@@ -1,0 +1,17 @@
+{% block _oro_integration_channel_form_transport_checkamazonchannel_widget %}
+    <div class="control-group">
+        <div class="controls">
+            {{ form_widget(form, {attr: {class: 'btn btn-primary' }}) }}
+            <script type="text/javascript">
+                require(['eltrino/amazon/rest-checker'], function (RestChecker) {
+                    "use strict";
+
+                    new RestChecker({
+                        el:                     '#{{ form.vars.id }}',
+                        transportEntityId:      {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }}
+                    });
+                });
+            </script>
+        </div>
+    </div>
+{% endblock %}

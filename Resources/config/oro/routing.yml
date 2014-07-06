@@ -1,0 +1,4 @@
+eltrino_amazon_bundle:
+    resource:     "@EltrinoOroCrmAmazonBundle/Controller"
+    type:         annotation
+    prefix:       /amazon

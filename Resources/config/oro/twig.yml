@@ -1,0 +1,2 @@
+bundles:
+    - EltrinoOroCrmAmazonBundle:Form:fields.html.twig

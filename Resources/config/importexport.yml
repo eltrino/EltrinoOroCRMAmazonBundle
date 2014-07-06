@@ -1,0 +1,48 @@
+parameters:
+    # entities
+    eltrino_amazon.order.entity.class:                                            Eltrino\OroCrmAmazonBundle\Entity\Order
+    eltrino_amazon.order_item.entity.class:                                       Eltrino\OroCrmAmazonBundle\Entity\OrderItem
+
+    # connectors
+    eltrino_amazon.provider.amazon_order_connector.class:                         Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector
+
+    # normalizer
+    eltrino_amazon.importexport.denormalizer.order.class:                         Eltrino\OroCrmAmazonBundle\ImportExport\Serializer\OrderDenormalizer
+
+    # strategies
+    eltrino_amazon.import_strategy.order.add_or_update.class:                     Eltrino\OroCrmAmazonBundle\ImportExport\Strategy\OrderStrategy
+
+services:
+    # connectors
+    eltrino_amazon.provider.amazon_order_connector:
+        class: %eltrino_amazon.provider.amazon_order_connector.class%
+        arguments:
+          - @oro_importexport.context_registry
+          - @oro_integration.provider.connector_context_mediator
+          - @eltrino_amazon.amazon_rest_client.factory
+          - @eltrino_amazon.filters.factory
+        tags:
+          - { name: oro_integration.connector, type: order, channel_type: amazon }
+
+    # Normalizers / Denormalizers
+    eltrino_amazon.importexport.denormalizer.order:
+        class: %eltrino_amazon.importexport.denormalizer.order.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @eltrino_amazon.order.factory
+        tags:
+            - { name: oro_importexport.normalizer }
+
+    # strategies
+    eltrino_amazon.import.strategy.order.add_or_update:
+        class: %eltrino_amazon.import_strategy.order.add_or_update.class%
+        arguments:
+            - @oro_importexport.strategy.import.helper
+
+    # Processors
+    eltrino_amazon.importexport.processor.import_order:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setStrategy, [@eltrino_amazon.import.strategy.order.add_or_update]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %eltrino_amazon.order.entity.class%, alias: eltrino_amazon.add_or_update_order }

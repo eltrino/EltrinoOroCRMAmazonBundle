@@ -1,0 +1,3 @@
+config:
+    paths:
+        'eltrino/amazon/rest-checker': 'bundles/eltrinoorocrmamazon/js/rest-checker.js'

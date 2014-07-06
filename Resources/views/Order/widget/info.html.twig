@@ -1,0 +1,20 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('Status'|trans, entity.orderStatus|trans) }}
+            {{ ui.renderProperty('Order Type'|trans, entity.orderType|trans) }}
+            {{ ui.renderProperty('Buyer Email'|trans, entity.customerEmail|trans) }}
+            {{ ui.renderProperty('Sales Channel'|trans, entity.salesChannel|trans) }}
+            {{ ui.renderProperty('Shipment Level'|trans, entity.shipServiceLevel|trans) }}
+            {{ ui.renderProperty('Shipment Category'|trans, entity.shipmentServiceLevelCategory|trans) }}
+            {{ ui.renderProperty('Shipped Items'|trans, entity.numberOfItemsShipped|trans) }}
+            {{ ui.renderProperty('Unshipped Items'|trans, entity.numberOfItemsUnshipped|trans) }}
+            {{ ui.renderProperty('Payment Method'|trans, entity.paymentMethod|trans) }}
+            {{ ui.renderProperty('Currency'|trans, entity.currencyId|trans) }}
+            {{ ui.renderProperty('Total'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currencyId})) }}
+        </div>
+    </div>
+</div>

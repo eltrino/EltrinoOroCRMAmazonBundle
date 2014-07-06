@@ -1,0 +1,218 @@
+datagrid:
+    amazon-orders-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - o
+                from:
+                    - { table: %eltrino_amazon.order.entity.class%, alias: o }
+                where:
+                    and:
+                        - o.channel = :channelId
+        columns:
+            amazonOrderId:
+                label: Amazon Order Id
+            marketPlaceId:
+                label: Market Place ID
+            salesChannel:
+                label: Sales Channel
+            orderType:
+                label: Order Type
+            orderStatus:
+                label: Order Status
+            fulfillmentChannel:
+                label: Fulfillment Channel
+            shipServiceLevel:
+                label: Ship Service Level
+            shipmentServiceLevelCategory:
+                label: Shipment Service Level Category
+            numberOfItemsShipped:
+                label: Number Of Shipped Items
+            numberOfItemsUnshipped:
+                label: Number Of Unshipped Items
+            currencyId:
+                label: Currency
+            paymentMethod:
+                label: Payment Method
+            totalAmount:
+                label: Total Amount
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+            createdAt:
+                label: Created At
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: eltrino_amazon_order_view
+                params: [ id ]
+        sorters:
+            columns:
+                amazonOrderId:                      { data_name: o.amazonOrderId }
+                marketPlaceId:                      { data_name: o.marketPlaceId }
+                salesChannel:                       { data_name: o.salesChannel }
+                orderType:                          { data_name: o.orderType }
+                orderStatus:                        { data_name: o.orderStatus }
+                fulfillmentChannel:                 { data_name: o.fulfillmentChannel }
+                shipServiceLevel:                   { data_name: o.shipServiceLevel }
+                shipmentServiceLevelCategory:       { data_name: o.shipmentServiceLevelCategory }
+                numberOfItemsShipped:               { data_name: o.numberOfItemsShipped }
+                numberOfItemsUnshipped:             { data_name: o.numberOfItemsUnshipped }
+                currencyId:                         { data_name: o.currencyId }
+                paymentMethod:                      { data_name: o.paymentMethod }
+                totalAmount:                        { data_name: o.totalAmount }
+                createdAt:                          { data_name: o.createdAt }
+        filters:
+            columns:
+                amazonOrderId:
+                    type: string
+                    data_name: o.amazonOrderId
+                marketPlaceId:
+                    type: string
+                    data_name: o.marketPlaceId
+                salesChannel:
+                    type: string
+                    data_name: o.salesChannel
+                orderType:
+                    type: string
+                    data_name: o.orderType
+                orderStatus:
+                    type: string
+                    data_name: o.orderStatus
+                fulfillmentChannel:
+                    type: string
+                    data_name: o.fulfillmentChannel
+                shipServiceLevel:
+                   type: string
+                   data_name: o.shipServiceLevel
+                shipmentServiceLevelCategory:
+                   type: string
+                   data_name: o.shipmentServiceLevelCategory
+                numberOfItemsShipped:
+                    type:             number
+                    data_name:        o.numberOfItemsShipped
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                numberOfItemsUnshipped:
+                    type:             number
+                    data_name:        o.numberOfItemsUnshipped
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                paymentMethod:
+                    type: string
+                    data_name: o.paymentMethod
+                totalAmount:
+                    type:             number
+                    data_name:        o.totalAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+        actions:
+            view:
+                type:         navigate
+                label:        eltrino.amazon.datagrid.actions.view.label
+                link:         view_link
+                icon:         book
+                rowAction:    true
+        options:
+            entityHint: order
+
+    amazon-orderitem-grid:
+        source:
+            type: orm
+            query:
+                select:
+                    - o
+                from:
+                    - { table: %eltrino_amazon.order_item.entity.class%, alias: o }
+                where:
+                    and:
+                        - o.order = :id
+        columns:
+            asin:
+                label: asin
+            orderItemId:
+                label: Order Item ID
+            sellerSku:
+                label: Seller Sku
+            title:
+                label: Title
+            quantityOrdered:
+                label: Qty Ordered
+            quantityShipped:
+                label: Qty Shipped
+            condition:
+                label: Condition
+            shippingPriceAmount:
+                label:  Shipping Price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverShippingCurrencyClosure
+            giftWrapPriceAmount:
+                label:  Gift Price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverGiftCurrencyClosure
+            itemPriceAmount:
+                label:  Item Price
+                type:   localized_number
+                method: formatCurrency
+                context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverItemCurrencyClosure
+        sorters:
+            columns:
+                asin:                  { data_name: o.asin }
+                orderItemId:           { data_name: o.orderItemId }
+                sellerSku:             { data_name: o.sellerSku }
+                title:                 { data_name: o.title }
+                quantityOrdered:       { data_name: o.quantityOrdered }
+                quantityShipped:       { data_name: o.quantityShipped }
+                condition:             { data_name: o.condition }
+                shippingPriceAmount:   { data_name: o.shippingPriceAmount }
+                giftWrapPriceAmount:   { data_name: o.giftWrapPriceAmount }
+                itemPriceAmount:       { data_name: o.itemPriceAmount }
+        filters:
+            columns:
+                asin:
+                    type: string
+                    data_name: o.asin
+                orderItemId:
+                    type: string
+                    data_name: o.orderItemId
+                sellerSku:
+                    type: string
+                    data_name: o.sellerSku
+                title:
+                    type: string
+                    data_name: o.title
+                quantityOrdered:
+                    type:             number
+                    data_name:        o.quantityOrdered
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                quantityShipped:
+                    type:             number
+                    data_name:        o.quantityShipped
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                condition:
+                    type: string
+                    data_name: o.condition
+                shippingPriceAmount:
+                    type:             number
+                    data_name:        o.shippingPriceAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                giftWrapPriceAmount:
+                    type:             number
+                    data_name:        o.giftWrapPriceAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                itemPriceAmount:
+                    type:             number
+                    data_name:        o.itemPriceAmount
+                    options:
+                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+        options:
+            entityHint: order item

@@ -1,0 +1,5 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+<div class="widget-content">
+    {{ dataGrid.renderGrid('amazon-orderitem-grid', {id: entity.id}) }}
+</div>
