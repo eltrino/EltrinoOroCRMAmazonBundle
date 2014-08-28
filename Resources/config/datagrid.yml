@@ -5,12 +5,15 @@ datagrid:
             query:
                 select:
                     - o
+                    - ch.name as channelName
                 from:
                     - { table: %eltrino_amazon.order.entity.class%, alias: o }
-                where:
-                    and:
-                        - o.channel = :channelId
+                join:
+                    left:
+                        - { join: o.channel, alias: ch }
         columns:
+            channelName:
+                label: Channel
             amazonOrderId:
                 label: Amazon Order Id
             marketPlaceId:
@@ -56,6 +59,7 @@ datagrid:
                 salesChannel:                       { data_name: o.salesChannel }
                 orderType:                          { data_name: o.orderType }
                 orderStatus:                        { data_name: o.orderStatus }
+                channelName:                        { data_name: ch.name }
                 fulfillmentChannel:                 { data_name: o.fulfillmentChannel }
                 shipServiceLevel:                   { data_name: o.shipServiceLevel }
                 shipmentServiceLevelCategory:       { data_name: o.shipmentServiceLevelCategory }
@@ -67,6 +71,14 @@ datagrid:
                 createdAt:                          { data_name: o.createdAt }
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: ch.id
+                    options:
+                        field_options:
+                            multiple: true
+                            class: OroIntegrationBundle:Channel
+                            property: name
                 amazonOrderId:
                     type: string
                     data_name: o.amazonOrderId
@@ -114,7 +126,7 @@ datagrid:
                 type:         navigate
                 label:        eltrino.amazon.datagrid.actions.view.label
                 link:         view_link
-                icon:         book
+                icon:         eye-open
                 rowAction:    true
         options:
             entityHint: order

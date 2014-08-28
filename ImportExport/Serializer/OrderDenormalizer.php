@@ -16,7 +16,7 @@ namespace Eltrino\OroCrmAmazonBundle\ImportExport\Serializer;
 
 use Doctrine\ORM\EntityManager;
 
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 
 use Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
@@ -45,7 +45,7 @@ class OrderDenormalizer implements DenormalizerInterface
      * @param null $format
      * @return bool
      */
-    public function supportsDenormalization($data, $type, $format = null)
+    public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
         return is_object($data) && ($type == AmazonOrderConnector::ORDER_TYPE);
     }

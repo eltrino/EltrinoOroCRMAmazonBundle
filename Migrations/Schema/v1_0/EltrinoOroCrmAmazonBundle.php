@@ -32,7 +32,7 @@ class EltrinoOroCrmAmazonBundle implements Migration
         /** Generate table eltrino_amazon_order **/
         $table = $schema->createTable('eltrino_amazon_order');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('channel_id', 'smallint', ['notnull' => false]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('amazon_order_id', 'string', ['length' => 60]);
         $table->addColumn('marketplace_id', 'string', ['notnull' => false, 'length' => 60]);
         $table->addColumn('created_at', 'datetime', []);
@@ -80,14 +80,39 @@ class EltrinoOroCrmAmazonBundle implements Migration
         $table->addIndex(['order_id'], 'IDX_346D93BC8D9F6D38', []);
         /** End of generate table eltrino_amazon_order_items **/
 
-        /** Generate foreign keys for table eltrino_amazon_order **/
-        $table = $schema->getTable('eltrino_amazon_order');
-        $table->addForeignKeyConstraint($schema->getTable('oro_integration_channel'), ['channel_id'], ['id'], ['onDelete' => 'SET NULL', 'onUpdate' => null, ]);
-        /** End of generate foreign keys for table eltrino_amazon_order **/
+        $this->addEltrinoAmazonOrderForeignKeys($schema);
+        $this->addEltrinoAmazonOrderItemsForeignKeys($schema);
+    }
 
-        /** Generate foreign keys for table eltrino_amazon_order_items **/
+    /**
+     * Add eltrino_amazon_order foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addEltrinoAmazonOrderForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('eltrino_amazon_order');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add eltrino_amazon_order_items foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addEltrinoAmazonOrderItemsForeignKeys(Schema $schema)
+    {
         $table = $schema->getTable('eltrino_amazon_order_items');
-        $table->addForeignKeyConstraint($schema->getTable('eltrino_amazon_order'), ['order_id'], ['id'], ['onDelete' => 'CASCADE', 'onUpdate' => null, ]);
-        /** End of generate foreign keys for table eltrino_amazon_order_items **/
+        $table->addForeignKeyConstraint(
+            $schema->getTable('eltrino_amazon_order'),
+            ['order_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
     }
 } 

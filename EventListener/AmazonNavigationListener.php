@@ -18,8 +18,6 @@ use Doctrine\ORM\EntityManager;
 
 use Knp\Menu\ItemInterface;
 
-use Symfony\Component\Routing\RouterInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
@@ -35,24 +33,22 @@ class AmazonNavigationListener
     protected static $map = [
         'order'    => [
             'parent'       => 'sales_tab',
-            'parent_item'  => 'magento_order',
             'prefix'       => self::ORDER_MENU_ITEM,
-            'label'        => 'Amazon',
+            'label'        => 'Amazon Orders',
             'route'        => 'eltrino_amazon_order_index',
-            'extra_routes' => '/^eltrino_amazon_order_(index|view)$/'
+            'extras' => [
+                'routes'   => '/^eltrino_amazon_order_(index|view)$/',
+                'position' => 50
+            ]
         ]
     ];
 
     /** @var EntityManager */
     protected $em;
 
-    /** @var RouterInterface */
-    protected $router;
-
-    public function __construct(EntityManager $em, RouterInterface $router)
+    public function __construct(EntityManager $em)
     {
         $this->em     = $em;
-        $this->router = $router;
     }
     /**
      * Adds dynamically menu entries depends on configured channels
@@ -71,32 +67,25 @@ class AmazonNavigationListener
                 if ($channel->getConnectors()) {
                     foreach ($channel->getConnectors() as $connector) {
                         if (!isset($entries[$connector])) {
-                            $entries[$connector] = [];
+                            $entries[$connector] = true;
                         }
-                        $entries[$connector][] = ['id' => $channel->getId(), 'label' => $channel->getName()];
                     }
                 }
             }
 
             // walk trough prepared array
-            foreach ($entries as $key => $items) {
+            foreach (array_keys($entries) as $key) {
                 if (isset(self::$map[$key])) {
                     /** @var ItemInterface $reportsMenuItem */
-                    $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent'])->getChild(self::$map[$key]['parent_item']);
-                    if ($salesMenuItem) {
-                        foreach ($items as $entry) {
-                            $salesMenuItem->addChild(
-                                implode([self::$map[$key]['prefix'], $entry['id']]),
-                                [
-                                    'route' => self::$map[$key]['route'],
-                                    'routeParameters' => ['id' => $entry['id']],
-                                    'label' => $entry['label'],
-                                    'check_access' => false,
-                                    'extras' => ['routes' => self::$map[$key]['extra_routes']]
-                                ]
-                            );
-                        }
-                    }
+                    $salesMenuItem = $event->getMenu()->getChild(self::$map[$key]['parent']);
+                    $salesMenuItem->addChild(
+                        self::$map[$key]['prefix'],
+                        [
+                            'label'  => self::$map[$key]['label'],
+                            'route'  => self::$map[$key]['route'],
+                            'extras' => array_merge(self::$map[$key]['extras'], ['skipBreadcrumbs' => true])
+                        ]
+                    );
                 }
             }
         }
