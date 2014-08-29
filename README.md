@@ -8,7 +8,7 @@ Eltrino is working on improvements for this bundle as well as on support for eBa
 Requirements
 ------------
 
-Amazon integration bundle supports OroCRM version 1.1 or above. Additional requirement is Guzzle version 3.7.
+Amazon integration bundle supports OroCRM version 1.3 or above. Additional requirement is Guzzle version 3.7.
 
 Installation
 ------------
