@@ -7,7 +7,8 @@ connector:
             type: import
             steps:
                 import:
-                    title:     import
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    eltrino_amazon.provider.amazon_order_connector
                         processor: oro_importexport.processor.import_delegate
