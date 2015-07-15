@@ -13,9 +13,9 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Controller;
+namespace OroCRM\Bundle\AmazonBundle\Controller;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,7 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
-use Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport;
+use OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport;
 
 /**
  * @Route("/rest")

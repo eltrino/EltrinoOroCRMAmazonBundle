@@ -12,17 +12,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\Order;
+namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
-use Eltrino\OroCrmAmazonBundle\Entity\Order;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItem;
+use OroCRM\Bundle\AmazonBundle\Entity\Order;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
 use Doctrine\Common\Collections\ArrayCollection;
 use SimpleXMLElement;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemCodFeeInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemGiftInfo;
 class OrderFactory
 {
     /**
@@ -47,9 +47,21 @@ class OrderFactory
         $currencyId                   = (string) $data->OrderTotal->CurrencyCode;
         $totalAmount                  = (string) $data->OrderTotal->Amount;
 
-        $shipping     = new Shipping($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped, $numberOfItemsUnshipped);
+        $shipping     = new Shipping(
+            $shipServiceLevel,
+            $shipmentServiceLevelCategory,
+            $numberOfItemsShipped,
+            $numberOfItemsUnshipped
+        );
         $payment      = new Payment($paymentMethod, $currencyId, $totalAmount);
-        $orderDetails = new OrderDetails($salesChannel, $orderType, $fulfillmentChannel, $orderStatus, $payment, $shipping);
+        $orderDetails = new OrderDetails(
+            $salesChannel,
+            $orderType,
+            $fulfillmentChannel,
+            $orderStatus,
+            $payment,
+            $shipping
+        );
 
         $order = new Order($amazonOrderId, $customerEmail, $marketPlaceId, $orderDetails);
 
@@ -60,7 +72,7 @@ class OrderFactory
      * @param $items
      * @return ArrayCollection
      */
-    private function processOrderItems($items, Order $order)
+    protected function processOrderItems($items, Order $order)
     {
         foreach ($items as $item) {
             $asin                        = (string) $item->ASIN;
@@ -83,19 +95,40 @@ class OrderFactory
             $giftWrapLevel               = (string) $item->GiftWrapLevel;
             $condition                   = (string) $item->ConditionId;
 
-            $itemInfo         = new ItemInfo($orderItemId, $title, $quantityOrdered, $quantityShipped,
-                $itemPriceCurrencyId, $itemPriceAmount, $condition);
+            $itemInfo         = new ItemInfo(
+                $orderItemId,
+                $title,
+                $quantityOrdered,
+                $quantityShipped,
+                $itemPriceCurrencyId,
+                $itemPriceAmount,
+                $condition
+            );
 
             $itemShippingInfo = new ItemShippingInfo($shippingPriceCurrencyId, $shippingPriceAmount);
 
-            $itemCodFeeInfo   = new ItemCodFeeInfo($codFeeCurrencyId, $codFeeAmount, $codFeeDiscountCurrencyId,
-                $codFeeDiscountAmount);
+            $itemCodFeeInfo   = new ItemCodFeeInfo(
+                $codFeeCurrencyId,
+                $codFeeAmount,
+                $codFeeDiscountCurrencyId,
+                $codFeeDiscountAmount
+            );
 
-            $itemGiftInfo     = new ItemGiftInfo($giftMessageText, $giftWrapPriceCurrencyId, $giftWrapPriceAmount,
-                $giftWrapLevel);
+            $itemGiftInfo     = new ItemGiftInfo(
+                $giftMessageText,
+                $giftWrapPriceCurrencyId,
+                $giftWrapPriceAmount,
+                $giftWrapLevel
+            );
 
-            $orderItem = new OrderItem($asin, $sellerSku, $itemInfo, $itemShippingInfo, $itemCodFeeInfo,
-                $itemGiftInfo);
+            $orderItem = new OrderItem(
+                $asin,
+                $sellerSku,
+                $itemInfo,
+                $itemShippingInfo,
+                $itemCodFeeInfo,
+                $itemGiftInfo
+            );
 
             $order->addOrderItem($orderItem);
         }

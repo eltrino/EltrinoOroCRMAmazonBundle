@@ -12,37 +12,40 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\Order;
+namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
 /**
  * Class File, Value Object
- * @package Eltrino\OroCrmAmazonBundle\Model
+ * @package OroCRM\Bundle\AmazonBundle\Model
  */
 class Shipping
 {
     /**
      * @var string
      */
-    private $shipServiceLevel;
+    protected $shipServiceLevel;
 
     /**
      * @var string
      */
-    private $shipmentServiceLevelCategory;
+    protected $shipmentServiceLevelCategory;
 
     /**
      * @var string
      */
-    private $numberOfItemsShipped;
+    protected $numberOfItemsShipped;
 
     /**
      * @var string
      */
-    private $numberOfItemsUnshipped;
+    protected $numberOfItemsUnshipped;
 
-    public function __construct($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped,
-                                $numberOfItemsUnshipped)
-    {
+    public function __construct(
+        $shipServiceLevel,
+        $shipmentServiceLevelCategory,
+        $numberOfItemsShipped,
+        $numberOfItemsUnshipped
+    ) {
         $this->shipServiceLevel             = $shipServiceLevel;
         $this->shipmentServiceLevelCategory = $shipmentServiceLevelCategory;
         $this->numberOfItemsShipped         = $numberOfItemsShipped;

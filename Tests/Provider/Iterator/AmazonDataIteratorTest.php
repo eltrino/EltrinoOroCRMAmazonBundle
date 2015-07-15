@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider\Iterator;
+namespace OroCRM\Bundle\AmazonBundle\Tests\Provider\Iterator;
 
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\AmazonDataIterator;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +26,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var Loader
-     * @Mock Eltrino\OroCrmAmazonBundle\Provider\Iterator\Loader
+     * @Mock OroCRM\Bundle\AmazonBundle\Provider\Iterator\Loader
      */
     private $loader;
 

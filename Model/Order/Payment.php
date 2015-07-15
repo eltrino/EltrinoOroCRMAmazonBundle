@@ -12,28 +12,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\Order;
+namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
 /**
  * Class File, Value Object
- * @package Eltrino\OroCrmAmazonBundle\Model
+ * @package OroCRM\Bundle\AmazonBundle\Model
  */
 class Payment
 {
     /**
      * @var string
      */
-    private $paymentMethod;
+    protected $paymentMethod;
 
     /**
      * @var string
      */
-    private $currencyId;
+    protected $currencyId;
 
     /**
      * @var string
      */
-    private $totalAmount;
+    protected $totalAmount;
 
     public function __construct($paymentMethod, $currencyId, $totalAmount)
     {
@@ -65,6 +65,4 @@ class Payment
     {
         return $this->paymentMethod;
     }
-
-
 }

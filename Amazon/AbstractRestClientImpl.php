@@ -12,10 +12,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use Guzzle\Http\Exception\ServerErrorResponseException;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter;
 use Guzzle\Http\ClientInterface;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
@@ -24,12 +25,12 @@ abstract class AbstractRestClientImpl
     /**
      * @var \Guzzle\Http\ClientInterface
      */
-    private $client;
+    protected $client;
 
     /**
-     * @var Api\AuthorizationHandler
+     * @var AuthorizationHandler
      */
-    private $authHandler;
+    protected $authHandler;
 
     /**
      * @var int
@@ -44,7 +45,7 @@ abstract class AbstractRestClientImpl
     /**
      * @var int
      */
-    private $callQty;
+    protected $callQty;
 
     /**
      * @var array
@@ -85,7 +86,7 @@ abstract class AbstractRestClientImpl
                 $response = $this->client->post(null, array(), $this->parameters)
                     ->send();
                 break;
-            } catch(\Guzzle\Http\Exception\ServerErrorResponseException $e) {
+            } catch (ServerErrorResponseException $e) {
                 sleep($this->restoreRate * $this->maxRequestQuote);
                 $this->callQty = 0;
             }
@@ -98,7 +99,7 @@ abstract class AbstractRestClientImpl
      * @param $response
      * @return mixed
      */
-    private function formatResponse($response)
+    protected function formatResponse($response)
     {
         $response = $response->xml();
         $response->registerXPathNamespace('c', 'https://mws.amazonservices.com/Orders/2013-09-01');
@@ -122,7 +123,6 @@ abstract class AbstractRestClientImpl
     }
 
     /**
-     * @param $parameters
      * @return mixed
      */
     protected function signParameters()
@@ -147,4 +147,4 @@ abstract class AbstractRestClientImpl
             $this->callQty = 0;
         }
     }
-} 
+}

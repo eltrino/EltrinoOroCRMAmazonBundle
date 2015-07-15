@@ -12,33 +12,36 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemGiftInfo
 {
     /**
      * @var string
      */
-    private $giftMessageText;
+    protected $giftMessageText;
 
     /**
      * @var string
      */
-    private $giftWrapPriceCurrencyId;
+    protected $giftWrapPriceCurrencyId;
 
     /**
      * @var string
      */
-    private $giftWrapPriceAmount;
+    protected $giftWrapPriceAmount;
 
     /**
      * @var string
      */
-    private $giftWrapLevel;
+    protected $giftWrapLevel;
 
-    public function __construct($giftMessageText, $giftWrapPriceCurrencyId, $giftWrapPriceAmount,
-                                $giftWrapLevel)
-    {
+    public function __construct(
+        $giftMessageText,
+        $giftWrapPriceCurrencyId,
+        $giftWrapPriceAmount,
+        $giftWrapLevel
+    ) {
         $this->giftMessageText           = $giftMessageText;
         $this->giftWrapPriceCurrencyId   = $giftWrapPriceCurrencyId;
         $this->giftWrapPriceAmount       = $giftWrapPriceAmount;
@@ -76,4 +79,4 @@ class ItemGiftInfo
     {
         return $this->giftWrapLevel;
     }
-} 
+}

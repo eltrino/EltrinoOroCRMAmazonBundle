@@ -13,9 +13,9 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider;
+namespace OroCRM\Bundle\AmazonBundle\Tests\Provider;
 
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class AmazonOrderConnectorTest extends \PHPUnit_Framework_TestCase
@@ -33,14 +33,14 @@ class AmazonOrderConnectorTest extends \PHPUnit_Framework_TestCase
     private $contextMediator;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory
      */
     private $amazonRestClientFactory;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
      */
     private $filtersFactory;
 
@@ -65,7 +65,7 @@ class AmazonOrderConnectorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetImportEntityFQCN()
     {
-        $this->assertEquals('Eltrino\OroCrmAmazonBundle\Entity\Order', $this->amazonOrderConnector->getImportEntityFQCN());
+        $this->assertEquals('OroCRM\Bundle\AmazonBundle\Entity\Order', $this->amazonOrderConnector->getImportEntityFQCN());
     }
 
     public function testGetType()

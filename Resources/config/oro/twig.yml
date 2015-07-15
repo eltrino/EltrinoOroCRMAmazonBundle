@@ -1,2 +1,2 @@
 bundles:
-    - EltrinoOroCrmAmazonBundle:Form:fields.html.twig
+    - OroCRMAmazonBundle:Form:fields.html.twig

@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemInfo;
 
 trait ItemInfoTrait
 {
@@ -23,57 +23,64 @@ trait ItemInfoTrait
      *
      * @ORM\Column(name="order_item_id", type="string", length=60, nullable=true)
      */
-    private $orderItemId;
+    protected $orderItemId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=80, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="quantity_ordered", type="integer", nullable=true)
      */
-    private $quantityOrdered;
+    protected $quantityOrdered;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="quantity_shipped", type="integer", nullable=true)
      */
-    private $quantityShipped;
+    protected $quantityShipped;
 
     /**
      * @var string
      *
      * @ORM\Column(name="item_price_currency_id", type="string", length=32, nullable=true)
      */
-    private $itemPriceCurrencyId;
+    protected $itemPriceCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="item_price_amount", type="float", nullable=true)
      */
-    private $itemPriceAmount;
+    protected $itemPriceAmount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="item_condition", type="string", length=32, nullable=true)
      */
-    private $condition;
+    protected $condition;
 
     /**
      * @return ItemInfo
      */
     protected function initItemInfo()
     {
-        return new ItemInfo($this->orderItemId, $this->title, $this->quantityOrdered, $this->quantityShipped,
-            $this->itemPriceCurrencyId, $this->itemPriceAmount, $this->condition);
+        return new ItemInfo(
+            $this->orderItemId,
+            $this->title,
+            $this->quantityOrdered,
+            $this->quantityShipped,
+            $this->itemPriceCurrencyId,
+            $this->itemPriceAmount,
+            $this->condition
+        );
     }
 
     /**
@@ -89,4 +96,4 @@ trait ItemInfoTrait
         $this->itemPriceAmount     = $itemInfo->getItemPriceAmount();
         $this->condition           = $itemInfo->getCondition();
     }
-} 
+}

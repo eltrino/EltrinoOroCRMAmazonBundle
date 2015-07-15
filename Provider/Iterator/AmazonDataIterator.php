@@ -12,31 +12,31 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator;
 
 class AmazonDataIterator implements \Iterator
 {
     /**
      * @var Loader
      */
-    private $loader;
+    protected $loader;
 
     /**
      * @var int
      */
-    private $position = 0;
+    protected $position = 0;
 
     /**
      * @var array of \SimpleXmlElement's
      */
-    private $elements = array();
+    protected $elements = array();
 
     public function __construct(Loader $loader)
     {
         $this->loader = $loader;
     }
 
-    private function load()
+    protected function load()
     {
         if ($this->shouldLoad()) {
             $elements = $this->loader->load();
@@ -50,7 +50,7 @@ class AmazonDataIterator implements \Iterator
      * Check whether need to load extra elements
      * @return bool
      */
-    private function shouldLoad()
+    protected function shouldLoad()
     {
         return empty($this->elements) || $this->position == count($this->elements);
     }
@@ -101,4 +101,4 @@ class AmazonDataIterator implements \Iterator
     {
         $this->position = 0;
     }
-} 
+}

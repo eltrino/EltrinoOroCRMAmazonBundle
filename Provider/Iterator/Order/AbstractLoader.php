@@ -12,12 +12,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\CompositeFilter;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AmazonRestClient;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Loader;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\CompositeFilter;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AmazonRestClient;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\Loader;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 abstract class AbstractLoader implements Loader
@@ -47,8 +47,11 @@ abstract class AbstractLoader implements Loader
      */
     protected $now;
 
-    public function __construct(AmazonRestClient $amazonRestClient, FiltersFactory $filtersFactory, \DateTime $startSyncDate)
-    {
+    public function __construct(
+        AmazonRestClient $amazonRestClient,
+        FiltersFactory $filtersFactory,
+        \DateTime $startSyncDate
+    ) {
         $this->amazonRestClient = $amazonRestClient;
         $this->filtersFactory = $filtersFactory;
         $this->startSyncDate = clone $startSyncDate;
@@ -121,7 +124,7 @@ abstract class AbstractLoader implements Loader
     /**
      * @param \DateTime $from
      * @param \DateTime $to
-     * @return \Eltrino\OroCrmAmazonBundle\Amazon\Filters\ModTimeRangeFilter
+     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\ModTimeRangeFilter
      */
     protected function createModTimeFilter(\DateTime $from, \DateTime $to)
     {
@@ -132,7 +135,7 @@ abstract class AbstractLoader implements Loader
 
     /**
      * @param $nextToken
-     * @return \Eltrino\OroCrmAmazonBundle\Amazon\Filters\NextTokenFilter
+     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\NextTokenFilter
      */
     protected function createNextTokenFilter($nextToken)
     {
@@ -143,7 +146,7 @@ abstract class AbstractLoader implements Loader
 
     /**
      * @param $amazonOrderId
-     * @return \Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter
+     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\AmazonOrderIdFilter
      */
     protected function createAmazonOrderIdFilter($amazonOrderId)
     {

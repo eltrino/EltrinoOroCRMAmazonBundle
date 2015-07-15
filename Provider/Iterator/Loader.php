@@ -12,12 +12,12 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator;
 
 interface Loader
 {
     /**
      * @return mixed
      */
-    function load();
+    public function load();
 }

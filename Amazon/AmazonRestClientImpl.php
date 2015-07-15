@@ -12,14 +12,14 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AmazonRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\CheckRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderItemsRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderByNextTokenRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AmazonRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\CheckRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderItemsRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderByNextTokenRestClient;
 use Guzzle\Http\ClientInterface;
 
 class AmazonRestClientImpl implements AmazonRestClient
@@ -27,17 +27,17 @@ class AmazonRestClientImpl implements AmazonRestClient
     /**
      * @var CheckRestClient
      */
-    private $checkRestClient;
+    protected $checkRestClient;
 
     /**
      * @var OrderRestClient
      */
-    private $orderRestClient;
+    protected $orderRestClient;
 
     /**
      * @var OrderItemsRestClient
      */
-    private $orderItemsRestClient;
+    protected $orderItemsRestClient;
 
     public function __construct(ClientInterface $client, AuthorizationHandler $authHandler)
     {
@@ -49,7 +49,7 @@ class AmazonRestClientImpl implements AmazonRestClient
     /**
      * @return CheckRestClient
      */
-    function getCheckRestClient()
+    public function getCheckRestClient()
     {
         return $this->checkRestClient;
     }
@@ -58,7 +58,7 @@ class AmazonRestClientImpl implements AmazonRestClient
      * Retrieves Amazon Order Client
      * @return OrderRestClient
      */
-    function getOrderRestClient()
+    public function getOrderRestClient()
     {
         return $this->orderRestClient;
     }
@@ -67,9 +67,8 @@ class AmazonRestClientImpl implements AmazonRestClient
      * Retrieves Amazon Order Items Client
      * @return OrderItemsRestClient
      */
-    function getOrderItemsRestClient()
+    public function getOrderItemsRestClient()
     {
         return $this->orderItemsRestClient;
     }
-
 }

@@ -12,10 +12,10 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\CompositeFilter;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\CompositeFilter;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory;
 
 class UpdateModeLoader extends AbstractLoader
 {

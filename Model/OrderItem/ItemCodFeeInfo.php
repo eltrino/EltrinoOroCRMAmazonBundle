@@ -12,33 +12,36 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemCodFeeInfo
 {
     /**
      * @var string
      */
-    private $codFeeCurrencyId;
+    protected $codFeeCurrencyId;
 
     /**
      * @var string
      */
-    private $codFeeAmount;
+    protected $codFeeAmount;
 
     /**
      * @var string
      */
-    private $codFeeDiscountCurrencyId;
+    protected $codFeeDiscountCurrencyId;
 
     /**
      * @var string
      */
-    private $codFeeDiscountAmount;
+    protected $codFeeDiscountAmount;
 
-    public function __construct($codFeeCurrencyId, $codFeeAmount, $codFeeDiscountCurrencyId,
-                                $codFeeDiscountAmount)
-    {
+    public function __construct(
+        $codFeeCurrencyId,
+        $codFeeAmount,
+        $codFeeDiscountCurrencyId,
+        $codFeeDiscountAmount
+    ) {
         $this->codFeeCurrencyId           = $codFeeCurrencyId;
         $this->codFeeAmount               = $codFeeAmount;
         $this->codFeeDiscountCurrencyId   = $codFeeDiscountCurrencyId;
@@ -76,4 +79,4 @@ class ItemCodFeeInfo
     {
         return $this->codFeeDiscountAmount;
     }
-} 
+}

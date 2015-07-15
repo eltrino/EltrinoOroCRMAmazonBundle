@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Api;
+namespace OroCRM\Bundle\AmazonBundle\Amazon\Api;
 
 interface AuthorizationHandler
 {
@@ -20,49 +20,49 @@ interface AuthorizationHandler
      * Retrieves key id
      * @return string
      */
-    function getKeyId();
+    public function getKeyId();
 
     /**
      * Retrieves secret
      * @return string
      */
-    function getSecret();
+    public function getSecret();
 
     /**
      * Retrieves merchant id
      * @return string
      */
-    function getMerchantId();
+    public function getMerchantId();
 
     /**
      * Retrieves marketplace id
      * @return string
      */
-    function getMarketplaceId();
+    public function getMarketplaceId();
 
     /**
      * Formats date as ISO 8601 timestamp
      * @return string
      */
-    function getFormattedTimestamp();
+    public function getFormattedTimestamp();
 
     /**
      * Retrieves service version
      * @return string
      */
-    function getVersion();
+    public function getVersion();
 
     /**
      * Retrieves signature version
      * @return string
      */
-    function getSignatureVersion();
+    public function getSignatureVersion();
 
     /**
      * Retrieves signature method
      * @return string
      */
-    function getSignatureMethod();
+    public function getSignatureMethod();
 
     /**
      * Retrieves signature for request
@@ -70,5 +70,5 @@ interface AuthorizationHandler
      * @param string $endpointUrl
      * @return string
      */
-    function getSignature($parameters, $endpointUrl);
-} 
+    public function getSignature($parameters, $endpointUrl);
+}

@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler;
 
 class DefaultAuthorizationHandler implements AuthorizationHandler
 {
@@ -27,24 +27,24 @@ class DefaultAuthorizationHandler implements AuthorizationHandler
     /**
      * @var string
      */
-    private $keyId;
+    protected $keyId;
 
     /**
      * @var string
      */
-    private $secret;
+    protected $secret;
 
     /**
      * @var string
      */
-    private $merchantId;
+    protected $merchantId;
 
     /**
      * @var string
      */
-    private $marketplaceId;
+    protected $marketplaceId;
 
-    function __construct($keyId, $secret, $merchantId, $marketplaceId)
+    public function __construct($keyId, $secret, $merchantId, $marketplaceId)
     {
         $this->keyId         = $keyId;
         $this->secret        = $secret;
@@ -163,7 +163,8 @@ class DefaultAuthorizationHandler implements AuthorizationHandler
      * @param $value
      * @return string
      */
-    private function urlEncode($value) {
+    protected function urlEncode($value)
+    {
         return str_replace('%7E', '~', rawurlencode($value));
     }
 
@@ -172,10 +173,10 @@ class DefaultAuthorizationHandler implements AuthorizationHandler
      * @param $key
      * @return string
      */
-    private function sign($data, $key)
+    protected function sign($data, $key)
     {
         return base64_encode(
             hash_hmac('sha256', $data, $key, true)
         );
     }
-} 
+}

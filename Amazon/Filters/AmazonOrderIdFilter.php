@@ -12,14 +12,14 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
+namespace OroCRM\Bundle\AmazonBundle\Amazon\Filters;
 
 class AmazonOrderIdFilter implements Filter
 {
     /**
      * @var string
      */
-    private $amazonOrderId;
+    protected $amazonOrderId;
 
     public function __construct($amazonOrderId)
     {
@@ -36,4 +36,4 @@ class AmazonOrderIdFilter implements Filter
 
         return $parameters;
     }
-} 
+}

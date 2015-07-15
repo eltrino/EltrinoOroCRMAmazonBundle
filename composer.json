@@ -11,10 +11,10 @@
     ],
     "autoload": {
         "psr-0": {
-            "Eltrino\\OroCrmAmazonBundle": "."
+            "OroCRM\\Bundle\\AmazonBundle": "src/"
         }
     },
-    "target-dir": "Eltrino/OroCrmAmazonBundle",
+    "target-dir": "src/OroCRM/Bundle/AmazonBundle",
     "repositories": [
        {
             "type": "git",

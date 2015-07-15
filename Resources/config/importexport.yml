@@ -1,16 +1,16 @@
 parameters:
     # entities
-    eltrino_amazon.order.entity.class:                                            Eltrino\OroCrmAmazonBundle\Entity\Order
-    eltrino_amazon.order_item.entity.class:                                       Eltrino\OroCrmAmazonBundle\Entity\OrderItem
+    eltrino_amazon.order.entity.class:                                            OroCRM\Bundle\AmazonBundle\Entity\Order
+    eltrino_amazon.order_item.entity.class:                                       OroCRM\Bundle\AmazonBundle\Entity\OrderItem
 
     # connectors
-    eltrino_amazon.provider.amazon_order_connector.class:                         Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector
+    eltrino_amazon.provider.amazon_order_connector.class:                         OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector
 
     # normalizer
-    eltrino_amazon.importexport.denormalizer.order.class:                         Eltrino\OroCrmAmazonBundle\ImportExport\Serializer\OrderDenormalizer
+    eltrino_amazon.importexport.denormalizer.order.class:                         OroCRM\Bundle\AmazonBundle\ImportExport\Serializer\OrderDenormalizer
 
     # strategies
-    eltrino_amazon.import_strategy.order.add_or_update.class:                     Eltrino\OroCrmAmazonBundle\ImportExport\Strategy\OrderStrategy
+    eltrino_amazon.import_strategy.order.add_or_update.class:                     OroCRM\Bundle\AmazonBundle\ImportExport\Strategy\OrderStrategy
 
 services:
     # connectors

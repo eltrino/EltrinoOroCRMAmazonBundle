@@ -12,18 +12,18 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter;
 use Guzzle\Http\ClientInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
 class OrderRestClientImpl extends AbstractRestClientImpl implements OrderRestClient
 {
-    private $orders = array();
+    protected $orders = array();
 
     /**
      * @param ClientInterface $client
@@ -58,7 +58,7 @@ class OrderRestClientImpl extends AbstractRestClientImpl implements OrderRestCli
     /**
      * @param string $nextToken
      */
-    private function getOrdersByNextToken($nextToken)
+    protected function getOrdersByNextToken($nextToken)
     {
         $this->action = 'ListOrdersByNextToken';
         $this->prepareRequestWithNextToken($nextToken);
@@ -73,7 +73,7 @@ class OrderRestClientImpl extends AbstractRestClientImpl implements OrderRestCli
     /**
      * @param string $nextToken
      */
-    private function prepareRequestWithNextToken($nextToken)
+    protected function prepareRequestWithNextToken($nextToken)
     {
         $this->parameters = $this->getParameters();
         $this->parameters['Action'] = $this->action;
@@ -83,7 +83,7 @@ class OrderRestClientImpl extends AbstractRestClientImpl implements OrderRestCli
     /**
      * @param SimpleXMLElement $res
      */
-    private function processTokenResponse($res)
+    protected function processTokenResponse($res)
     {
         $nextToken = (string) $res->NextToken ? (string) $res->NextToken : null;
 
@@ -96,7 +96,7 @@ class OrderRestClientImpl extends AbstractRestClientImpl implements OrderRestCli
      * @param SimpleXMLElement $response
      * @param string $path
      */
-    private function processOrdersArrayFromResponse($response, $path)
+    protected function processOrdersArrayFromResponse($response, $path)
     {
         $ordersArray = $response->xpath($path);
         $this->orders = array_merge($this->orders, $ordersArray);

@@ -13,9 +13,9 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider;
+namespace OroCRM\Bundle\AmazonBundle\Tests\Provider;
 
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonChannelType;
 
 class AmazonChannelTypeTest extends \PHPUnit_Framework_TestCase
 {

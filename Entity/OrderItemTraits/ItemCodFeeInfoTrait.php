@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemCodFeeInfo;
 
 trait ItemCodFeeInfoTrait
 {
@@ -23,36 +23,40 @@ trait ItemCodFeeInfoTrait
      *
      * @ORM\Column(name="cod_fee_currency_id", type="string", length=32, nullable=true)
      */
-    private $codFeeCurrencyId;
+    protected $codFeeCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="cod_fee_amount", type="float", nullable=true)
      */
-    private $codFeeAmount;
+    protected $codFeeAmount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="cod_fee_discount_currency_id", type="string", length=32, nullable=true)
      */
-    private $codFeeDiscountCurrencyId;
+    protected $codFeeDiscountCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="cod_fee_discount_amount", type="float", nullable=true)
      */
-    private $codFeeDiscountAmount;
+    protected $codFeeDiscountAmount;
 
     /**
      * @return ItemCodFeeInfo
      */
     protected function initItemCodFeeInfo()
     {
-        return new ItemCodFeeInfo($this->codFeeCurrencyId, $this->codFeeAmount,
-            $this->codFeeDiscountCurrencyId, $this->codFeeDiscountAmount);
+        return new ItemCodFeeInfo(
+            $this->codFeeCurrencyId,
+            $this->codFeeAmount,
+            $this->codFeeDiscountCurrencyId,
+            $this->codFeeDiscountAmount
+        );
     }
 
     /**
@@ -65,4 +69,4 @@ trait ItemCodFeeInfoTrait
         $this->codFeeDiscountCurrencyId = $itemCodFeeInfo->getCodFeeDiscountCurrencyId();
         $this->codFeeDiscountAmount     = $itemCodFeeInfo->getCodFeeDiscountAmount();
     }
-} 
+}

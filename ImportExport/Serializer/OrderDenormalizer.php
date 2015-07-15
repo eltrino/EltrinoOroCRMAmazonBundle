@@ -12,19 +12,19 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\ImportExport\Serializer;
+namespace OroCRM\Bundle\AmazonBundle\ImportExport\Serializer;
 
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 
-use Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory;
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
+use OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector;
 
 class OrderDenormalizer implements DenormalizerInterface
 {
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
      */
     private $orderFactory;
 

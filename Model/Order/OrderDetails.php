@@ -12,44 +12,50 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\Order;
-use Eltrino\OroCrmAmazonBundle\Model\Order\Payment;
-use Eltrino\OroCrmAmazonBundle\Model\Order\Shipping;
+namespace OroCRM\Bundle\AmazonBundle\Model\Order;
+use OroCRM\Bundle\AmazonBundle\Model\Order\Payment;
+use OroCRM\Bundle\AmazonBundle\Model\Order\Shipping;
 
 class OrderDetails
 {
     /**
      * @var string
      */
-    private $salesChannel;
+    protected $salesChannel;
 
     /**
      * @var string
      */
-    private $orderType;
+    protected $orderType;
 
     /**
      * @var string
      */
-    private $fulfillmentChannel;
+    protected $fulfillmentChannel;
 
     /**
      * @var string
      */
-    private $orderStatus;
+    protected $orderStatus;
 
     /**
      * @var Payment
      */
-    private $payment;
+    protected $payment;
 
     /**
      * @var Shipping
      */
-    private $shipping;
+    protected $shipping;
 
-    function __construct($salesChannel, $orderType, $fulfillmentChannel, $orderStatus, Payment $payment, Shipping $shipping)
-    {
+    public function __construct(
+        $salesChannel,
+        $orderType,
+        $fulfillmentChannel,
+        $orderStatus,
+        Payment $payment,
+        Shipping $shipping
+    ) {
         $this->salesChannel       = $salesChannel;
         $this->orderType          = $orderType;
         $this->fulfillmentChannel = $fulfillmentChannel;

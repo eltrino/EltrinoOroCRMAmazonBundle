@@ -12,13 +12,13 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Controller;
+namespace OroCRM\Bundle\AmazonBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Eltrino\OroCrmAmazonBundle\Entity\Order;
+use OroCRM\Bundle\AmazonBundle\Entity\Order;
 
 /**
  * @Route("/order")

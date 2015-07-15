@@ -12,11 +12,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderTraits;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderTraits;
 
-use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\ShippingTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\PaymentTrait;
-use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\ShippingTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\PaymentTrait;
+use OroCRM\Bundle\AmazonBundle\Model\Order\OrderDetails;
 
 trait OrderDetailsTrait
 {
@@ -28,28 +28,28 @@ trait OrderDetailsTrait
      *
      * @ORM\Column(name="sales_channel", type="string", length=60, nullable=true)
      */
-    private $salesChannel;
+    protected $salesChannel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="order_type", type="string", length=60, nullable=true)
      */
-    private $orderType;
+    protected $orderType;
 
     /**
      * @var string
      *
      * @ORM\Column(name="fulfillment_channel", type="string", length=60, nullable=true)
      */
-    private $fulfillmentChannel;
+    protected $fulfillmentChannel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="order_status", type="string", length=60, nullable=true)
      */
-    private $orderStatus;
+    protected $orderStatus;
 
     protected function initFromOrderDetails(OrderDetails $orderDetails)
     {
@@ -58,5 +58,4 @@ trait OrderDetailsTrait
         $this->fulfillmentChannel = $orderDetails->getFulfillmentChannel();
         $this->orderStatus        = $orderDetails->getOrderStatus();
     }
-
 }

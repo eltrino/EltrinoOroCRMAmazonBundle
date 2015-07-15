@@ -1,22 +1,22 @@
 parameters:
     # transport
-    eltrino_amazon.amazon_rest_transport.class:                              Eltrino\OroCrmAmazonBundle\Provider\Transport\AmazonRestTransport
+    eltrino_amazon.amazon_rest_transport.class:                              OroCRM\Bundle\AmazonBundle\Provider\Transport\AmazonRestTransport
 
     # providers
-    eltrino_amazon.provider.amazon_channel_type.class:                       Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType
+    eltrino_amazon.provider.amazon_channel_type.class:                       OroCRM\Bundle\AmazonBundle\Provider\AmazonChannelType
 
     # forms
-    eltrino_amazon.form.type.amazon_rest_transport_setting.class:            Eltrino\OroCrmAmazonBundle\Form\Type\AmazonRestTransportSettingFormType
+    eltrino_amazon.form.type.amazon_rest_transport_setting.class:            OroCRM\Bundle\AmazonBundle\Form\Type\AmazonRestTransportSettingFormType
 
-    eltrino_amazon.order.factory.class:                                      Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
+    eltrino_amazon.order.factory.class:                                      OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
 
-    eltrino_amazon.amazon_rest_client.factory_class:                         Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
+    eltrino_amazon.amazon_rest_client.factory_class:                         OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory
 
-    eltrino_amazon.rest_client.class:                                        Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientImpl
+    eltrino_amazon.rest_client.class:                                        OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientImpl
 
-    eltrino_amazon.filters.factory_class:                                    Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
+    eltrino_amazon.filters.factory_class:                                    OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
 
-    eltrino_amazon.navigation.listener_class:                                Eltrino\OroCrmAmazonBundle\EventListener\AmazonNavigationListener
+    eltrino_amazon.navigation.listener_class:                                OroCRM\Bundle\AmazonBundle\EventListener\AmazonNavigationListener
 
 services:
    # transport

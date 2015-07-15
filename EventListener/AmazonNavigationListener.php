@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\EventListener;
+namespace OroCRM\Bundle\AmazonBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
@@ -20,11 +20,11 @@ use Knp\Menu\ItemInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonChannelType;
 
 /**
  * Class AmazonNavigationListener.
- * @package Eltrino\OroCrmAmazonBundle\EventListener
+ * @package OroCRM\Bundle\AmazonBundle\EventListener
  */
 class AmazonNavigationListener
 {

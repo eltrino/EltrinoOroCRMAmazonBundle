@@ -12,23 +12,23 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity;
+namespace OroCRM\Bundle\AmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\OrderItemTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemGiftInfoTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemCodFeeInfoTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemInfoTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemShippingInfoTrait;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemInfo;
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\OrderItemTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemGiftInfoTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemCodFeeInfoTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemInfoTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemShippingInfoTrait;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemGiftInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemCodFeeInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
 
 /**
  * Class OrderItem
  *
- * @package Eltrino\OroCrmAmazonBundle\Entity
+ * @package OroCRM\Bundle\AmazonBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="eltrino_amazon_order_items")
  */
@@ -47,52 +47,57 @@ class OrderItem
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var Order
      * @ORM\ManyToOne(targetEntity="Order", cascade={"persist"})
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")
      */
-    private $order;
+    protected $order;
 
     /**
      * @var string
      *
      * @ORM\Column(name="asin", type="string", length=60)
      */
-    private $asin;
+    protected $asin;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="seller_sku", type="string", length=60, nullable=true)
      */
-    private $sellerSku;
+    protected $sellerSku;
 
     /**
      * @var ItemInfo
      */
-    private $itemInfo;
+    protected $itemInfo;
 
     /**
      * @var ItemShippingInfo
      */
-    private $itemShippingInfo;
+    protected $itemShippingInfo;
 
     /**
      * @var ItemCodFeeInfo
      */
-    private $itemCodFeeInfo;
+    protected $itemCodFeeInfo;
 
     /**
      * @var ItemGiftInfo
      */
-    private $itemGiftInfo;
+    protected $itemGiftInfo;
 
-    public function __construct($asin, $sellerSku, ItemInfo $itemInfo, ItemShippingInfo $itemShippingInfo,
-                                ItemCodFeeInfo $itemCodFeeInfo, ItemGiftInfo $itemGiftInfo)
-    {
+    public function __construct(
+        $asin,
+        $sellerSku,
+        ItemInfo $itemInfo,
+        ItemShippingInfo $itemShippingInfo,
+        ItemCodFeeInfo $itemCodFeeInfo,
+        ItemGiftInfo $itemGiftInfo
+    ) {
         $this->asin             = $asin;
         $this->sellerSku        = $sellerSku;
         $this->itemInfo         = $itemInfo;
@@ -123,7 +128,7 @@ class OrderItem
     }
 
     /**
-     * @return \Eltrino\OroCrmAmazonBundle\Entity\Order
+     * @return \OroCRM\Bundle\AmazonBundle\Entity\Order
      */
     public function getOrder()
     {

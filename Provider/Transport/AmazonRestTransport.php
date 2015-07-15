@@ -13,7 +13,7 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
@@ -23,7 +23,7 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  * used to fetch and pull data to/from Amazon instance
  * with sessionId param using REST requests
  *
- * @package Eltrino\OroCrmAmazonBundle
+ * @package OroCRM\Bundle\AmazonBundle
  */
 class AmazonRestTransport implements TransportInterface
 {
@@ -48,7 +48,7 @@ class AmazonRestTransport implements TransportInterface
      */
     public function getSettingsEntityFQCN()
     {
-        return 'Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport';
+        return 'OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport';
     }
 
     /**
@@ -69,4 +69,4 @@ class AmazonRestTransport implements TransportInterface
     {
 
     }
-} 
+}

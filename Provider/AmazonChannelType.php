@@ -13,7 +13,7 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Provider;
+namespace OroCRM\Bundle\AmazonBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Provider\ChannelInterface;
 
@@ -28,4 +28,4 @@ class AmazonChannelType implements ChannelInterface
     {
         return 'Amazon';
     }
-} 
+}

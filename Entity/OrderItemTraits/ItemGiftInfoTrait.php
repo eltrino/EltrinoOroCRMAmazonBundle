@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemGiftInfo;
 
 trait ItemGiftInfoTrait
 {
@@ -23,36 +23,40 @@ trait ItemGiftInfoTrait
      *
      * @ORM\Column(name="gift_message_text", type="string", length=2048, nullable=true)
      */
-    private $giftMessageText;
+    protected $giftMessageText;
 
     /**
      * @var string
      *
      * @ORM\Column(name="gift_price_currency_id", type="string", length=32, nullable=true)
      */
-    private $giftWrapPriceCurrencyId;
+    protected $giftWrapPriceCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="gift_price_amount", type="float", nullable=true)
      */
-    private $giftWrapPriceAmount;
+    protected $giftWrapPriceAmount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="gift_level", type="string", length=256, nullable=true)
      */
-    private $giftWrapLevel;
+    protected $giftWrapLevel;
 
     /**
      * @return ItemGiftInfo
      */
     protected function initItemGiftInfo()
     {
-        return new ItemGiftInfo($this->giftMessageText, $this->giftWrapPriceCurrencyId,
-            $this->giftWrapPriceAmount, $this->giftWrapLevel);
+        return new ItemGiftInfo(
+            $this->giftMessageText,
+            $this->giftWrapPriceCurrencyId,
+            $this->giftWrapPriceAmount,
+            $this->giftWrapLevel
+        );
     }
 
     /**
@@ -65,4 +69,4 @@ trait ItemGiftInfoTrait
         $this->giftWrapPriceAmount     = $itemGiftInfo->getGiftWrapPriceAmount();
         $this->giftWrapLevel           = $itemGiftInfo->getGiftWrapLevel();
     }
-} 
+}

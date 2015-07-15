@@ -12,8 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderTraits;
-use Eltrino\OroCrmAmazonBundle\Model\Order\Shipping;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderTraits;
+
+use OroCRM\Bundle\AmazonBundle\Model\Order\Shipping;
 
 trait ShippingTrait
 {
@@ -22,36 +23,40 @@ trait ShippingTrait
      *
      * @ORM\Column(name="ship_service_level", type="string", length=300)
      */
-    private $shipServiceLevel;
+    protected $shipServiceLevel;
 
     /**
      * @var string
      *
      * @ORM\Column(name="ship_service_level_category", type="string", length=300)
      */
-    private $shipmentServiceLevelCategory;
+    protected $shipmentServiceLevelCategory;
 
     /**
      * @var float
      *
      * @ORM\Column(name="number_of_items_shipped", type="integer", nullable=true)
      */
-    private $numberOfItemsShipped;
+    protected $numberOfItemsShipped;
 
     /**
      * @var float
      *
      * @ORM\Column(name="number_of_items_unshipped", type="integer", nullable=true)
      */
-    private $numberOfItemsUnshipped;
+    protected $numberOfItemsUnshipped;
 
     /**
      * @return Shipping
      */
     protected function initShipping()
     {
-        return new Shipping($this->shipServiceLevel, $this->shipmentServiceLevelCategory,
-            $this->numberOfItemsShipped, $this->numberOfItemsUnshipped);
+        return new Shipping(
+            $this->shipServiceLevel,
+            $this->shipmentServiceLevelCategory,
+            $this->numberOfItemsShipped,
+            $this->numberOfItemsUnshipped
+        );
     }
 
     /**

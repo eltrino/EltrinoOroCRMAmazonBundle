@@ -12,8 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderTraits;
-use Eltrino\OroCrmAmazonBundle\Model\Order\Payment;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderTraits;
+
+use OroCRM\Bundle\AmazonBundle\Model\Order\Payment;
 
 trait PaymentTrait
 {
@@ -22,21 +23,21 @@ trait PaymentTrait
      *
      * @ORM\Column(name="total_amount", type="float", nullable=true)
      */
-    private $totalAmount;
+    protected $totalAmount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="currency_id", type="string", length=32, nullable=true)
      */
-    private $currencyId;
+    protected $currencyId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="payment_method", type="string", length=60, nullable=true)
      */
-    private $paymentMethod;
+    protected $paymentMethod;
 
     /**
      * @return Payment

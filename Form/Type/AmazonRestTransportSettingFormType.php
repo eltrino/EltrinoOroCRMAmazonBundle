@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Form\Type;
+namespace OroCRM\Bundle\AmazonBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -57,7 +57,7 @@ class AmazonRestTransportSettingFormType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport']);
+        $resolver->setDefaults(['data_class' => 'OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport']);
     }
 
     /**
@@ -67,4 +67,4 @@ class AmazonRestTransportSettingFormType extends AbstractType
     {
         return 'eltrino_amazon_rest_transport_setting_form_type';
     }
-} 
+}

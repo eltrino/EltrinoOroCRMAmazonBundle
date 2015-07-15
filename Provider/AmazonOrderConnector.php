@@ -13,25 +13,25 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Provider;
+namespace OroCRM\Bundle\AmazonBundle\Provider;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\InitialModeLoader;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\UpdateModeLoader;
+use OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\AmazonDataIterator;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order\InitialModeLoader;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order\UpdateModeLoader;
 use Oro\Bundle\ImportExportBundle\Reader\IteratorBasedReader;
 
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 
 class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInterface
 {
-    const ORDER_TYPE = 'Eltrino\OroCrmAmazonBundle\Entity\Order';
+    const ORDER_TYPE = 'OroCRM\Bundle\AmazonBundle\Entity\Order';
 
     /**
      * @var ContextRegistry
@@ -46,12 +46,12 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
     /**
      * @var AmazonRestClientFactory
      */
-    private $amazonRestClientFactory;
+    protected $amazonRestClientFactory;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
      */
-    private $filtersFactory;
+    protected $filtersFactory;
 
     /**
      * @param ContextRegistry $contextRegistry
@@ -59,10 +59,12 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
      * @param AmazonRestClientFactory $amazonRestClientFactory
      * @param FiltersFactory $filtersFactory
      */
-    public function __construct(ContextRegistry $contextRegistry,
-                                ConnectorContextMediator $contextMediator, AmazonRestClientFactory $amazonRestClientFactory,
-                                FiltersFactory $filtersFactory)
-    {
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        ConnectorContextMediator $contextMediator,
+        AmazonRestClientFactory $amazonRestClientFactory,
+        FiltersFactory $filtersFactory
+    ) {
         $this->contextRegistry = $contextRegistry;
         $this->contextMediator = $contextMediator;
         $this->amazonRestClientFactory = $amazonRestClientFactory;
@@ -122,7 +124,7 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
         $this->setSourceIterator($orderIterator);
     }
 
-    private function initializeAmazonRestClient(ParameterBag $settings)
+    protected function initializeAmazonRestClient(ParameterBag $settings)
     {
         $amazonRestClient = $this->amazonRestClientFactory->create(
             $settings->get('wsdl_url'),

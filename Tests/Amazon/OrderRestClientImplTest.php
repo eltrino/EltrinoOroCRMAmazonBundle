@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Tests\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\OrderRestClientImpl;
+use OroCRM\Bundle\AmazonBundle\Amazon\OrderRestClientImpl;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
@@ -26,8 +26,8 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
     private $client;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler
      */
     private $authHandler;
 
@@ -59,8 +59,8 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
     private $getOrdersByNextToken;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter
      */
     private $filter;
 

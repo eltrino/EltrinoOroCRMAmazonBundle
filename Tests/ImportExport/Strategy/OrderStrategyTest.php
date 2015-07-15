@@ -12,8 +12,8 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\ImportExport\Srtategy;
-use Eltrino\OroCrmAmazonBundle\ImportExport\Strategy\OrderStrategy;
+namespace OroCRM\Bundle\AmazonBundle\Tests\ImportExport\Srtategy;
+use OroCRM\Bundle\AmazonBundle\ImportExport\Strategy\OrderStrategy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
@@ -26,8 +26,8 @@ class OrderStrategyTest extends \PHPUnit_Framework_TestCase
     private $strategyHelper;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Entity\Order
-     * @Mock Eltrino\OroCrmAmazonBundle\Entity\Order
+     * @var \OroCRM\Bundle\AmazonBundle\Entity\Order
+     * @Mock OroCRM\Bundle\AmazonBundle\Entity\Order
      */
     private $order;
 

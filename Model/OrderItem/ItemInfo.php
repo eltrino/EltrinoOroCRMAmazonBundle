@@ -12,48 +12,54 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemInfo
 {
     /**
      * @var string
      */
-    private $orderItemId;
+    protected $orderItemId;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $quantityOrdered;
+    protected $quantityOrdered;
 
     /**
      * @var string
      */
-    private $quantityShipped;
+    protected $quantityShipped;
 
     /**
      * @var string
      */
-    private $itemPriceCurrencyId;
+    protected $itemPriceCurrencyId;
 
     /**
      * @var string
      */
-    private $itemPriceAmount;
+    protected $itemPriceAmount;
 
     /**
      * @var string
      */
-    private $condition;
+    protected $condition;
 
-    public function __construct($orderItemId, $title, $quantityOrdered, $quantityShipped,
-                                $itemPriceCurrencyId, $itemPriceAmount, $condition)
-    {
+    public function __construct(
+        $orderItemId,
+        $title,
+        $quantityOrdered,
+        $quantityShipped,
+        $itemPriceCurrencyId,
+        $itemPriceAmount,
+        $condition
+    ) {
         $this->orderItemId           = $orderItemId;
         $this->title                 = $title;
         $this->quantityOrdered       = $quantityOrdered;

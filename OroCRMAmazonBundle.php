@@ -13,13 +13,13 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle;
+namespace OroCRM\Bundle\AmazonBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Eltrino\OroCrmAmazonBundle\DependencyInjection\Compiler\FosJsConfigurationPass;
+use OroCRM\Bundle\AmazonBundle\DependencyInjection\Compiler\FosJsConfigurationPass;
 
-class EltrinoOroCrmAmazonBundle extends Bundle
+class OroCRMAmazonBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

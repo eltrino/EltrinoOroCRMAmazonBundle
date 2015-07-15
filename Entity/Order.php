@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity;
+namespace OroCRM\Bundle\AmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -20,14 +20,14 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderTrait;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderDetailsTrait;
-use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\OrderTrait;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\OrderDetailsTrait;
+use OroCRM\Bundle\AmazonBundle\Model\Order\OrderDetails;
 
 /**
  * Class Order
  *
- * @package Eltrino\OroCrmAmazonBundle\Entity
+ * @package OroCRM\Bundle\AmazonBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="eltrino_amazon_order")
  */
@@ -44,54 +44,54 @@ class Order
      * @ORM\Column(type="integer", name="id")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      *
      * @ORM\Column(name="amazon_order_id", type="string", length=60, nullable=false)
      */
-    private $amazonOrderId;
+    protected $amazonOrderId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="customer_email", type="string", length=128, nullable=true)
      */
-    private $customerEmail;
+    protected $customerEmail;
 
     /**
      * @var string
      *
      * @ORM\Column(name="marketplace_id", type="string", length=60, nullable=true)
      */
-    private $marketPlaceId;
+    protected $marketPlaceId;
 
     /**
      * @var \DateTime $createdAt
      *
      * @ORM\Column(type="datetime", name="created_at")
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime $updatedAt
      *
      * @ORM\Column(name="updated_at", type="datetime")
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order",cascade={"all"})
      */
-    private $items;
+    protected $items;
 
     /**
      * @var OrderDetails
      */
-    private $orderDetails;
+    protected $orderDetails;
 
     /**
      * @param $amazonOrderId
@@ -99,9 +99,13 @@ class Order
      * @param OrderDetails $orderDetails
      * @param null $createdAt
      */
-    public function __construct($amazonOrderId, $customerEmail, $marketPlaceId, OrderDetails $orderDetails,
-                                $createdAt = null)
-    {
+    public function __construct(
+        $amazonOrderId,
+        $customerEmail,
+        $marketPlaceId,
+        OrderDetails $orderDetails,
+        $createdAt = null
+    ) {
         $this->amazonOrderId = $amazonOrderId;
         $this->customerEmail = $customerEmail;
         $this->marketPlaceId = $marketPlaceId;
@@ -191,7 +195,7 @@ class Order
         return $this->orderDetails;
     }
 
-    private function initOrderDetails()
+    protected function initOrderDetails()
     {
         if (is_null($this->orderDetails)) {
             $payment  = $this->initPayment($this->paymentMethod, $this->currencyId, $this->totalAmount);

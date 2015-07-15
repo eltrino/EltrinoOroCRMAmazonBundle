@@ -13,13 +13,13 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Migrations\Schema\v1_0;
+namespace OroCRM\Bundle\AmazonBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class EltrinoOroCrmAmazonBundle implements Migration
+class OroCRMAmazonBundle implements Migration
 {
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -115,4 +115,4 @@ class EltrinoOroCrmAmazonBundle implements Migration
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
-} 
+}

@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
+namespace OroCRM\Bundle\AmazonBundle\Amazon\Filters;
 
 class CreateTimeRangeFilter implements Filter
 {
@@ -24,12 +24,12 @@ class CreateTimeRangeFilter implements Filter
     /**
      * @var \DateTime
      */
-    private $from;
+    protected $from;
 
     /**
      * @var \DateTime
      */
-    private $to;
+    protected $to;
 
     public function __construct(\DateTime $from, \DateTime $to)
     {

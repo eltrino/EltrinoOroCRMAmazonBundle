@@ -12,19 +12,19 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemShippingInfo
 {
     /**
      * @var string
      */
-    private $shippingPriceCurrencyId;
+    protected $shippingPriceCurrencyId;
 
     /**
      * @var string
      */
-    private $shippingPriceAmount;
+    protected $shippingPriceAmount;
 
     public function __construct($shippingPriceCurrencyId, $shippingPriceAmount)
     {
@@ -47,4 +47,4 @@ class ItemShippingInfo
     {
         return $this->shippingPriceAmount;
     }
-} 
+}

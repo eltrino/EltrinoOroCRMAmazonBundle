@@ -12,13 +12,13 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\ImportExport\Strategy;
+namespace OroCRM\Bundle\AmazonBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 
-use Eltrino\OroCrmAmazonBundle\Entity\Order;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItem;
+use OroCRM\Bundle\AmazonBundle\Entity\Order;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -28,10 +28,10 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 class OrderStrategy implements StrategyInterface, ContextAwareInterface
 {
     /** @var ImportStrategyHelper */
-    private $strategyHelper;
+    protected $strategyHelper;
 
     /** @var ContextInterface */
-    private $context;
+    protected $context;
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -126,7 +126,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return object
      */
-    private function getEntityByCriteria(array $criteria, $entity)
+    protected function getEntityByCriteria(array $criteria, $entity)
     {
         if (is_object($entity)) {
             $entityClass = ClassUtils::getClass($entity);
@@ -142,7 +142,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return EntityRepository
      */
-    private function getEntityRepository($entityName)
+    protected function getEntityRepository($entityName)
     {
         return $this->strategyHelper->getEntityManager($entityName)->getRepository($entityName);
     }
@@ -152,7 +152,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return null|object
      */
-    private function validateAndUpdateContext($entity)
+    protected function validateAndUpdateContext($entity)
     {
         // validate entity
         $validationErrors = $this->strategyHelper->validateEntity($entity);

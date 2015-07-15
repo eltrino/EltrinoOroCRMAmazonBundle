@@ -12,11 +12,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon;
+namespace OroCRM\Bundle\AmazonBundle\Amazon;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
-use Eltrino\OroCrmAmazonBundle\Amazon\Api\CheckRestClient;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\AuthorizationHandler;
+use OroCRM\Bundle\AmazonBundle\Amazon\Api\CheckRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter;
 use Guzzle\Http\ClientInterface;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 

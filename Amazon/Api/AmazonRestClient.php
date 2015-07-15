@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Api;
+namespace OroCRM\Bundle\AmazonBundle\Amazon\Api;
 
 interface AmazonRestClient
 {
@@ -20,17 +20,17 @@ interface AmazonRestClient
      * Retrieves Amazon Check Client
      * @return CheckRestClient
      */
-    function getCheckRestClient();
+    public function getCheckRestClient();
 
     /**
      * Retrieves Amazon Order Client
      * @return OrderRestClient
      */
-    function getOrderRestClient();
+    public function getOrderRestClient();
 
     /**
      * Retrieves Amazon Order Items Client
      * @return OrderItemsRestClient
      */
-    function getOrderItemsRestClient();
-} 
+    public function getOrderItemsRestClient();
+}

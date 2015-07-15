@@ -12,52 +12,52 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider\Iterator\Order;
+namespace OroCRM\Bundle\AmazonBundle\Tests\Provider\Iterator\Order;
 
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\UpdateModeLoader;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order\UpdateModeLoader;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class UpdateModeLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Api\AmazonRestClient
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Api\AmazonRestClient
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Api\AmazonRestClient
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Api\AmazonRestClient
      */
     private $amazonRestClient;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderRestClient
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderRestClient
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderRestClient
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderRestClient
      */
     private $amazonOrderClient;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderItemsRestClient
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Api\OrderItemsRestClient
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderItemsRestClient
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Api\OrderItemsRestClient
      */
     private $amazonOrderItemsClient;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory
      */
     private $filtersFactory;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\CompositeFilter
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\CompositeFilter
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\CompositeFilter
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\CompositeFilter
      */
     private $compositeFilter;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\ModTimeRangeFilter
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\ModTimeRangeFilter
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\ModTimeRangeFilter
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\ModTimeRangeFilter
      */
     private $modTimeRangeFilter;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter
+     * @var \OroCRM\Bundle\AmazonBundle\Amazon\Filters\AmazonOrderIdFilter
+     * @Mock OroCRM\Bundle\AmazonBundle\Amazon\Filters\AmazonOrderIdFilter
      */
     private $amazonOrderIdFilter;
 

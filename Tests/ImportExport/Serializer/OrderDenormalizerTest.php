@@ -12,17 +12,17 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\ImportExport\Serializer;
+namespace OroCRM\Bundle\AmazonBundle\Tests\ImportExport\Serializer;
 
-use Eltrino\OroCrmAmazonBundle\ImportExport\Serializer\OrderDenormalizer;
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
+use OroCRM\Bundle\AmazonBundle\ImportExport\Serializer\OrderDenormalizer;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
+     * @var \OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
+     * @Mock OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
      */
     private $orderFactory;
 
@@ -45,8 +45,8 @@ class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
     private $channel;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Entity\Order
-     * @Mock Eltrino\OroCrmAmazonBundle\Entity\Order
+     * @var \OroCRM\Bundle\AmazonBundle\Entity\Order
+     * @Mock OroCRM\Bundle\AmazonBundle\Entity\Order
      */
     private $order;
 

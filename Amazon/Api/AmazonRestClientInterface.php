@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Api;
+namespace OroCRM\Bundle\AmazonBundle\Amazon\Api;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\Filter;
 
 interface AmazonRestClientInterface
 {
@@ -22,11 +22,11 @@ interface AmazonRestClientInterface
      * @param Filter $filter
      * @return mixed
      */
-    function getOrders(Filter $filter);
+    public function getOrders(Filter $filter);
 
     /**
      * @param Filter $filter
      * @return mixed
      */
-    function getOrderItems(Filter $filter);
+    public function getOrderItems(Filter $filter);
 }

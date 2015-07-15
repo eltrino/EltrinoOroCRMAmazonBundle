@@ -12,9 +12,9 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
 
 trait ItemShippingInfoTrait
 {
@@ -23,14 +23,14 @@ trait ItemShippingInfoTrait
      *
      * @ORM\Column(name="shipping_price_currency_id", type="string", length=32, nullable=true)
      */
-    private $shippingPriceCurrencyId;
+    protected $shippingPriceCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="shipping_price_amount", type="float", nullable=true)
      */
-    private $shippingPriceAmount;
+    protected $shippingPriceAmount;
 
     /**
      * @return ItemShippingInfo
@@ -48,4 +48,4 @@ trait ItemShippingInfoTrait
         $this->shippingPriceCurrencyId    = $itemShippingInfo->getShippingPriceCurrencyId();
         $this->shippingPriceAmount        = $itemShippingInfo->getShippingPriceAmount();
     }
-} 
+}
