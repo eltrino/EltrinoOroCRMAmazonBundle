@@ -1,0 +1,6 @@
+orocrm:
+    amazon:
+        transport_check_message:
+            success:    Connected to Amazon MWS API
+            invalid:    Parameters are not valid.
+            error:      Error occurred during check request, please try later!

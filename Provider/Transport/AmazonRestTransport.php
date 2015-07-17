@@ -17,6 +17,9 @@ namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientImpl;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Amazon REST transport
@@ -27,8 +30,14 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  */
 class AmazonRestTransport implements TransportInterface
 {
+    /** @var ParameterBag */
+    protected $settings;
+
+    /** @var AmazonRestClientImpl */
+    protected $amazonClient;
+
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLabel()
     {
@@ -36,7 +45,7 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
@@ -44,7 +53,7 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsEntityFQCN()
     {
@@ -52,11 +61,19 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @param Transport $transportEntity
+     * {@inheritdoc}
      */
     public function init(Transport $transportEntity)
     {
-
+        $this->settings = $transportEntity->getSettingsBag();
+        $amazonRestClientFactory = new AmazonRestClientFactory();
+        $this->amazonClient = $amazonRestClientFactory->create(
+            $this->settings->get('wsdl_url'),
+            $this->settings->get('aws_access_key_id'),
+            $this->settings->get('aws_secret_access_key'),
+            $this->settings->get('merchant_id'),
+            $this->settings->get('marketplace_id')
+        );
     }
 
     /**
@@ -68,5 +85,13 @@ class AmazonRestTransport implements TransportInterface
     public function call($action, $params = [])
     {
 
+    }
+
+    /**
+     * @return AmazonRestClientImpl
+     */
+    public function getAmazonClient()
+    {
+        return $this->amazonClient;
     }
 }

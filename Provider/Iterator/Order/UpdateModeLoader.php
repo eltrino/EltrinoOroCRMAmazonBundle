@@ -25,7 +25,7 @@ class UpdateModeLoader extends AbstractLoader
 
         while(empty($elements) && $this->startSyncDate < $this->now) {
 
-            list($from, $to) = $this->prepareDateRange($this->startSyncDate, new \DateInterval('P2D'));
+            list($from, $to) = $this->prepareDateRange($this->startSyncDate, new \DateInterval('P20D'));
             $this->compositeFilter->reset();
             $this->compositeFilter->addFilter($this->createModTimeFilter($from, $to));
 

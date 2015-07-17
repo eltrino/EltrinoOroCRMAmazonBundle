@@ -22,10 +22,9 @@ class InitialModeLoader extends AbstractLoader
     public function load()
     {
         $elements = array();
-
         while(empty($elements) && $this->startSyncDate < $this->now) {
-
-            list($from, $to) = $this->prepareDateRange($this->startSyncDate, new \DateInterval('P2D'));
+            list($from, $to) = $this->createTimes(10);
+            //list($from, $to) = $this->prepareDateRange($this->startSyncDate, new \DateInterval('P20D'));
             $this->compositeFilter->reset();
             $this->compositeFilter->addFilter($this->createCreateTimeFilter($from, $to));
 

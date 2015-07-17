@@ -14,9 +14,11 @@
  */
 namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator\Order;
 
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 use OroCRM\Bundle\AmazonBundle\Amazon\Filters\CompositeFilter;
 use OroCRM\Bundle\AmazonBundle\Amazon\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Amazon\Api\AmazonRestClient;
+use OroCRM\Bundle\AmazonBundle\Amazon\Filters\ModTimeRangeFilter;
 use OroCRM\Bundle\AmazonBundle\Provider\Iterator\Loader;
 use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
@@ -50,7 +52,7 @@ abstract class AbstractLoader implements Loader
     public function __construct(
         AmazonRestClient $amazonRestClient,
         FiltersFactory $filtersFactory,
-        \DateTime $startSyncDate
+        \DateTime $startSyncDate = null
     ) {
         $this->amazonRestClient = $amazonRestClient;
         $this->filtersFactory = $filtersFactory;
@@ -76,9 +78,11 @@ abstract class AbstractLoader implements Loader
             $this->appendSimplexml($simplexmlTemp, $simplexmlChild);
         }
     }
+
     /**
-     * @param \DateTime $startSyncDate
-     * @param \DateTime $endSyncDate
+     * @param \DateTime     $startSyncDate
+     * @param \DateInterval $dateInterval
+     *
      * @return array
      */
     protected function prepareDateRange(\DateTime $startSyncDate, \DateInterval $dateInterval)
@@ -90,9 +94,9 @@ abstract class AbstractLoader implements Loader
     }
 
     /**
-     * @param $orders
+     * @param array $orders
      */
-    protected function loadOrderItems($orders)
+    protected function loadOrderItems(array $orders)
     {
         foreach ($orders as $order) {
             $amazonOrderId = (string)$order->AmazonOrderId;
@@ -124,7 +128,7 @@ abstract class AbstractLoader implements Loader
     /**
      * @param \DateTime $from
      * @param \DateTime $to
-     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\ModTimeRangeFilter
+     * @return ModTimeRangeFilter
      */
     protected function createModTimeFilter(\DateTime $from, \DateTime $to)
     {
@@ -134,19 +138,8 @@ abstract class AbstractLoader implements Loader
     }
 
     /**
-     * @param $nextToken
-     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\NextTokenFilter
-     */
-    protected function createNextTokenFilter($nextToken)
-    {
-        return $this
-            ->filtersFactory
-            ->createNextTokenFilter($nextToken);
-    }
-
-    /**
      * @param $amazonOrderId
-     * @return \OroCRM\Bundle\AmazonBundle\Amazon\Filters\AmazonOrderIdFilter
+     * @return AmazonOrderIdFilter
      */
     protected function createAmazonOrderIdFilter($amazonOrderId)
     {
