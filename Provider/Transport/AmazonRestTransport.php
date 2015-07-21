@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
-use Guzzle\Http\Message\Response;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use OroCRM\Bundle\AmazonBundle\Client\AuthHandler;

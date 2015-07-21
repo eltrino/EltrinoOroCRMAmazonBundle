@@ -47,7 +47,6 @@ class OrderIterator implements \Iterator
         $this->filtersFactory = $filtersFactory;
         $this->from           = $from;
         $this->mode           = $mode;
-        return 'fifif';
     }
 
     protected function load()
