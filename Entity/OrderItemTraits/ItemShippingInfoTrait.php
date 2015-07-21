@@ -45,7 +45,7 @@ trait ItemShippingInfoTrait
      */
     protected function initFromItemShippingInfo(ItemShippingInfo $itemShippingInfo)
     {
-        $this->shippingPriceCurrencyId    = $itemShippingInfo->getShippingPriceCurrencyId();
-        $this->shippingPriceAmount        = $itemShippingInfo->getShippingPriceAmount();
+        $this->shippingPriceCurrencyId = $itemShippingInfo->getShippingPriceCurrencyId();
+        $this->shippingPriceAmount     = $itemShippingInfo->getShippingPriceAmount();
     }
 }

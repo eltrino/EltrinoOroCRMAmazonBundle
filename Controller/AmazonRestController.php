@@ -15,6 +15,7 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Controller;
 
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use OroCRM\Bundle\AmazonBundle\Amazon\AmazonRestClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,12 +32,17 @@ use OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport;
 class AmazonRestController extends Controller
 {
     /**
-     * @Route("/check", name="eltrino_amazon_rest_check")
+     * @Route("/check", name="orocrm_amazon_rest_check")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function checkAction(Request $request)
     {
-        $transport = $this->get('eltrino_amazon.amazon_rest_transport');
-        $data = null;
+        $transport = $this->get('orocrm_amazon.amazon_rest_transport');
+        $data      = null;
 
         if ($id = $request->get('id', false)) {
             $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
@@ -45,25 +51,12 @@ class AmazonRestController extends Controller
         $form = $this->get('form.factory')
             ->createNamed('rest-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
         $form->submit($request);
+        /**
+         * @var Transport $transportEntity
+         */
+        $transportEntity = $form->getData();
+        $transport->init($transportEntity);
 
-        $amazonRestClientFactory = $this->get('eltrino_amazon.amazon_rest_client.factory');
-        $filtersFactory          = $this->get('eltrino_amazon.filters.factory');
-
-        $amazonRestClient = $amazonRestClientFactory->create(
-            $data->getWsdlUrl(),
-            $data->getKeyId(),
-            $data->getSecret(),
-            $data->getMerchantId(),
-            $data->getMarketplaceId()
-        );
-
-        $filter = $filtersFactory->createCompositeFilter();
-        $result = $amazonRestClient->getCheckRestClient()->getStatus($filter);
-
-        return new JsonResponse(
-            [
-                'success' => $result
-            ]
-        );
+        return new JsonResponse(['success' => $transport->getStatus()]);
     }
 }

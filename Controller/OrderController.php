@@ -26,18 +26,18 @@ use OroCRM\Bundle\AmazonBundle\Entity\Order;
 class OrderController extends Controller
 {
     /**
-     * @Route("/", name="eltrino_amazon_order_index")
+     * @Route("/", name="orocrm_amazon_order_index")
      * @Template
      */
     public function indexAction()
     {
         return [
-            'entity_class' => $this->container->getParameter('eltrino_amazon.order.entity.class')
+            'entity_class' => $this->container->getParameter('orocrm_amazon.order.entity.class')
         ];
     }
 
     /**
-     * @Route("/view/{id}", name="eltrino_amazon_order_view", requirements={"id"="\d+"}))
+     * @Route("/view/{id}", name="orocrm_amazon_order_view", requirements={"id"="\d+"}))
      * @Template
      */
     public function viewAction(Order $order)
@@ -46,7 +46,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="eltrino_amazon_order_widget_info", requirements={"id"="\d+"}))
+     * @Route("/info/{id}", name="orocrm_amazon_order_widget_info", requirements={"id"="\d+"}))
      * @Template
      */
     public function infoAction(Order $order)
@@ -55,7 +55,7 @@ class OrderController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", name="eltrino_amazon_order_widget_items", requirements={"id"="\d+"}))
+     * @Route("/widget/grid/{id}", name="orocrm_amazon_order_widget_items", requirements={"id"="\d+"}))
      * @Template
      */
     public function itemsAction(Order $order)

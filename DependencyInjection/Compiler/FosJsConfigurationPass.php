@@ -31,6 +31,6 @@ class FosJsConfigurationPass implements CompilerPassInterface
         }
 
         $container->getDefinition('fos_js_routing.extractor')
-            ->replaceArgument(1, array(0 => "[oro_*, eltrino_*]"));
+            ->replaceArgument(1, [0 => "[oro_*, eltrino_*]"]);
     }
 }

@@ -81,8 +81,7 @@ class OrderItemsRestClientImplTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrderItems()
     {
-        $parameters = array
-        (
+        $parameters = [
             'SellerId'           => 'SellerId',
             'MarketplaceId.Id.1' => 'MarketplaceId.Id.1',
             'Action'             => 'Action',
@@ -92,7 +91,7 @@ class OrderItemsRestClientImplTest extends \PHPUnit_Framework_TestCase
             'SignatureVersion'   => 'SignatureVersion',
             'SignatureMethod'    => 'SignatureMethod',
             'Signature'          => 'Signature',
-        );
+        ];
 
         $this->authHandler->expects($this->once())
             ->method('getSignature');

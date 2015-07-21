@@ -31,7 +31,7 @@ class ModTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter = new ModTimeRangeFilter($from, $to);
 
-        $parameters = array();
+        $parameters          = [];
         $processedParameters = $filter->process($parameters);
 
         $expectedFrom = clone $from;
@@ -40,10 +40,10 @@ class ModTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
         $expectedFrom = $from->format('Y-m-d\TH:i:sO');
         $expectedTo   = $to->format('Y-m-d\TH:i:sO');
 
-        $expected = array(
+        $expected = [
             'LastUpdatedAfter'  => $expectedFrom,
             'LastUpdatedBefore' => $expectedTo
-        );
+        ];
 
         $this->assertEquals($expected, $processedParameters);
     }

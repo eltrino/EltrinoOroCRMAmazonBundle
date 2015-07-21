@@ -60,13 +60,13 @@ class ItemInfo
         $itemPriceAmount,
         $condition
     ) {
-        $this->orderItemId           = $orderItemId;
-        $this->title                 = $title;
-        $this->quantityOrdered       = $quantityOrdered;
-        $this->quantityShipped       = $quantityShipped;
-        $this->itemPriceCurrencyId   = $itemPriceCurrencyId;
-        $this->itemPriceAmount       = $itemPriceAmount;
-        $this->condition             = $condition;
+        $this->orderItemId         = $orderItemId;
+        $this->title               = $title;
+        $this->quantityOrdered     = $quantityOrdered;
+        $this->quantityShipped     = $quantityShipped;
+        $this->itemPriceCurrencyId = $itemPriceCurrencyId;
+        $this->itemPriceAmount     = $itemPriceAmount;
+        $this->condition           = $condition;
     }
 
     /**

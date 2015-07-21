@@ -35,7 +35,7 @@ class AmazonRestTransportSettingFormType extends AbstractType
         $builder->add('merchantId', 'text', ['label' => 'Merchant ID']);
         $builder->add('marketplaceId', 'text', ['label' => 'Marketplace ID']);
 
-        $date = new \DateTime('2007-01-01', new \DateTimeZone('UTC'));
+        $date          = new \DateTime('2007-01-01', new \DateTimeZone('UTC'));
         $syncStartDate = $date->format('Y-m-d');
 
         $builder->add(
@@ -65,6 +65,6 @@ class AmazonRestTransportSettingFormType extends AbstractType
      */
     public function getName()
     {
-        return 'eltrino_amazon_rest_transport_setting_form_type';
+        return 'orocrm_amazon_rest_transport_setting_form_type';
     }
 }

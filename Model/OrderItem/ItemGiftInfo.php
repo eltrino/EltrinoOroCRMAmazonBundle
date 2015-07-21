@@ -42,10 +42,10 @@ class ItemGiftInfo
         $giftWrapPriceAmount,
         $giftWrapLevel
     ) {
-        $this->giftMessageText           = $giftMessageText;
-        $this->giftWrapPriceCurrencyId   = $giftWrapPriceCurrencyId;
-        $this->giftWrapPriceAmount       = $giftWrapPriceAmount;
-        $this->giftWrapLevel             = $giftWrapLevel;
+        $this->giftMessageText         = $giftMessageText;
+        $this->giftWrapPriceCurrencyId = $giftWrapPriceCurrencyId;
+        $this->giftWrapPriceAmount     = $giftWrapPriceAmount;
+        $this->giftWrapLevel           = $giftWrapLevel;
     }
 
     /**

@@ -23,6 +23,7 @@ use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemInfo;
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemCodFeeInfo;
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemGiftInfo;
+
 class OrderFactory
 {
     /**
@@ -32,20 +33,20 @@ class OrderFactory
      */
     public function createOrder(SimpleXMLElement $data)
     {
-        $amazonOrderId                = (string) $data->AmazonOrderId;
-        $customerEmail                = (string) $data->BuyerEmail;
-        $marketPlaceId                = (string) $data->MarketplaceId;
-        $shipServiceLevel             = (string) $data->ShipServiceLevel;
-        $shipmentServiceLevelCategory = (string) $data->ShipmentServiceLevelCategory;
-        $salesChannel                 = (string) $data->SalesChannel;
-        $orderType                    = (string) $data->OrderType;
-        $fulfillmentChannel           = (string) $data->FulfillmentChannel;
-        $orderStatus                  = (string) $data->OrderStatus;
-        $numberOfItemsShipped         = (string) $data->NumberOfItemsShipped;
-        $numberOfItemsUnshipped       = (string) $data->NumberOfItemsUnshipped;
-        $paymentMethod                = (string) $data->PaymentMethod;
-        $currencyId                   = (string) $data->OrderTotal->CurrencyCode;
-        $totalAmount                  = (string) $data->OrderTotal->Amount;
+        $amazonOrderId                = (string)$data->AmazonOrderId;
+        $customerEmail                = (string)$data->BuyerEmail;
+        $marketPlaceId                = (string)$data->MarketplaceId;
+        $shipServiceLevel             = (string)$data->ShipServiceLevel;
+        $shipmentServiceLevelCategory = (string)$data->ShipmentServiceLevelCategory;
+        $salesChannel                 = (string)$data->SalesChannel;
+        $orderType                    = (string)$data->OrderType;
+        $fulfillmentChannel           = (string)$data->FulfillmentChannel;
+        $orderStatus                  = (string)$data->OrderStatus;
+        $numberOfItemsShipped         = (string)$data->NumberOfItemsShipped;
+        $numberOfItemsUnshipped       = (string)$data->NumberOfItemsUnshipped;
+        $paymentMethod                = (string)$data->PaymentMethod;
+        $currencyId                   = (string)$data->OrderTotal->CurrencyCode;
+        $totalAmount                  = (string)$data->OrderTotal->Amount;
 
         $shipping     = new Shipping(
             $shipServiceLevel,
@@ -75,27 +76,27 @@ class OrderFactory
     protected function processOrderItems($items, Order $order)
     {
         foreach ($items as $item) {
-            $asin                        = (string) $item->ASIN;
-            $orderItemId                 = (string) $item->OrderItemId;
-            $sellerSku                   = (string) $item->SellerSKU;
-            $title                       = (string) $item->Title;
-            $quantityOrdered             = (string) $item->QuantityOrdered;
-            $quantityShipped             = (string) $item->QuantityShipped;
-            $itemPriceCurrencyId         = (string) $item->ItemPrice->CurrencyCode;
-            $itemPriceAmount             = (string) $item->ItemPrice->Amount;
-            $shippingPriceCurrencyId     = (string) $item->ShippingPrice->CurrencyCode;
-            $shippingPriceAmount         = (string) $item->ShippingPrice->Amount;
-            $codFeeCurrencyId            = (string) $item->CODFee->CurrencyCode;
-            $codFeeAmount                = (string) $item->CODFee->Amount;
-            $codFeeDiscountCurrencyId    = (string) $item->CODFeeDiscount->CurrencyCode;
-            $codFeeDiscountAmount        = (string) $item->CODFeeDiscount->Amount;
-            $giftMessageText             = (string) $item->GiftMessageText;
-            $giftWrapPriceCurrencyId     = (string) $item->GiftWrapPrice->CurrencyCode;
-            $giftWrapPriceAmount         = (string) $item->GiftWrapPrice->Amount;
-            $giftWrapLevel               = (string) $item->GiftWrapLevel;
-            $condition                   = (string) $item->ConditionId;
+            $asin                     = (string)$item->ASIN;
+            $orderItemId              = (string)$item->OrderItemId;
+            $sellerSku                = (string)$item->SellerSKU;
+            $title                    = (string)$item->Title;
+            $quantityOrdered          = (string)$item->QuantityOrdered;
+            $quantityShipped          = (string)$item->QuantityShipped;
+            $itemPriceCurrencyId      = (string)$item->ItemPrice->CurrencyCode;
+            $itemPriceAmount          = (string)$item->ItemPrice->Amount;
+            $shippingPriceCurrencyId  = (string)$item->ShippingPrice->CurrencyCode;
+            $shippingPriceAmount      = (string)$item->ShippingPrice->Amount;
+            $codFeeCurrencyId         = (string)$item->CODFee->CurrencyCode;
+            $codFeeAmount             = (string)$item->CODFee->Amount;
+            $codFeeDiscountCurrencyId = (string)$item->CODFeeDiscount->CurrencyCode;
+            $codFeeDiscountAmount     = (string)$item->CODFeeDiscount->Amount;
+            $giftMessageText          = (string)$item->GiftMessageText;
+            $giftWrapPriceCurrencyId  = (string)$item->GiftWrapPrice->CurrencyCode;
+            $giftWrapPriceAmount      = (string)$item->GiftWrapPrice->Amount;
+            $giftWrapLevel            = (string)$item->GiftWrapLevel;
+            $condition                = (string)$item->ConditionId;
 
-            $itemInfo         = new ItemInfo(
+            $itemInfo = new ItemInfo(
                 $orderItemId,
                 $title,
                 $quantityOrdered,
@@ -107,14 +108,14 @@ class OrderFactory
 
             $itemShippingInfo = new ItemShippingInfo($shippingPriceCurrencyId, $shippingPriceAmount);
 
-            $itemCodFeeInfo   = new ItemCodFeeInfo(
+            $itemCodFeeInfo = new ItemCodFeeInfo(
                 $codFeeCurrencyId,
                 $codFeeAmount,
                 $codFeeDiscountCurrencyId,
                 $codFeeDiscountAmount
             );
 
-            $itemGiftInfo     = new ItemGiftInfo(
+            $itemGiftInfo = new ItemGiftInfo(
                 $giftMessageText,
                 $giftWrapPriceCurrencyId,
                 $giftWrapPriceAmount,

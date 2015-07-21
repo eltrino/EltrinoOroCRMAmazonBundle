@@ -1,4 +1,4 @@
-eltrino_amazon_bundle:
+orocrm_amazon_bundle:
     resource:     "@OroCRMAmazonBundle/Controller"
     type:         annotation
     prefix:       /amazon

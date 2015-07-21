@@ -80,7 +80,7 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
         MockAnnotations::init($this);
 
         $this->getOrdersResponseWithoutNextToken = new \SimpleXMLElement('<ListOrdersResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01"><ListOrdersResult><Orders><Order><AmazonOrderId>1</AmazonOrderId></Order><Order><AmazonOrderId>2</AmazonOrderId></Order></Orders></ListOrdersResult></ListOrdersResponse>');
-        $this->getOrdersResponseWithNextToken = new \SimpleXMLElement('<ListOrdersResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01"><ListOrdersResult><NextToken>nextToken</NextToken>><Orders><Order><AmazonOrderId>1</AmazonOrderId></Order><Order><AmazonOrderId>2</AmazonOrderId></Order></Orders></ListOrdersResult></ListOrdersResponse>');
+        $this->getOrdersResponseWithNextToken    = new \SimpleXMLElement('<ListOrdersResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01"><ListOrdersResult><NextToken>nextToken</NextToken>><Orders><Order><AmazonOrderId>1</AmazonOrderId></Order><Order><AmazonOrderId>2</AmazonOrderId></Order></Orders></ListOrdersResult></ListOrdersResponse>');
 
         $this->getOrdersByNextToken = new \SimpleXMLElement('<ListOrdersByNextTokenResponse xmlns="https://mws.amazonservices.com/Orders/2013-09-01"><ListOrdersByNextTokenResult><Orders><Order><AmazonOrderId>1</AmazonOrderId></Order><Order><AmazonOrderId>2</AmazonOrderId></Order></Orders></ListOrdersByNextTokenResult></ListOrdersByNextTokenResponse>');
 
@@ -94,8 +94,7 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrdersWithoutNextToken()
     {
-        $parameters = array
-        (
+        $parameters = [
             'SellerId'           => 'SellerId',
             'MarketplaceId.Id.1' => 'MarketplaceId.Id.1',
             'Action'             => 'Action',
@@ -105,7 +104,7 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
             'SignatureVersion'   => 'SignatureVersion',
             'SignatureMethod'    => 'SignatureMethod',
             'Signature'          => 'Signature',
-        );
+        ];
 
         $this->authHandler->expects($this->once())
             ->method('getSignature');
@@ -136,8 +135,7 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOrdersWithNextToken()
     {
-        $parameters = array
-        (
+        $parameters = [
             'SellerId'           => 'SellerId',
             'MarketplaceId.Id.1' => 'MarketplaceId.Id.1',
             'Action'             => 'Action',
@@ -147,7 +145,7 @@ class OrderRestClientImplTest extends \PHPUnit_Framework_TestCase
             'SignatureVersion'   => 'SignatureVersion',
             'SignatureMethod'    => 'SignatureMethod',
             'Signature'          => 'Signature',
-        );
+        ];
 
         $this->authHandler->expects($this->exactly(2))
             ->method('getSignature');

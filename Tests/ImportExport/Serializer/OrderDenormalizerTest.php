@@ -57,11 +57,11 @@ class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
 
     public function testDenormalize()
     {
-        $data = new \SimpleXMLElement('<Order><AmazonOrderId>1</AmazonOrderId></Order>');
-        $class = '';
-        $context = array(
+        $data    = new \SimpleXMLElement('<Order><AmazonOrderId>1</AmazonOrderId></Order>');
+        $class   = '';
+        $context = [
             'channel' => '100'
-        );
+        ];
 
         $this->em
             ->expects($this->once())
@@ -96,9 +96,9 @@ class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testDenormalizeWithoutChannel()
     {
-        $data = new \SimpleXMLElement('<Order><AmazonOrderId>1</AmazonOrderId></Order>');
-        $class = '';
-        $context = array();
+        $data    = new \SimpleXMLElement('<Order><AmazonOrderId>1</AmazonOrderId></Order>');
+        $class   = '';
+        $context = [];
 
         $this->em
             ->expects($this->once())
@@ -115,7 +115,7 @@ class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
         $testObject = new \SimpleXMLElement('<Order><AmazonOrderId>1</AmazonOrderId></Order>');
 
         $orderDenormilizer = new OrderDenormalizer($this->em, $this->orderFactory);
-        $this->assertFalse($orderDenormilizer->supportsDenormalization(array(), 'TEST_TYPE'));
+        $this->assertFalse($orderDenormilizer->supportsDenormalization([], 'TEST_TYPE'));
         $this->assertFalse($orderDenormilizer->supportsDenormalization('string', 'TEST_TYPE'));
         $this->assertTrue($orderDenormilizer->supportsDenormalization($testObject, AmazonOrderConnector::ORDER_TYPE));
     }

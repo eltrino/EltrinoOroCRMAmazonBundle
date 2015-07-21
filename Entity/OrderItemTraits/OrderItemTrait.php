@@ -71,6 +71,7 @@ trait OrderItemTrait
     {
         return $this->condition;
     }
+
     /**
      * @return string
      */

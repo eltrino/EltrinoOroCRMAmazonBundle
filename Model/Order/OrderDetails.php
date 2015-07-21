@@ -13,6 +13,7 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 namespace OroCRM\Bundle\AmazonBundle\Model\Order;
+
 use OroCRM\Bundle\AmazonBundle\Model\Order\Payment;
 use OroCRM\Bundle\AmazonBundle\Model\Order\Shipping;
 

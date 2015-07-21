@@ -24,14 +24,14 @@ class AmazonOrderIdFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter = new AmazonOrderIdFilter($amazonOrderId);
 
-        $parameters = array();
+        $parameters          = [];
         $processedParameters = $filter->process($parameters);
 
         $expectedAmazonOrderId = $amazonOrderId;
 
-        $expected = array(
-            'AmazonOrderId'  => $expectedAmazonOrderId,
-        );
+        $expected = [
+            'AmazonOrderId' => $expectedAmazonOrderId,
+        ];
 
         $this->assertEquals($expected, $processedParameters);
     }

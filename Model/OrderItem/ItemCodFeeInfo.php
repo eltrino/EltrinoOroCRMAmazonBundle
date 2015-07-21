@@ -42,10 +42,10 @@ class ItemCodFeeInfo
         $codFeeDiscountCurrencyId,
         $codFeeDiscountAmount
     ) {
-        $this->codFeeCurrencyId           = $codFeeCurrencyId;
-        $this->codFeeAmount               = $codFeeAmount;
-        $this->codFeeDiscountCurrencyId   = $codFeeDiscountCurrencyId;
-        $this->codFeeDiscountAmount       = $codFeeDiscountAmount;
+        $this->codFeeCurrencyId         = $codFeeCurrencyId;
+        $this->codFeeAmount             = $codFeeAmount;
+        $this->codFeeDiscountCurrencyId = $codFeeDiscountCurrencyId;
+        $this->codFeeDiscountAmount     = $codFeeDiscountAmount;
     }
 
     /**

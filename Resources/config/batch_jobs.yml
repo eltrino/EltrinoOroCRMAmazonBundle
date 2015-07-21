@@ -3,14 +3,14 @@ connector:
     jobs:
         # Order import job
         amazon_order_import:
-            title: "Order Import from Amazon via REST API"
+            title: orocrm.amazon.connector.order.job
             type: import
             steps:
                 import:
                     title: import
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    eltrino_amazon.provider.amazon_order_connector
+                        reader:    orocrm_amazon.provider.amazon_order_connector
                         processor: oro_importexport.processor.import_delegate
                         writer:    oro_integration.writer.persistent_batch_writer
                     parameters:

@@ -63,7 +63,7 @@ class CheckRestClientImplTest extends \PHPUnit_Framework_TestCase
     {
         MockAnnotations::init($this);
 
-        $this->responseXml = new \SimpleXMLElement('<Response><GetServiceStatusResult><Status>GREEN</Status></GetServiceStatusResult></Response>');
+        $this->responseXml     = new \SimpleXMLElement('<Response><GetServiceStatusResult><Status>GREEN</Status></GetServiceStatusResult></Response>');
         $this->checkRestClient = new CheckRestClientImpl($this->client, $this->authHandler);
     }
 

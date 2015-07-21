@@ -28,8 +28,8 @@ class ItemShippingInfo
 
     public function __construct($shippingPriceCurrencyId, $shippingPriceAmount)
     {
-        $this->shippingPriceCurrencyId    = $shippingPriceCurrencyId;
-        $this->shippingPriceAmount        = $shippingPriceAmount;
+        $this->shippingPriceCurrencyId = $shippingPriceCurrencyId;
+        $this->shippingPriceAmount     = $shippingPriceAmount;
     }
 
     /**

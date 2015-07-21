@@ -90,7 +90,7 @@ class UpdateModeLoaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('getOrders')
             ->with($this->equalTo($this->compositeFilter))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->filtersFactory
             ->expects($this->once())
@@ -123,7 +123,7 @@ class UpdateModeLoaderTest extends \PHPUnit_Framework_TestCase
         $this->amazonOrderItemsClient
             ->expects($this->exactly(2))
             ->method('getOrderItems')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $elements = $this->loader->load();
         $this->assertNotEmpty($elements);

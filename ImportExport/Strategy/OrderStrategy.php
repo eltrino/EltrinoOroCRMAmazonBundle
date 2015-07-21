@@ -17,6 +17,8 @@ namespace OroCRM\Bundle\AmazonBundle\ImportExport\Strategy;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
+use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use OroCRM\Bundle\AmazonBundle\Entity\Order;
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
 
@@ -44,16 +46,20 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param mixed $importedOrder
      * @return mixed|null|object
-     * @throws \Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException
-     * @throws \Oro\Bundle\ImportExportBundle\Exception\LogicException
+     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function process($importedOrder)
     {
-        $criteria = ['amazonOrderId' => $importedOrder->getAmazonOrderId(), 'channel' => $importedOrder->getChannel()];
+        /** @var Order $importedOrder */
+        $criteria = [
+            'amazonOrderId' => $importedOrder->getAmazonOrderId(),
+            'channel'       => $importedOrder->getChannel()
+        ];
         $order    = $this->getEntityByCriteria($criteria, $importedOrder);
 
         if ($order) {
-            $this->strategyHelper->importEntity($order, $importedOrder, array('id', 'amazonOrderId', 'items'));
+            $this->strategyHelper->importEntity($order, $importedOrder, ['id', 'amazonOrderId', 'items']);
         } else {
             $order = $importedOrder;
         }

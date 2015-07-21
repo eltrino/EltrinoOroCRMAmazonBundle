@@ -91,7 +91,7 @@ class InitialModeLoaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(1))
             ->method('getOrders')
             ->with($this->equalTo($this->compositeFilter))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->filtersFactory
             ->expects($this->once())
@@ -131,7 +131,7 @@ class InitialModeLoaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly(2))
             ->method('getOrderItems')
             ->with($this->equalTo($this->compositeFilter))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $elements = $this->loader->load();
         $this->assertNotEmpty($elements);

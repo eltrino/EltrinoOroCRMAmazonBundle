@@ -65,7 +65,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         $this->loader
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->assertFalse($this->iterator->valid());
     }
@@ -85,7 +85,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         $this->loader
             ->expects($this->at(1))
             ->method('load')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->assertTrue($this->iterator->valid());
         $this->iterator->next();
@@ -99,7 +99,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         $this->loader
             ->expects($this->once())
             ->method('load')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->assertNull($this->iterator->current());
     }
@@ -129,7 +129,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         $this->loader
             ->expects($this->at(2))
             ->method('load')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $elm1 = $this->iterator->current();
         $this->iterator->next();

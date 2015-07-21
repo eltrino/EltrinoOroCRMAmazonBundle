@@ -37,9 +37,9 @@ class Payment
 
     public function __construct($paymentMethod, $currencyId, $totalAmount)
     {
-        $this->paymentMethod  = $paymentMethod;
-        $this->currencyId     = $currencyId;
-        $this->totalAmount    = $totalAmount;
+        $this->paymentMethod = $paymentMethod;
+        $this->currencyId    = $currencyId;
+        $this->totalAmount   = $totalAmount;
     }
 
     /**

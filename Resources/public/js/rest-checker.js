@@ -32,10 +32,10 @@ define([
          * Check url
          * @property string
          */
-        route:           'eltrino_amazon_rest_check',
-        url:             null,
-        id:              null,
-        requiredOptions: [ ],
+        route: 'orocrm_amazon_rest_check',
+        url: null,
+        id: null,
+        requiredOptions: [],
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
@@ -95,7 +95,7 @@ define([
                 .always(_.bind(function (response, status) {
                     mediator.execute('hideLoading');
                     if (status !== 'success') {
-                        this.renderResult('error', __('orocrm.amazon.error'));
+                        this.renderResult('error', __('orocrm.amazon.transport_check_message.error'));
                     }
                 }, this));
         },
@@ -107,13 +107,13 @@ define([
          */
         responseHandler: function (res) {
             var success = res.success || false,
-                message = success ? 'orocrm.amazon.success' : 'orocrm.amazon.not_valid_parameters';
+                message = success ? 'orocrm.amazon.transport_check_message.success' : 'orocrm.amazon.transport_check_message.invalid';
 
             if (success) {
                 var form = this.$el.parents('form');
             }
 
-            this.renderResult(success ? 'success' : 'error', message);
+            this.renderResult(success ? 'success' : 'error', __(message));
         },
 
         /**
@@ -123,7 +123,10 @@ define([
          * @param message string
          */
         renderResult: function (type, message) {
-            messenger.notificationFlashMessage(type, message, {container: this.$el.parent(), template: this.resultTemplate});
+            messenger.notificationFlashMessage(type, message, {
+                container: this.$el.parent(),
+                template: this.resultTemplate
+            });
         }
     });
 });

@@ -18,52 +18,57 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use OroCRM\Bundle\AmazonBundle\Entity\Order;
 use OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory;
-use OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector;
+use OroCRM\Bundle\AmazonBundle\Provider\Connector\OrderConnector;
 
 class OrderDenormalizer implements DenormalizerInterface
 {
     /**
-     * @var \OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
+     * @var OrderFactory
      */
-    private $orderFactory;
+    protected $orderFactory;
 
     /**
      * @var  ChannelRepository
      */
-    private $channelRepository;
+    protected $channelRepository;
 
+    /**
+     * @param EntityManager $em
+     * @param OrderFactory  $orderFactory
+     */
     public function __construct(EntityManager $em, OrderFactory $orderFactory)
     {
         $this->channelRepository = $em->getRepository('OroIntegrationBundle:Channel');
-        $this->orderFactory = $orderFactory;
+        $this->orderFactory      = $orderFactory;
     }
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $type
-     * @param null $format
+     * @param null   $format
+     * @param array  $context
      * @return bool
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
-        return is_object($data) && ($type == AmazonOrderConnector::ORDER_TYPE);
+        return is_object($data) && ($type == OrderConnector::ORDER_TYPE);
     }
 
     /**
-     * @param mixed $data
+     * @param mixed  $data
      * @param string $class
-     * @param null $format
-     * @param array $context
-     * @return Order|object
+     * @param null   $format
+     * @param array  $context
+     * @return object|Order
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         $channel = $this->getChannelFromContext($context);
-
-        /** @var Order $order */
-
-        $order = $this->orderFactory->createOrder($data);
+        $order   = $this->orderFactory->createOrder($data);
         $order->setChannel($channel);
 
         return $order;
@@ -72,7 +77,7 @@ class OrderDenormalizer implements DenormalizerInterface
     /**
      * @param array $context
      *
-     * @return \Oro\Bundle\IntegrationBundle\Entity\Channel
+     * @return Channel
      * @throws \LogicException
      */
     protected function getChannelFromContext(array $context)

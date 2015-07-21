@@ -1,22 +1,18 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
 
 namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
+use Guzzle\Http\Message\Response;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use OroCRM\Bundle\AmazonBundle\Client\AuthHandler;
+use OroCRM\Bundle\AmazonBundle\Client\Filters\CompositeFilter;
+use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
+use OroCRM\Bundle\AmazonBundle\Client\RestClient;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Amazon REST transport
@@ -27,8 +23,59 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  */
 class AmazonRestTransport implements TransportInterface
 {
+    /** @var ParameterBag */
+    protected $settings;
+
+    /** @var RestClient */
+    protected $amazonClient;
+
     /**
-     * @return string
+     * @var CompositeFilter
+     */
+    protected $compositeFilter;
+
+    /**
+     * @var FiltersFactory
+     */
+    protected $filtersFactory;
+
+    /**
+     * @var array
+     */
+    protected $parameters = [];
+
+    /**
+     * @var string
+     */
+    protected $action;
+
+    /**
+     * @var AuthHandler
+     */
+    protected $authHandler;
+
+    /**
+     * @var int
+     */
+    protected $restoreRate = 0;
+
+    /**
+     * @var int
+     */
+    protected $maxRequestQuote = 0;
+
+    /**
+     * @var int
+     */
+    protected $callQty;
+
+    public function __construct(FiltersFactory $filtersFactory)
+    {
+        $this->filtersFactory = $filtersFactory;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getLabel()
     {
@@ -36,15 +83,15 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
-        return 'eltrino_amazon_rest_transport_setting_form_type';
+        return 'orocrm_amazon_rest_transport_setting_form_type';
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsEntityFQCN()
     {
@@ -52,21 +99,73 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @param Transport $transportEntity
+     * {@inheritdoc}
      */
     public function init(Transport $transportEntity)
+    {
+        $this->settings          = $transportEntity->getSettingsBag();
+        $amazonRestClientFactory = new RestClientFactory();
+        $this->amazonClient      = $amazonRestClientFactory->create(
+            $this->settings->get('wsdl_url'),
+            $this->settings->get('aws_access_key_id'),
+            $this->settings->get('aws_secret_access_key'),
+            $this->settings->get('merchant_id'),
+            $this->settings->get('marketplace_id')
+        );
+    }
+
+    /**
+     * @param string $action
+     * @param array  $params
+     * @return array|mixed
+     * @throws RuntimeException
+     */
+    public function call($action, $params = [])
     {
 
     }
 
     /**
-     * @param string $action
-     * @param array $params
-     * @return array|mixed
-     * @throws \Symfony\Component\DependencyInjection\Exception\RuntimeException
+     * @return RestClient
      */
-    public function call($action, $params = [])
+    public function getAmazonClient()
     {
+        return $this->amazonClient;
+    }
 
+    protected function getOrders(\DateTime $startSyncDate = null, $mode = OrderIterator::MODIFIED_MODE)
+    {
+        return new OrderIterator($this->amazonClient, $this->filtersFactory, $startSyncDate, $mode);
+    }
+
+    public function getStatus()
+    {
+        $status    = false;
+        $filter    = $this->filtersFactory->createCompositeFilter();
+        $responses = $this->amazonClient->makeRequest(RestClient::GET_SERVICE_STATUS_ACTION, $filter);
+        if (isset($responses[0])) {
+            $status = $this->getStatusFromResponse($responses[0]);
+        }
+
+        return $status;
+    }
+
+    /**
+     * @param array $response
+     * @return bool
+     */
+    protected function getStatusFromResponse(array $response)
+    {
+        return (string)$response['result']->{$response['result_root']}->Status === RestClient::STATUS_GREEN;
+    }
+
+    public function getModOrders(\DateTime $from)
+    {
+        return $this->getOrders($from);
+    }
+
+    public function getInitialOrders(\DateTime $from)
+    {
+        return $this->getOrders($from, OrderIterator::INITIAL_MODE);
     }
 }

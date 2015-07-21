@@ -31,13 +31,13 @@ class AmazonNavigationListener
     const ORDER_MENU_ITEM = 'amazon_order';
 
     protected static $map = [
-        'order'    => [
-            'parent'       => 'sales_tab',
-            'prefix'       => self::ORDER_MENU_ITEM,
-            'label'        => 'Amazon Orders',
-            'route'        => 'eltrino_amazon_order_index',
+        'order' => [
+            'parent' => 'sales_tab',
+            'prefix' => self::ORDER_MENU_ITEM,
+            'label'  => 'Amazon Orders',
+            'route'  => 'orocrm_amazon_order_index',
             'extras' => [
-                'routes'   => '/^eltrino_amazon_order_(index|view)$/',
+                'routes'   => '/^orocrm_amazon_order_(index|view)$/',
                 'position' => 50
             ]
         ]
@@ -48,8 +48,9 @@ class AmazonNavigationListener
 
     public function __construct(EntityManager $em)
     {
-        $this->em     = $em;
+        $this->em = $em;
     }
+
     /**
      * Adds dynamically menu entries depends on configured channels
      *

@@ -13,6 +13,7 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 namespace OroCRM\Bundle\AmazonBundle\Tests\ImportExport\Srtategy;
+
 use OroCRM\Bundle\AmazonBundle\ImportExport\Strategy\OrderStrategy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
