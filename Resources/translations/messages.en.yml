@@ -1,0 +1,39 @@
+orocrm:
+    amazon:
+        order_information: Order Information
+        order:
+            entity.label: Order
+            channel.label: Channel
+            amazon_order_id.label: Amazon Order Id
+            marketplace_id.label: Market Place ID
+            sales_channel.label: Sales Channel
+            order_type.label: Order Type
+            order_status.label: Order Status
+            fullfilment_channel.label: Fulfillment Channel
+            ship_service_level.label: Ship Service Level
+            shipment_service_level_category.label: Shipment Service Level Category
+            currency_id.label: Currency
+            payment_method.label: Payment Method
+            total_amount.label: Total Amount
+            entity_plural_label: Orders
+
+        order_item:
+            asin.label:
+            order_item_id.label:
+            seller_sku.label:
+            title.label:
+            quantity_ordered.label:
+            quantity_shipped.label:
+            condition.label:
+            shipping_price_amount.label:
+            giftWrap_price_amount.label: Gift Price
+            item_price_amount.label: Item Price
+            entity_plural_label: Order Items
+
+        datagrid:
+            actions:
+                view.label: View1
+
+        connector:
+            order:
+                job: Order Import from Amazon via REST API
