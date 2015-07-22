@@ -22,7 +22,7 @@ class AmazonNavigationListener
         'order' => [
             'parent' => 'sales_tab',
             'prefix' => self::ORDER_MENU_ITEM,
-            'label'  => 'Amazon Orders',
+            'label'  => 'orocrm.amazon.order.entity_plural_label',
             'route'  => 'orocrm_amazon_order_index',
             'extras' => [
                 'routes'   => '/^orocrm_amazon_order_(index|view)$/',

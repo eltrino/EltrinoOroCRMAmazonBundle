@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AmazonBundle\Client;
 use Guzzle\Http\Exception\RequestException;
 use Guzzle\Http\Message\Response;
 use Guzzle\Http\ClientInterface;
+
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FilterInterface;
 
 class RestClient
@@ -80,6 +81,11 @@ class RestClient
         return $this->responses;
     }
 
+    /**
+     * @param string            $action
+     * @param \SimpleXMLElement $parent
+     * @param string            $resultRoot
+     */
     protected function processNextTokenRequest($action, \SimpleXMLElement $parent, $resultRoot)
     {
         if ((string)$parent->{$resultRoot}->{self::NEXT_TOKEN_PARAM}) {
@@ -98,8 +104,8 @@ class RestClient
     }
 
     /**
-     * @param $response
-     * @return mixed
+     * @param Response $response
+     * @return array
      */
     protected function formatResponse(Response $response)
     {
@@ -112,6 +118,9 @@ class RestClient
         ];
     }
 
+    /**
+     * @return array
+     */
     public function getAuthParameters()
     {
         return [
@@ -126,7 +135,7 @@ class RestClient
     }
 
     /**
-     * @param                 $action
+     * @param string          $action
      * @param FilterInterface $filter
      * @param array           $parameters
      */
@@ -147,6 +156,9 @@ class RestClient
         $this->parameters['Signature'] = $signature;
     }
 
+    /**
+     * @param string $action
+     */
     protected function applyRecoveryRate($action)
     {
         if (!isset(static::$throttlingParams[$action])) {

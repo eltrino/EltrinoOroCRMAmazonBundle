@@ -57,4 +57,36 @@ trait ItemCodFeeInfoTrait
         $this->codFeeDiscountCurrencyId = $itemCodFeeInfo->getCodFeeDiscountCurrencyId();
         $this->codFeeDiscountAmount     = $itemCodFeeInfo->getCodFeeDiscountAmount();
     }
+
+    /**
+     * @return string
+     */
+    public function getCodFeeCurrencyId()
+    {
+        return $this->codFeeCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodFeeAmount()
+    {
+        return $this->codFeeAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodFeeDiscountCurrencyId()
+    {
+        return $this->codFeeDiscountCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCodFeeDiscountAmount()
+    {
+        return $this->codFeeDiscountAmount;
+    }
 }

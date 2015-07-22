@@ -44,4 +44,28 @@ trait PaymentTrait
         $this->currencyId    = $payment->getCurrencyId();
         $this->paymentMethod = $payment->getPaymentMethod();
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrencyId()
+    {
+        return $this->currencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentMethod()
+    {
+        return $this->paymentMethod;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTotalAmount()
+    {
+        return $this->totalAmount;
+    }
 }

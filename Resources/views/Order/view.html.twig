@@ -8,7 +8,7 @@
     'entity': entity,
     'indexPath': path('orocrm_amazon_order_index', {id: entity.channel.id}),
     'indexLabel': 'orocrm.amazon.order.entity_plural_label'|trans,
-    'entityTitle': 'orocrm.amazon.order.entity_plural_label' ~ ' ' ~ entity.amazonOrderId
+    'entityTitle': 'orocrm.amazon.order.entity_label'|trans ~ ' ' ~ entity.amazonOrderId
     } %}
     {{ parent() }}
 {% endblock pageHeader %}

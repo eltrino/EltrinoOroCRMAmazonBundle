@@ -2,7 +2,7 @@ orocrm:
     amazon:
         order_information: Order Information
         order:
-            entity.label: Order
+            entity_label: Amazon Order
             channel.label: Channel
             amazon_order_id.label: Amazon Order Id
             marketplace_id.label: Market Place ID
@@ -15,7 +15,9 @@ orocrm:
             currency_id.label: Currency
             payment_method.label: Payment Method
             total_amount.label: Total Amount
-            entity_plural_label: Orders
+            number_of_items_shipped.label: Number Of Shipped Items
+            number_of_items_unshipped.label: Number Of Unshipped Items
+            entity_plural_label: Amazon Orders
 
         order_item:
             asin.label:
@@ -32,7 +34,7 @@ orocrm:
 
         datagrid:
             actions:
-                view.label: View1
+                view.label: View
 
         connector:
             order:

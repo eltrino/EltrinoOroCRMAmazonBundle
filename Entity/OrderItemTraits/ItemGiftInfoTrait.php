@@ -57,4 +57,36 @@ trait ItemGiftInfoTrait
         $this->giftWrapPriceAmount     = $itemGiftInfo->getGiftWrapPriceAmount();
         $this->giftWrapLevel           = $itemGiftInfo->getGiftWrapLevel();
     }
+
+    /**
+     * @return string
+     */
+    public function getGiftMessageText()
+    {
+        return $this->giftMessageText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapPriceCurrencyId()
+    {
+        return $this->giftWrapPriceCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapPriceAmount()
+    {
+        return $this->giftWrapPriceAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapLevel()
+    {
+        return $this->giftWrapLevel;
+    }
 }

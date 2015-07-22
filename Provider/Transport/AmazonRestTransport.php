@@ -4,34 +4,17 @@ namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+
 use OroCRM\Bundle\AmazonBundle\Client\AuthHandler;
-use OroCRM\Bundle\AmazonBundle\Client\Filters\CompositeFilter;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Client\RestClient;
 use OroCRM\Bundle\AmazonBundle\Client\RestClientFactory;
 use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
-use Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
-/**
- * Amazon REST transport
- * used to fetch and pull data to/from Amazon instance
- * with sessionId param using REST requests
- *
- * @package OroCRM\Bundle\AmazonBundle
- */
 class AmazonRestTransport implements TransportInterface
 {
-    /** @var ParameterBag */
-    protected $settings;
-
     /** @var RestClient */
     protected $amazonClient;
-
-    /**
-     * @var CompositeFilter
-     */
-    protected $compositeFilter;
 
     /**
      * @var FiltersFactory
@@ -41,12 +24,7 @@ class AmazonRestTransport implements TransportInterface
     /**
      * @var array
      */
-    protected $parameters = [];
-
-    /**
-     * @var string
-     */
-    protected $action;
+    protected $settings = [];
 
     /**
      * @var AuthHandler
@@ -54,22 +32,13 @@ class AmazonRestTransport implements TransportInterface
     protected $authHandler;
 
     /**
-     * @var int
+     * @var RestClientFactory
      */
-    protected $restoreRate = 0;
+    protected $clientFactory;
 
-    /**
-     * @var int
-     */
-    protected $maxRequestQuote = 0;
-
-    /**
-     * @var int
-     */
-    protected $callQty;
-
-    public function __construct(FiltersFactory $filtersFactory)
+    public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
     {
+        $this->clientFactory = $clientFactory;
         $this->filtersFactory = $filtersFactory;
     }
 
@@ -78,7 +47,7 @@ class AmazonRestTransport implements TransportInterface
      */
     public function getLabel()
     {
-        return 'eltrino.amazon.transport.rest.label';
+        return 'orocrm.amazon.transport.rest.label';
     }
 
     /**
@@ -102,34 +71,14 @@ class AmazonRestTransport implements TransportInterface
      */
     public function init(Transport $transportEntity)
     {
-        $this->settings          = $transportEntity->getSettingsBag();
-        $amazonRestClientFactory = new RestClientFactory();
-        $this->amazonClient      = $amazonRestClientFactory->create(
-            $this->settings->get('wsdl_url'),
-            $this->settings->get('aws_access_key_id'),
-            $this->settings->get('aws_secret_access_key'),
-            $this->settings->get('merchant_id'),
-            $this->settings->get('marketplace_id')
+        $settings           = $transportEntity->getSettingsBag();
+        $this->amazonClient = $this->clientFactory->create(
+            $settings->get('wsdl_url'),
+            $settings->get('aws_access_key_id'),
+            $settings->get('aws_secret_access_key'),
+            $settings->get('aws_merchant_id'),
+            $settings->get('aws_marketplace_id')
         );
-    }
-
-    /**
-     * @param string $action
-     * @param array  $params
-     * @return array|mixed
-     * @throws RuntimeException
-     */
-    public function call($action, $params = [])
-    {
-
-    }
-
-    /**
-     * @return RestClient
-     */
-    public function getAmazonClient()
-    {
-        return $this->amazonClient;
     }
 
     protected function getOrders(\DateTime $startSyncDate = null, $mode = OrderIterator::MODIFIED_MODE)

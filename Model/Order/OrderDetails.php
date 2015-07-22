@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
-use OroCRM\Bundle\AmazonBundle\Model\Order\Payment;
-use OroCRM\Bundle\AmazonBundle\Model\Order\Shipping;
-
 class OrderDetails
 {
     /**
@@ -37,6 +34,14 @@ class OrderDetails
      */
     protected $shipping;
 
+    /**
+     * @param string   $salesChannel
+     * @param string   $orderType
+     * @param string   $fulfillmentChannel
+     * @param string   $orderStatus
+     * @param Payment  $payment
+     * @param Shipping $shipping
+     */
     public function __construct(
         $salesChannel,
         $orderType,
@@ -100,5 +105,4 @@ class OrderDetails
     {
         return $this->shipping;
     }
-
 }

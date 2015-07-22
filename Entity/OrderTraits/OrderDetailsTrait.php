@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Entity\OrderTraits;
 
-use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\ShippingTrait;
-use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\PaymentTrait;
 use OroCRM\Bundle\AmazonBundle\Model\Order\OrderDetails;
 
 trait OrderDetailsTrait
@@ -45,5 +43,37 @@ trait OrderDetailsTrait
         $this->orderType          = $orderDetails->getOrderType();
         $this->fulfillmentChannel = $orderDetails->getFulfillmentChannel();
         $this->orderStatus        = $orderDetails->getOrderStatus();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalesChannel()
+    {
+        return $this->salesChannel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderType()
+    {
+        return $this->orderType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFulfillmentChannel()
+    {
+        return $this->fulfillmentChannel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderStatus()
+    {
+        return $this->orderStatus;
     }
 }

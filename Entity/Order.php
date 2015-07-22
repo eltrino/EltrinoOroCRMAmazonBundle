@@ -3,12 +3,10 @@
 namespace OroCRM\Bundle\AmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\OrderTrait;
+use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+
 use OroCRM\Bundle\AmazonBundle\Entity\OrderTraits\OrderDetailsTrait;
 use OroCRM\Bundle\AmazonBundle\Model\Order\OrderDetails;
 
@@ -17,13 +15,12 @@ use OroCRM\Bundle\AmazonBundle\Model\Order\OrderDetails;
  *
  * @package OroCRM\Bundle\AmazonBundle\Entity
  * @ORM\Entity()
- * @ORM\Table(name="eltrino_amazon_order")
+ * @ORM\Table(name="orocrm_amazon_order")
  */
 class Order
 {
     use IntegrationEntityTrait;
     use OrderDetailsTrait;
-    use OrderTrait;
 
     /**
      * @var int
@@ -82,18 +79,18 @@ class Order
     protected $orderDetails;
 
     /**
-     * @param              $amazonOrderId
-     * @param              $customerEmail
-     * @param              $marketPlaceId
-     * @param OrderDetails $orderDetails
-     * @param null         $createdAt
+     * @param string         $amazonOrderId
+     * @param string         $customerEmail
+     * @param string         $marketPlaceId
+     * @param OrderDetails   $orderDetails
+     * @param \DateTime|null $createdAt
      */
     public function __construct(
         $amazonOrderId,
         $customerEmail,
         $marketPlaceId,
         OrderDetails $orderDetails,
-        $createdAt = null
+        \DateTime $createdAt = null
     ) {
         $this->amazonOrderId = $amazonOrderId;
         $this->customerEmail = $customerEmail;
@@ -188,12 +185,16 @@ class Order
     protected function initOrderDetails()
     {
         if (is_null($this->orderDetails)) {
-            $payment  = $this->initPayment($this->paymentMethod, $this->currencyId, $this->totalAmount);
-            $shipping = $this->initShipping($this->shipServiceLevel, $this->shipmentServiceLevelCategory,
-                $this->numberOfItemsShipped, $this->numberOfItemsUnshipped);
-
-            $this->orderDetails = new OrderDetails($this->salesChannel, $this->orderType, $this->fulfillmentChannel,
-                $this->orderStatus, $payment, $shipping);
+            $payment  = $this->initPayment();
+            $shipping = $this->initShipping();
+            $this->orderDetails = new OrderDetails(
+                $this->salesChannel,
+                $this->orderType,
+                $this->fulfillmentChannel,
+                $this->orderStatus,
+                $payment,
+                $shipping
+            );
         }
     }
 }

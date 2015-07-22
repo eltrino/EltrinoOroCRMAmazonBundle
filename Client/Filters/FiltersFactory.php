@@ -33,7 +33,7 @@ class FiltersFactory
     }
 
     /**
-     * @param $amazonOrderId
+     * @param string $amazonOrderId
      * @return AmazonOrderIdFilter
      */
     public function createAmazonOrderIdFilter($amazonOrderId)

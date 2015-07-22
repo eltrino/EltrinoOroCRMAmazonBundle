@@ -36,4 +36,20 @@ trait ItemShippingInfoTrait
         $this->shippingPriceCurrencyId = $itemShippingInfo->getShippingPriceCurrencyId();
         $this->shippingPriceAmount     = $itemShippingInfo->getShippingPriceAmount();
     }
+
+    /**
+     * @return string
+     */
+    public function getShippingPriceCurrencyId()
+    {
+        return $this->shippingPriceCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingPriceAmount()
+    {
+        return $this->shippingPriceAmount;
+    }
 }

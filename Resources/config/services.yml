@@ -18,6 +18,7 @@ services:
     orocrm_amazon.amazon_rest_transport:
         class: %orocrm_amazon.amazon_rest_transport.class%
         arguments:
+            - @orocrm_amazon.client_rest_client_factory
             - @orocrm_amazon.client_filters_factory
         tags:
             - { name: oro_integration.transport, type: amazon_rest, channel_type: amazon}

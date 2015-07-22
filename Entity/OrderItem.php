@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\AmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\OrderItemTrait;
+
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemGiftInfoTrait;
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemCodFeeInfoTrait;
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits\ItemInfoTrait;
@@ -18,11 +18,10 @@ use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
  *
  * @package OroCRM\Bundle\AmazonBundle\Entity
  * @ORM\Entity()
- * @ORM\Table(name="eltrino_amazon_order_items")
+ * @ORM\Table(name="orocrm_amazon_order_item")
  */
 class OrderItem
 {
-    use OrderItemTrait;
     use ItemGiftInfoTrait;
     use ItemCodFeeInfoTrait;
     use ItemInfoTrait;
@@ -100,14 +99,6 @@ class OrderItem
     }
 
     /**
-     * @return string
-     */
-    public function getBuyerEmail()
-    {
-        return $this->buyerEmail;
-    }
-
-    /**
      * @return int
      */
     public function getId()
@@ -116,7 +107,7 @@ class OrderItem
     }
 
     /**
-     * @return \OroCRM\Bundle\AmazonBundle\Entity\Order
+     * @return Order
      */
     public function getOrder()
     {

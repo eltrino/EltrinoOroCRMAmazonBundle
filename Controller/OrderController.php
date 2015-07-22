@@ -16,6 +16,7 @@ class OrderController extends Controller
     /**
      * @Route("/", name="orocrm_amazon_order_index")
      * @Template
+     * @return array
      */
     public function indexAction()
     {
@@ -27,6 +28,8 @@ class OrderController extends Controller
     /**
      * @Route("/view/{id}", name="orocrm_amazon_order_view", requirements={"id"="\d+"}))
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function viewAction(Order $order)
     {
@@ -36,6 +39,8 @@ class OrderController extends Controller
     /**
      * @Route("/info/{id}", name="orocrm_amazon_order_widget_info", requirements={"id"="\d+"}))
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function infoAction(Order $order)
     {
@@ -45,6 +50,8 @@ class OrderController extends Controller
     /**
      * @Route("/widget/grid/{id}", name="orocrm_amazon_order_widget_items", requirements={"id"="\d+"}))
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function itemsAction(Order $order)
     {

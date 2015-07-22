@@ -5,9 +5,7 @@ namespace OroCRM\Bundle\AmazonBundle\Client;
 class AuthHandler implements AuthHandlerInterface
 {
     const SERVICE_VERSION = '2013-09-01';
-
     const SIGNATURE_VERSION = '2';
-
     const SIGNATURE_METHOD = 'HmacSHA256';
 
     /**
@@ -45,7 +43,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getKeyId()
     {
@@ -53,7 +51,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getMarketplaceId()
     {
@@ -61,7 +59,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getMerchantId()
     {
@@ -69,7 +67,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getSecret()
     {
@@ -77,8 +75,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * Formats date as ISO 8601 timestamp
-     * @return string
+     * @inheritdoc
      */
     public function getFormattedTimestamp()
     {
@@ -86,7 +83,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getVersion()
     {
@@ -94,7 +91,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getSignatureVersion()
     {
@@ -102,7 +99,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getSignatureMethod()
     {
@@ -110,10 +107,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @param array  $parameters
-     * @param string $baseUrl
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getSignature(array $parameters, $baseUrl)
     {
@@ -149,7 +143,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @param $value
+     * @param string $value
      * @return string
      */
     protected function urlEncode($value)

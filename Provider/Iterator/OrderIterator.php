@@ -36,6 +36,11 @@ class OrderIterator implements \Iterator
     protected $from;
 
     /**
+     * @var bool
+     */
+    protected $loaded = false;
+
+    /**
      * @param RestClient     $client
      * @param FiltersFactory $filtersFactory
      * @param \DateTime      $from
@@ -51,18 +56,9 @@ class OrderIterator implements \Iterator
 
     protected function load()
     {
-        if ($this->shouldLoad()) {
+        if (!$this->loaded) {
             $this->elements = $this->loadOrders();
         }
-    }
-
-    /**
-     * Check whether need to load extra elements
-     * @return bool
-     */
-    protected function shouldLoad()
-    {
-        return empty($this->elements) || $this->position === count($this->elements);
     }
 
     /**
@@ -132,6 +128,7 @@ class OrderIterator implements \Iterator
         $responses = $this->amazonClient->makeRequest(RestClient::LIST_ORDERS_ACTION, $compositeFilter);
         $orders = $this->extractResultElements($responses, 'Orders');
         $this->loadOrderItems($orders);
+        $this->loaded = true;
         return $orders;
     }
 

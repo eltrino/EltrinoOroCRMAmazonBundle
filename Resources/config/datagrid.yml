@@ -31,9 +31,9 @@ datagrid:
             shipmentServiceLevelCategory:
                 label: orocrm.amazon.order.shipment_service_level_category.label
             numberOfItemsShipped:
-                label: orocrm.amazon.order.numberOfItemsShipped.label Number Of Shipped Items
+                label: orocrm.amazon.order.number_of_items_shipped.label
             numberOfItemsUnshipped:
-                label: orocrm.amazon.order.numberOfItemsUnshipped.label Number Of Unshipped Items
+                label: orocrm.amazon.order.number_of_items_unshipped.label
             currencyId:
                 label: orocrm.amazon.order.currency_id.label
             paymentMethod:
@@ -138,7 +138,7 @@ datagrid:
                 select:
                     - o
                 from:
-                    - { table: OroCRM\Bundle\AmazonBundle\Entity\Order, alias: o }
+                    - { table: OroCRM\Bundle\AmazonBundle\Entity\OrderItem, alias: o }
                 where:
                     and:
                         - o.order = :id

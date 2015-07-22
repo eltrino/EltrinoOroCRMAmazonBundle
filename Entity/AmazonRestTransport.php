@@ -16,42 +16,42 @@ class AmazonRestTransport extends Transport
     /**
      * @var string
      *
-     * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=false)
+     * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=true)
      */
     protected $wsdlUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_access_key_id", type="string", length=2048, nullable=false)
+     * @ORM\Column(name="aws_access_key_id", type="string", length=2048, nullable=true)
      */
     protected $keyId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_secret_access_key", type="string", length=255, nullable=false)
+     * @ORM\Column(name="aws_secret_access_key", type="string", length=255, nullable=true)
      */
     protected $secret;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="merchant_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="aws_merchant_id", type="string", length=255, nullable=true)
      */
     protected $merchantId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="marketplace_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="marketplace_id", type="string", length=255, nullable=true)
      */
     protected $marketplaceId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sync_start_date", type="date")
+     * @ORM\Column(name="sync_start_date", type="date", nullable=true)
      */
     protected $syncStartDate;
 
@@ -184,8 +184,8 @@ class AmazonRestTransport extends Transport
             [
                 'aws_access_key_id'     => $this->getKeyId(),
                 'aws_secret_access_key' => $this->getSecret(),
-                'merchant_id'           => $this->getMerchantId(),
-                'marketplace_id'        => $this->getMarketplaceId(),
+                'aws_merchant_id'           => $this->getMerchantId(),
+                'aws_marketplace_id'        => $this->getMarketplaceId(),
                 'start_sync_date'       => $this->getSyncStartDate(),
                 'wsdl_url'              => $this->getWsdlUrl(),
             ]

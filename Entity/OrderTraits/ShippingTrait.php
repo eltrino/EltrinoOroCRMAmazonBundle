@@ -57,4 +57,36 @@ trait ShippingTrait
         $this->numberOfItemsShipped         = $shipping->getNumberOfItemsShipped();
         $this->numberOfItemsUnshipped       = $shipping->getNumberOfItemsUnshipped();
     }
+
+    /**
+     * @return string
+     */
+    public function getShipServiceLevel()
+    {
+        return $this->shipServiceLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipmentServiceLevelCategory()
+    {
+        return $this->shipmentServiceLevelCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfItemsShipped()
+    {
+        return $this->numberOfItemsShipped;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfItemsUnshipped()
+    {
+        return $this->numberOfItemsUnshipped;
+    }
 }
