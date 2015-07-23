@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 class ItemInfo
 {
     /**
-     * @var string
+     * @var integer
      */
     protected $orderItemId;
 
@@ -15,12 +15,12 @@ class ItemInfo
     protected $title;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $quantityOrdered;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $quantityShipped;
 
@@ -30,7 +30,7 @@ class ItemInfo
     protected $itemPriceCurrencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $itemPriceAmount;
 
@@ -39,6 +39,15 @@ class ItemInfo
      */
     protected $condition;
 
+    /**
+     * @param integer $orderItemId
+     * @param string  $title
+     * @param integer $quantityOrdered
+     * @param integer $quantityShipped
+     * @param string  $itemPriceCurrencyId
+     * @param float   $itemPriceAmount
+     * @param string  $condition
+     */
     public function __construct(
         $orderItemId,
         $title,
@@ -58,7 +67,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getOrderItemId()
     {
@@ -74,7 +83,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getQuantityOrdered()
     {
@@ -82,7 +91,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getQuantityShipped()
     {
@@ -98,7 +107,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getItemPriceAmount()
     {

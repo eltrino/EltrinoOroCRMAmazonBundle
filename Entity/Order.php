@@ -69,7 +69,7 @@ class Order
     /**
      * @var OrderItem[]|ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"})
      */
     protected $items;
 

@@ -10,10 +10,14 @@ class ItemShippingInfo
     protected $shippingPriceCurrencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $shippingPriceAmount;
 
+    /**
+     * @param string $shippingPriceCurrencyId
+     * @param float  $shippingPriceAmount
+     */
     public function __construct($shippingPriceCurrencyId, $shippingPriceAmount)
     {
         $this->shippingPriceCurrencyId = $shippingPriceCurrencyId;
@@ -29,7 +33,7 @@ class ItemShippingInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getShippingPriceAmount()
     {

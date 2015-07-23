@@ -16,26 +16,22 @@ class AmazonRestTransport implements TransportInterface
     /** @var RestClient */
     protected $amazonClient;
 
-    /**
-     * @var FiltersFactory
-     */
+    /** @var FiltersFactory */
     protected $filtersFactory;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings = [];
 
-    /**
-     * @var AuthHandler
-     */
+    /** @var AuthHandler */
     protected $authHandler;
 
-    /**
-     * @var RestClientFactory
-     */
+    /** @var RestClientFactory */
     protected $clientFactory;
 
+    /**
+     * @param RestClientFactory $clientFactory
+     * @param FiltersFactory    $filtersFactory
+     */
     public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
     {
         $this->clientFactory = $clientFactory;
@@ -81,16 +77,24 @@ class AmazonRestTransport implements TransportInterface
         );
     }
 
+    /**
+     * @param \DateTime|null $startSyncDate
+     * @param string         $mode
+     * @return OrderIterator
+     */
     protected function getOrders(\DateTime $startSyncDate = null, $mode = OrderIterator::MODIFIED_MODE)
     {
         return new OrderIterator($this->amazonClient, $this->filtersFactory, $startSyncDate, $mode);
     }
 
+    /**
+     * @return bool
+     */
     public function getStatus()
     {
         $status    = false;
         $filter    = $this->filtersFactory->createCompositeFilter();
-        $responses = $this->amazonClient->makeRequest(RestClient::GET_SERVICE_STATUS_ACTION, $filter);
+        $responses = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS_ACTION, $filter);
         if (isset($responses[0])) {
             $status = $this->getStatusFromResponse($responses[0]);
         }
@@ -107,11 +111,19 @@ class AmazonRestTransport implements TransportInterface
         return (string)$response['result']->{$response['result_root']}->Status === RestClient::STATUS_GREEN;
     }
 
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
     public function getModOrders(\DateTime $from)
     {
         return $this->getOrders($from);
     }
 
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
     public function getInitialOrders(\DateTime $from)
     {
         return $this->getOrders($from, OrderIterator::INITIAL_MODE);

@@ -38,8 +38,7 @@ class OrderItem
 
     /**
      * @var Order
-     * @ORM\ManyToOne(targetEntity="Order", cascade={"persist"})
-     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items", cascade={"persist"})
      */
     protected $order;
 
@@ -77,6 +76,14 @@ class OrderItem
      */
     protected $itemGiftInfo;
 
+    /**
+     * @param string           $asin
+     * @param string           $sellerSku
+     * @param ItemInfo         $itemInfo
+     * @param ItemShippingInfo $itemShippingInfo
+     * @param ItemCodFeeInfo   $itemCodFeeInfo
+     * @param ItemGiftInfo     $itemGiftInfo
+     */
     public function __construct(
         $asin,
         $sellerSku,
@@ -117,7 +124,7 @@ class OrderItem
     /**
      * @param Order $order
      */
-    public function assignOrder(Order $order)
+    public function assignOrder(Order $order = null)
     {
         $this->order = $order;
     }

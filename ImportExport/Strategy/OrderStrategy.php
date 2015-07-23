@@ -9,7 +9,6 @@ use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
 use Oro\Bundle\ImportExportBundle\Exception\LogicException;
 use OroCRM\Bundle\AmazonBundle\Entity\Order;
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
-
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -86,12 +85,9 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
                 $item = $existingItem;
             }
 
-            if (!$item->getOrder()) {
-                $item->setOrder($entityToUpdate);
-            }
-
             if (!$entityToUpdate->getItems()->contains($item)) {
                 $entityToUpdate->getItems()->add($item);
+                $item->assignOrder($entityToUpdate);
             }
         }
 
@@ -102,7 +98,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
             }
         );
         foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->remove($item);
+            $item->assignOrder(null);
         }
     }
 

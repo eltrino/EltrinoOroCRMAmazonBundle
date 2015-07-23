@@ -15,7 +15,7 @@ class ItemGiftInfo
     protected $giftWrapPriceCurrencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $giftWrapPriceAmount;
 
@@ -24,6 +24,12 @@ class ItemGiftInfo
      */
     protected $giftWrapLevel;
 
+    /**
+     * @param string  $giftMessageText
+     * @param string  $giftWrapPriceCurrencyId
+     * @param float   $giftWrapPriceAmount
+     * @param string  $giftWrapLevel
+     */
     public function __construct(
         $giftMessageText,
         $giftWrapPriceCurrencyId,
@@ -53,7 +59,7 @@ class ItemGiftInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getGiftWrapPriceAmount()
     {

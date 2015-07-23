@@ -1,6 +1,5 @@
 orocrm:
     amazon:
-        order_information: Order Information
         order:
             entity_label: Amazon Order
             channel.label: Channel
@@ -17,6 +16,7 @@ orocrm:
             total_amount.label: Total Amount
             number_of_items_shipped.label: Number Of Shipped Items
             number_of_items_unshipped.label: Number Of Unshipped Items
+            customer_email.label: 'orocrm.amazon.order.customer_email.label'
             entity_plural_label: Amazon Orders
 
         order_item:
@@ -32,6 +32,15 @@ orocrm:
             item_price_amount.label: Item Price
             entity_plural_label: Order Items
 
+        transport:
+            endpoint_url: Endpoint url
+            access_key_id: Access Key ID
+            secret_access_key: Secret Access Key
+            merchant_id: Merchant ID
+            marketplace_id: Marketplace ID
+            sync_start_date: Sync start date
+            check_connection: Check connection
+
         datagrid:
             actions:
                 view.label: View
@@ -39,3 +48,7 @@ orocrm:
         connector:
             order:
                 job: Order Import from Amazon via REST API
+        view:
+            general_information: General Information
+            order_information: Order Information
+

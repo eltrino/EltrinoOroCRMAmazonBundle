@@ -2,11 +2,10 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\AmazonBundle\Entity\Order;
 use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
-use Doctrine\Common\Collections\ArrayCollection;
-use SimpleXMLElement;
-
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemInfo;
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
 use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemCodFeeInfo;
@@ -16,10 +15,10 @@ class OrderFactory
 {
     /**
      * Create Order
-     * @param SimpleXMLElement $data
+     * @param \SimpleXMLElement $data
      * @return Order
      */
-    public function createOrder(SimpleXMLElement $data)
+    public function createOrder(\SimpleXMLElement $data)
     {
         $amazonOrderId                = (string)$data->AmazonOrderId;
         $customerEmail                = (string)$data->BuyerEmail;
@@ -58,10 +57,11 @@ class OrderFactory
     }
 
     /**
-     * @param $items
+     * @param array $items
+     * @param Order $order
      * @return ArrayCollection
      */
-    protected function processOrderItems($items, Order $order)
+    protected function processOrderItems(array $items, Order $order)
     {
         foreach ($items as $item) {
             $asin                     = (string)$item->ASIN;
@@ -124,5 +124,4 @@ class OrderFactory
 
         return $order;
     }
-
 }

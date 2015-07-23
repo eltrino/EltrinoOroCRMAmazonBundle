@@ -37,6 +37,9 @@ trait OrderDetailsTrait
      */
     protected $orderStatus;
 
+    /**
+     * @param OrderDetails $orderDetails
+     */
     protected function initFromOrderDetails(OrderDetails $orderDetails)
     {
         $this->salesChannel       = $orderDetails->getSalesChannel();

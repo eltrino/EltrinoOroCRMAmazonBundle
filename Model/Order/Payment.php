@@ -19,10 +19,15 @@ class Payment
     protected $currencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $totalAmount;
 
+    /**
+     * @param string $paymentMethod
+     * @param string $currencyId
+     * @param float  $totalAmount
+     */
     public function __construct($paymentMethod, $currencyId, $totalAmount)
     {
         $this->paymentMethod = $paymentMethod;
@@ -31,7 +36,7 @@ class Payment
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getTotalAmount()
     {

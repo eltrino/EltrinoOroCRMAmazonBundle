@@ -22,7 +22,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_amazon_order_widget_info', {id: entity.id}),
-            'title': 'orocrm.amazon.order_information'|trans
+            'title': 'orocrm.amazon.view.order_information'|trans
         }) }}
     {% endset %}
 
@@ -37,7 +37,7 @@
 
     {% set dataBlocks = [
     {
-    'title': 'General Information'|trans,
+    'title': 'orocrm.amazon.view.general_information'|trans,
     'class': 'active',
     'subblocks': generalSubblocks
     },

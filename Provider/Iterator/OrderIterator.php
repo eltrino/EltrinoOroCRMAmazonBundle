@@ -2,21 +2,27 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FilterInterface;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Client\RestClient;
 
-class OrderIterator implements \Iterator
+class OrderIterator implements \Iterator, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     const INITIAL_MODE  = 'initial';
     const MODIFIED_MODE = 'modified';
+
     /**
      * @var RestClient
      */
     protected $amazonClient;
 
     /**
-     * @var int
+     * @var integer
      */
     protected $position = 0;
 
@@ -44,7 +50,7 @@ class OrderIterator implements \Iterator
      * @param RestClient     $client
      * @param FiltersFactory $filtersFactory
      * @param \DateTime      $from
-     * @param                $mode
+     * @param string         $mode
      */
     public function __construct(RestClient $client, FiltersFactory $filtersFactory, \DateTime $from, $mode)
     {
@@ -62,8 +68,7 @@ class OrderIterator implements \Iterator
     }
 
     /**
-     * Return the current element
-     * @return null|\SimpleXMLElement
+     * @inheritdoc
      */
     public function current()
     {
@@ -73,8 +78,7 @@ class OrderIterator implements \Iterator
     }
 
     /**
-     * Move forward to next element
-     * @return void
+     * @inheritdoc
      */
     public function next()
     {
@@ -82,8 +86,7 @@ class OrderIterator implements \Iterator
     }
 
     /**
-     * Return the key of the current element
-     * @return int
+     * @inheritdoc
      */
     public function key()
     {
@@ -91,8 +94,7 @@ class OrderIterator implements \Iterator
     }
 
     /**
-     * Checks if current position is valid
-     * @return boolean
+     * @inheritdoc
      */
     public function valid()
     {
@@ -102,17 +104,24 @@ class OrderIterator implements \Iterator
     }
 
     /**
-     * Rewind the Iterator to the first element
-     * @return void
+     * @inheritdoc
      */
     public function rewind()
     {
         $this->position = 0;
     }
 
+    /**
+     * @return array
+     */
     protected function loadOrders()
     {
+        $this->amazonClient->setLogger($this->logger);
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        /**
+         * Amazon mws api requirement:
+         * Must be no later than two minutes before the time that the request was submitted.
+         */
         $now->sub(new \DateInterval('PT3M'));
         if ($this->mode === self::INITIAL_MODE) {
             $filter = $filter = $this
@@ -125,13 +134,16 @@ class OrderIterator implements \Iterator
         }
         $compositeFilter = $this->filtersFactory->createCompositeFilter();
         $compositeFilter->addFilter($filter);
-        $responses = $this->amazonClient->makeRequest(RestClient::LIST_ORDERS_ACTION, $compositeFilter);
+        $responses = $this->amazonClient->requestAction(RestClient::LIST_ORDERS_ACTION, $compositeFilter);
         $orders = $this->extractResultElements($responses, 'Orders');
         $this->loadOrderItems($orders);
         $this->loaded = true;
         return $orders;
     }
 
+    /**
+     * @param array $orders
+     */
     protected function loadOrderItems(array $orders)
     {
         $compositeFilter = $this->filtersFactory->createCompositeFilter();
@@ -145,43 +157,53 @@ class OrderIterator implements \Iterator
                 $items = $this->getOrderItems($compositeFilter);
 
                 foreach ($items as $item) {
-                    $this->appendSimplexml($order->OrderItems[], $item);
+                    $this->appendSimpleXML($order->OrderItems[], $item);
                 }
             }
         }
     }
 
     /**
-     * @param $simplexmlTo
-     * @param $simplexmlFrom
+     * @param \SimpleXMLElement $to
+     * @param \SimpleXMLElement $from
      */
-    protected function appendSimplexml(&$simplexmlTo, &$simplexmlFrom)
+    protected function appendSimpleXML(\SimpleXMLElement &$to, \SimpleXMLElement $from)
     {
-        foreach ($simplexmlFrom->children() as $simplexmlChild) {
-            $simplexmlTemp = $simplexmlTo->addChild($simplexmlChild->getName(), htmlentities((string)$simplexmlChild));
-            foreach ($simplexmlChild->attributes() as $attrKey => $attrValue) {
-                $simplexmlTemp->addAttribute($attrKey, $attrValue);
+        foreach ($from->children() as $fromChild) {
+            $temp = $to->addChild($fromChild->getName(), htmlentities((string)$fromChild));
+            foreach ($fromChild->attributes() as $attrKey => $attrValue) {
+                $temp->addAttribute($attrKey, $attrValue);
             }
 
-            $this->appendSimplexml($simplexmlTemp, $simplexmlChild);
+            $this->appendSimplexml($temp, $fromChild);
         }
     }
 
+    /**
+     * @param FilterInterface $filter
+     * @return array
+     */
     protected function getOrderItems(FilterInterface $filter)
     {
-        $responses = $this->amazonClient->makeRequest(RestClient::LIST_ORDERS_ITEMS_ACTION, $filter);
+        $responses = $this->amazonClient->requestAction(RestClient::LIST_ORDERS_ITEMS_ACTION, $filter);
         return $this->extractResultElements($responses, 'OrderItems');
     }
 
+    /**
+     * @param array  $responses
+     * @param string $elementsName
+     * @return array
+     */
     protected function extractResultElements(array $responses, $elementsName)
     {
         $elements = [];
-
         /** @var \SimpleXMLElement $element */
         foreach ($responses as $response) {
             $element    = $response['result']->{$response['result_root']}->{$elementsName};
             if ($element->children()->count()) {
-                $elements[] = $element->children();
+                foreach ($element->children() as $order) {
+                    $elements[] = $order;
+                }
             }
         }
 

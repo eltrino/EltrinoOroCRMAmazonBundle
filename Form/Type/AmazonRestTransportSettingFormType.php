@@ -6,10 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
-use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-
 class AmazonRestTransportSettingFormType extends AbstractType
 {
     /**
@@ -17,11 +13,11 @@ class AmazonRestTransportSettingFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('wsdlUrl', 'text', ['label' => 'Endpoint url', 'required' => true]);
-        $builder->add('keyId', 'text', ['label' => 'Acces Key ID']);
-        $builder->add('secret', 'text', ['label' => 'Secret Access Key']);
-        $builder->add('merchantId', 'text', ['label' => 'Merchant ID']);
-        $builder->add('marketplaceId', 'text', ['label' => 'Marketplace ID']);
+        $builder->add('wsdlUrl', 'text', ['label' => 'orocrm.amazon.transport.endpoint_url', 'required' => true]);
+        $builder->add('keyId', 'text', ['label' => 'orocrm.amazon.transport.access_key_id']);
+        $builder->add('secret', 'text', ['label' => 'orocrm.amazon.transport.secret_access_key']);
+        $builder->add('merchantId', 'text', ['label' => 'orocrm.amazon.transport.merchant_id']);
+        $builder->add('marketplaceId', 'text', ['label' => 'orocrm.amazon.transport.marketplace_id']);
 
         $date          = new \DateTime('2007-01-01', new \DateTimeZone('UTC'));
         $syncStartDate = $date->format('Y-m-d');
@@ -30,14 +26,14 @@ class AmazonRestTransportSettingFormType extends AbstractType
             'syncStartDate',
             'oro_date',
             [
-                'label'      => 'Sync start date',
+                'label'      => 'orocrm.amazon.transport.sync_start_date',
                 'required'   => true,
-                'tooltip'    => 'Provide the start date you wish to import data from.',
+                'tooltip'    => 'orocrm.amazon.transport.tooltip.sync_start_date',
                 'empty_data' => $syncStartDate
             ]
         );
 
-        $builder->add('checkamazonchannel', 'button', ['label' => 'Check connection']);
+        $builder->add('checkamazonchannel', 'button', ['label' => 'orocrm.amazon.transport.check_connection']);
     }
 
     /**

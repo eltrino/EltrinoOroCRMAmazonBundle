@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\AmazonBundle\ImportExport\Serializer;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use OroCRM\Bundle\AmazonBundle\Entity\Order;

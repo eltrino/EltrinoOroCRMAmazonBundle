@@ -44,7 +44,7 @@ class AmazonRestTransport extends Transport
     /**
      * @var string
      *
-     * @ORM\Column(name="marketplace_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="aws_marketplace_id", type="string", length=255, nullable=true)
      */
     protected $marketplaceId;
 

@@ -10,7 +10,7 @@ class ItemCodFeeInfo
     protected $codFeeCurrencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $codFeeAmount;
 
@@ -20,10 +20,16 @@ class ItemCodFeeInfo
     protected $codFeeDiscountCurrencyId;
 
     /**
-     * @var string
+     * @var float
      */
     protected $codFeeDiscountAmount;
 
+    /**
+     * @param string $codFeeCurrencyId
+     * @param float  $codFeeAmount
+     * @param string $codFeeDiscountCurrencyId
+     * @param float  $codFeeDiscountAmount
+     */
     public function __construct(
         $codFeeCurrencyId,
         $codFeeAmount,
@@ -45,7 +51,7 @@ class ItemCodFeeInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getCodFeeAmount()
     {
@@ -61,7 +67,7 @@ class ItemCodFeeInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getCodFeeDiscountAmount()
     {

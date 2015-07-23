@@ -19,15 +19,21 @@ class Shipping
     protected $shipmentServiceLevelCategory;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $numberOfItemsShipped;
 
     /**
-     * @var string
+     * @var integer
      */
     protected $numberOfItemsUnshipped;
 
+    /**
+     * @param string  $shipServiceLevel
+     * @param string  $shipmentServiceLevelCategory
+     * @param integer $numberOfItemsShipped
+     * @param integer $numberOfItemsUnshipped
+     */
     public function __construct(
         $shipServiceLevel,
         $shipmentServiceLevelCategory,
@@ -57,7 +63,7 @@ class Shipping
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfItemsShipped()
     {
@@ -65,7 +71,7 @@ class Shipping
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfItemsUnshipped()
     {
