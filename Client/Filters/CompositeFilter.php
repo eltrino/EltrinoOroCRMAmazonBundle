@@ -12,7 +12,7 @@ class CompositeFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function process(array $parameters)
+    public function process(array $parameters = [])
     {
         foreach ($this->filters as $filter) {
             $parameters = $filter->process($parameters);

@@ -14,13 +14,14 @@ class RestClient implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    const GET_SERVICE_STATUS_ACTION = 'GetServiceStatus';
-    const LIST_ORDERS_ACTION        = 'ListOrders';
-    const LIST_ORDERS_ITEMS_ACTION  = 'ListOrderItems';
-    const BY_NEXT_TOKEN_SUF         = 'ByNextToken';
-    const ACTION_PARAM              = 'Action';
-    const NEXT_TOKEN_PARAM          = 'NextToken';
-    const ACTION_RESULT_SUF         = 'Result';
+    const GET_SERVICE_STATUS             = 'GetServiceStatus';
+    const LIST_ORDERS                    = 'ListOrders';
+    const LIST_ORDER_ITEMS               = 'ListOrderItems';
+    const LIST_ORDERS_BY_NEXT_TOKEN      = 'ListOrdersByNextToken';
+    const LIST_ORDER_ITEMS_BY_NEXT_TOKEN = 'ListOrderItemsByNextToken';
+
+    const ACTION_PARAM     = 'Action';
+    const NEXT_TOKEN_PARAM = 'NextToken';
 
     const STATUS_GREEN = 'GREEN';
 
@@ -31,15 +32,12 @@ class RestClient implements LoggerAwareInterface
      * 'restore_rate' => The rate at which your request quota increases over time, up to the maximum request quota.
      */
     protected static $throttlingParams = [
-        self::GET_SERVICE_STATUS_ACTION => ['max_requests_quota' => 2, 'restore_rate' => 300],
-        self::LIST_ORDERS_ACTION        => ['max_requests_quota' => 6, 'restore_rate' => 60],
-        self::LIST_ORDERS_ITEMS_ACTION  => ['max_requests_quota' => 30, 'restore_rate' => 2]
+        self::GET_SERVICE_STATUS             => ['max_requests_quota' => 2, 'restore_rate' => 300],
+        self::LIST_ORDERS                    => ['max_requests_quota' => 6, 'restore_rate' => 60],
+        self::LIST_ORDERS_BY_NEXT_TOKEN      => ['max_requests_quota' => 6, 'restore_rate' => 60],
+        self::LIST_ORDER_ITEMS               => ['max_requests_quota' => 30, 'restore_rate' => 2],
+        self::LIST_ORDER_ITEMS_BY_NEXT_TOKEN => ['max_requests_quota' => 30, 'restore_rate' => 2],
     ];
-
-    /**
-     * @var \SimpleXMLElement[]
-     */
-    protected $responses;
 
     /**
      * @var ClientInterface
@@ -52,20 +50,15 @@ class RestClient implements LoggerAwareInterface
     protected $authHandler;
 
     /**
-     * @var string
-     */
-    protected $nextTokenParam;
-
-    /**
      * @var array
      * Store counters for api requests.
      * The number of requests that you can submit at one time without throttling
      * for each action
      */
     protected $requestsCounters = [
-        self::GET_SERVICE_STATUS_ACTION => 0,
-        self::LIST_ORDERS_ACTION        => 0,
-        self::LIST_ORDERS_ITEMS_ACTION  => 0
+        self::GET_SERVICE_STATUS => 0,
+        self::LIST_ORDERS        => 0,
+        self::LIST_ORDER_ITEMS   => 0
     ];
 
     /**
@@ -73,96 +66,79 @@ class RestClient implements LoggerAwareInterface
      */
     protected $parameters = [];
 
-    public function __construct(ClientInterface $client, AuthHandler $authHandler)
+    /**
+     * @param ClientInterface      $client
+     * @param AuthHandlerInterface $authHandler
+     */
+    public function __construct(ClientInterface $client, AuthHandlerInterface $authHandler)
     {
         $this->client      = $client;
         $this->authHandler = $authHandler;
-        iconv_set_encoding('output_encoding', 'UTF-8');
-        iconv_set_encoding('input_encoding', 'UTF-8');
-        iconv_set_encoding('internal_encoding', 'UTF-8');
-    }
-
-    /**
-     * @param                 $action
-     * @param FilterInterface $filter
-     * @param array           $parameters
-     * @return array
-     */
-    public function requestAction($action, FilterInterface $filter = null, array $parameters = [])
-    {
-        $this->responses = [];
-        $this->processParameters($action, $filter, $parameters);
-        $response = $this->formatResponse($this->client->post(null, [], $this->parameters)->send());
-        $this->applyRecoveryRate($action);
-        $this->responses[] = $response;
-        $this->nextTokenParam = (string)$response['result']->{$response['result_root']}->{self::NEXT_TOKEN_PARAM};
-        while ($this->nextTokenParam) {
-            $this->processParameters(
-                $action . self::BY_NEXT_TOKEN_SUF,
-                null,
-                [self::NEXT_TOKEN_PARAM => $this->nextTokenParam]
-            );
-
-            $response          = $this->formatResponse($this->client->post(null, [], $this->parameters)->send());
-            $this->responses[] = $response;
-            $this->applyRecoveryRate($action);
-            $this->nextTokenParam = (string)$response['result']->{$response['result_root']}->{self::NEXT_TOKEN_PARAM};
-        }
-
-        return $this->responses;
-    }
-
-    /**
-     * @param Response $response
-     * @return array
-     */
-    protected function formatResponse(Response $response)
-    {
-        $resultRoot = $this->parameters[self::ACTION_PARAM] . self::ACTION_RESULT_SUF;
-        $namespace  = $this->client->getBaseUrl() . '/' . $this->authHandler->getVersion();
-
-        return [
-            'result'      => $response->xml()->children($namespace),
-            'result_root' => $resultRoot
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getAuthParameters()
-    {
-        return [
-            'SellerId'           => $this->authHandler->getMerchantId(),
-            'MarketplaceId.Id.1' => $this->authHandler->getMarketplaceId(),
-            'AWSAccessKeyId'     => $this->authHandler->getKeyId(),
-            'Timestamp'          => $this->authHandler->getFormattedTimestamp(),
-            'Version'            => $this->authHandler->getVersion(),
-            'SignatureVersion'   => $this->authHandler->getSignatureVersion(),
-            'SignatureMethod'    => $this->authHandler->getSignatureMethod(),
-        ];
     }
 
     /**
      * @param string          $action
      * @param FilterInterface $filter
      * @param array           $parameters
+     * @return RestClientResponse
      */
-    protected function processParameters($action, FilterInterface $filter = null, array $parameters = [])
+    public function requestAction($action, FilterInterface $filter = null, array $parameters = [])
     {
-        $this->parameters = $this->getAuthParameters();
-        if ($filter) {
-            $this->parameters = $filter->process($this->parameters);
+        if (!isset(static::$throttlingParams[$action])) {
+            throw new \InvalidArgumentException('Unknown action ' . $action);
         }
-        $this->parameters[self::ACTION_PARAM] = $action;
-        if (isset($parameters[self::NEXT_TOKEN_PARAM])) {
-            $this->parameters[self::NEXT_TOKEN_PARAM] = $parameters[self::NEXT_TOKEN_PARAM];
+        $requestParameters = $this->getRequestParameters($action, $filter, $parameters);
+
+        $response = $this->client->post(null, [], $requestParameters)->send();
+        $this->applyRecoveryRate(str_replace(self::NEXT_TOKEN_PARAM, '', $action));
+        $namespace = $this->client->getBaseUrl() . '/' . $this->authHandler->getVersion();
+
+        $result             = $response->xml()->children($namespace);
+        $resultRoot         = $requestParameters[self::ACTION_PARAM] . 'Result';
+        $restClientResponse = new RestClientResponse(
+            $result,
+            $resultRoot
+        );
+        if ($nextToken = (string)$result->{$resultRoot}->{self::NEXT_TOKEN_PARAM}) {
+            $restClientResponse->setNextToken($nextToken);
         }
-        $signature                     = $this->authHandler->getSignature(
-            $this->parameters,
+
+        return $restClientResponse;
+    }
+
+    /**
+     * @param string               $action
+     * @param FilterInterface|null $filter
+     * @param array                $parameters
+     * @return array
+     */
+    protected function getRequestParameters($action, FilterInterface $filter = null, array $parameters = [])
+    {
+        $filterParameters = [];
+        if (null !== $filter) {
+            $filterParameters = $filter->process();
+        }
+        $requestParameters = array_merge(
+            [
+                'Action'             => $action,
+                'SellerId'           => $this->authHandler->getMerchantId(),
+                'MarketplaceId.Id.1' => $this->authHandler->getMarketplaceId(),
+                'AWSAccessKeyId'     => $this->authHandler->getKeyId(),
+                'Timestamp'          => $this->authHandler->getFormattedTimestamp(),
+                'Version'            => $this->authHandler->getVersion(),
+                'SignatureVersion'   => $this->authHandler->getSignatureVersion(),
+                'SignatureMethod'    => $this->authHandler->getSignatureMethod(),
+            ],
+            $parameters,
+            $filterParameters
+        );
+
+        $requestParameters['Signature'] = $this->authHandler->getSignature(
+            $requestParameters,
             $this->client->getBaseUrl()
         );
-        $this->parameters['Signature'] = $signature;
+
+        return $requestParameters;
     }
 
     /**
@@ -170,9 +146,6 @@ class RestClient implements LoggerAwareInterface
      */
     protected function applyRecoveryRate($action)
     {
-        if (!isset(static::$throttlingParams[$action])) {
-            throw new \InvalidArgumentException('Unknown action ' . $action);
-        }
         $this->requestsCounters[$action]++;
         $maxRequestsQuota = static::$throttlingParams[$action]['max_requests_quota'];
 

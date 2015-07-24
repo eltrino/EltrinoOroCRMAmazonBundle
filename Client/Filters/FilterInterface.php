@@ -8,5 +8,5 @@ interface FilterInterface
      * @param array $parameters
      * @return array
      */
-    public function process(array $parameters);
+    public function process(array $parameters = []);
 }

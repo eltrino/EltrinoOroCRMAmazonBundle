@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Provider\Iterator;
 
+use OroCRM\Bundle\AmazonBundle\Client\RestClientResponse;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -15,6 +16,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
 
     const INITIAL_MODE  = 'initial';
     const MODIFIED_MODE = 'modified';
+    const LOAD_BATCH_SIZE = 200;
 
     /**
      * @var RestClient
@@ -47,6 +49,15 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     protected $loaded = false;
 
     /**
+     * @var bool
+     */
+    protected $firstRequestSend = false;
+    /**
+     * @var string
+     */
+    protected $nextToken;
+
+    /**
      * @param RestClient     $client
      * @param FiltersFactory $filtersFactory
      * @param \DateTime      $from
@@ -58,13 +69,6 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
         $this->filtersFactory = $filtersFactory;
         $this->from           = $from;
         $this->mode           = $mode;
-    }
-
-    protected function load()
-    {
-        if (!$this->loaded) {
-            $this->elements = $this->loadOrders();
-        }
     }
 
     /**
@@ -111,33 +115,108 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
         $this->position = 0;
     }
 
+    protected function load()
+    {
+        if ($this->shouldLoad()) {
+            $this->loadOrders();
+        }
+    }
+
+    protected function shouldLoad()
+    {
+        return !isset($this->elements[$this->position]) && ($this->nextToken || !$this->firstRequestSend);
+    }
+
+    /**
+     * @param int  $loaded
+     * @param bool $clear
+     */
+    protected function loadBatch($loaded, $clear)
+    {
+        $max   = count($this->elements) ? max(array_keys($this->elements)) : false;
+        $start = $max ? $max + 1 : 0;
+        $orders = [];
+        while ($this->nextToken && ($loaded < self::LOAD_BATCH_SIZE)) {
+            $response = $this->amazonClient->requestAction(
+                RestClient::LIST_ORDERS_BY_NEXT_TOKEN,
+                null,
+                [RestClient::NEXT_TOKEN_PARAM => $this->nextToken]
+            );
+            $orders = $this->processOrdersResponse($start, $response);
+            $loaded += count($orders);
+        }
+        if ($clear) {
+            $this->elements = $orders;
+        } else {
+            $this->elements = array_merge($this->elements, $orders);
+        }
+    }
+
+    /**
+     * @param int                $start
+     * @param RestClientResponse $response
+     * @return array
+     */
+    protected function extractOrders($start, RestClientResponse $response)
+    {
+        $orders = [];
+        $position = $start;
+        /** @var \SimpleXMLElement $element */
+        $element    = $response->getResult()->{$response->getResultRoot()}->Orders;
+        if ($element->children()->count()) {
+            foreach ($element->children() as $order) {
+                $orders[$position] = $order;
+                $position++;
+            }
+        }
+
+        return $orders;
+    }
+
     /**
      * @return array
      */
     protected function loadOrders()
     {
-        $this->amazonClient->setLogger($this->logger);
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-        /**
-         * Amazon mws api requirement:
-         * Must be no later than two minutes before the time that the request was submitted.
-         */
-        $now->sub(new \DateInterval('PT3M'));
-        if ($this->mode === self::INITIAL_MODE) {
-            $filter = $filter = $this
-                ->filtersFactory
-                ->createCreateTimeRangeFilter($this->from, $now);
-        } else {
-            $filter = $this
-                ->filtersFactory
-                ->createModTimeRangeFilter($this->from, $now);
+        $loaded = 0;
+        $clear = true;
+        if (!$this->firstRequestSend) {
+            $this->amazonClient->setLogger($this->logger);
+            $now = new \DateTime('now', new \DateTimeZone('UTC'));
+            /**
+             * Amazon mws api requirement:
+             * Must be no later than two minutes before the time that the request was submitted.
+             */
+            $now->sub(new \DateInterval('PT3M'));
+            if ($this->mode === self::INITIAL_MODE) {
+                $filter = $filter = $this
+                    ->filtersFactory
+                    ->createCreateTimeRangeFilter($this->from, $now);
+            } else {
+                $filter = $this
+                    ->filtersFactory
+                    ->createModTimeRangeFilter($this->from, $now);
+            }
+            $compositeFilter = $this->filtersFactory->createCompositeFilter();
+            $compositeFilter->addFilter($filter);
+            $response = $this->amazonClient->requestAction(RestClient::LIST_ORDERS, $compositeFilter);
+            $this->elements = $this->processOrdersResponse(0, $response);
+            $this->firstRequestSend = true;
+            $loaded = count($this->elements);
+            $clear = false;
         }
-        $compositeFilter = $this->filtersFactory->createCompositeFilter();
-        $compositeFilter->addFilter($filter);
-        $responses = $this->amazonClient->requestAction(RestClient::LIST_ORDERS_ACTION, $compositeFilter);
-        $orders = $this->extractResultElements($responses, 'Orders');
-        $this->loadOrderItems($orders);
-        $this->loaded = true;
+
+        $this->loadBatch($loaded, $clear);
+    }
+
+    protected function processOrdersResponse($start, RestClientResponse $response)
+    {
+        $orders = $this->extractOrders($start, $response);
+        //$this->loadOrderItems($orders);
+        if ($nextToken = $response->getNextToken()) {
+            $this->nextToken = $nextToken;
+        }
+
         return $orders;
     }
 
@@ -147,7 +226,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     protected function loadOrderItems(array $orders)
     {
         $compositeFilter = $this->filtersFactory->createCompositeFilter();
-        foreach ($orders as $order) {
+        foreach ($orders as $key => $order) {
             $amazonOrderId = (string)$order->AmazonOrderId;
             if ($amazonOrderId) {
                 $amazonOrderIdFilter = $this->filtersFactory->createAmazonOrderIdFilter($amazonOrderId);
@@ -185,28 +264,35 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
      */
     protected function getOrderItems(FilterInterface $filter)
     {
-        $responses = $this->amazonClient->requestAction(RestClient::LIST_ORDERS_ITEMS_ACTION, $filter);
-        return $this->extractResultElements($responses, 'OrderItems');
+        $firstResponse = $this->amazonClient->requestAction(RestClient::LIST_ORDER_ITEMS, $filter);
+        $nextToken = $firstResponse->getNextToken();
+        $items = $this->extractItems($firstResponse);
+        while ($nextToken) {
+            $response = $this->amazonClient->requestAction(
+                RestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN,
+                null,
+                [RestClient::NEXT_TOKEN_PARAM => $nextToken]
+            );
+            $items = array_merge($items, $this->extractItems($response));
+        }
+        return $items;
     }
 
     /**
-     * @param array  $responses
-     * @param string $elementsName
+     * @param RestClientResponse $response
      * @return array
      */
-    protected function extractResultElements(array $responses, $elementsName)
+    protected function extractItems(RestClientResponse $response)
     {
-        $elements = [];
+        $items = [];
         /** @var \SimpleXMLElement $element */
-        foreach ($responses as $response) {
-            $element    = $response['result']->{$response['result_root']}->{$elementsName};
-            if ($element->children()->count()) {
-                foreach ($element->children() as $order) {
-                    $elements[] = $order;
-                }
+        $element    = $response->getResult()->{$response->getResultRoot()}->OrderItems;
+        if ($element->children()->count()) {
+            foreach ($element->children() as $item) {
+                $items[] = $item;
             }
         }
 
-        return $elements;
+        return $items;
     }
 }

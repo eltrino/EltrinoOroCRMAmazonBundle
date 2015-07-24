@@ -20,7 +20,7 @@ class AmazonOrderIdFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    public function process(array $parameters)
+    public function process(array $parameters = [])
     {
         $parameters['AmazonOrderId'] = $this->amazonOrderId;
 

@@ -32,5 +32,5 @@ abstract class AbstractTimeRangeFilter implements FilterInterface
     /**
      * @inheritdoc
      */
-    abstract public function process(array $parameters);
+    abstract public function process(array $parameters = []);
 }

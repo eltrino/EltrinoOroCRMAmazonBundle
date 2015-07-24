@@ -50,7 +50,7 @@ class OrderDenormalizer implements DenormalizerInterface
      * @param string $class
      * @param null   $format
      * @param array  $context
-     * @return object|Order
+     * @return Order
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
