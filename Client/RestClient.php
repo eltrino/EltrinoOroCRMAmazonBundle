@@ -52,6 +52,11 @@ class RestClient implements LoggerAwareInterface
     protected $authHandler;
 
     /**
+     * @var string
+     */
+    protected $nextTokenParam;
+
+    /**
      * @var array
      * Store counters for api requests.
      * The number of requests that you can submit at one time without throttling
@@ -90,32 +95,21 @@ class RestClient implements LoggerAwareInterface
         $response = $this->formatResponse($this->client->post(null, [], $this->parameters)->send());
         $this->applyRecoveryRate($action);
         $this->responses[] = $response;
-        $this->processNextTokenRequest($action, $response['result'], $response['result_root']);
-
-        return $this->responses;
-    }
-
-    /**
-     * @param string            $action
-     * @param \SimpleXMLElement $parent
-     * @param string            $resultRoot
-     */
-    protected function processNextTokenRequest($action, \SimpleXMLElement $parent, $resultRoot)
-    {
-        if ((string)$parent->{$resultRoot}->{self::NEXT_TOKEN_PARAM}) {
-            $nextToken = (string)$parent->{$resultRoot}->{self::NEXT_TOKEN_PARAM};
-
+        $this->nextTokenParam = (string)$response['result']->{$response['result_root']}->{self::NEXT_TOKEN_PARAM};
+        while ($this->nextTokenParam) {
             $this->processParameters(
                 $action . self::BY_NEXT_TOKEN_SUF,
                 null,
-                [self::NEXT_TOKEN_PARAM => $nextToken]
+                [self::NEXT_TOKEN_PARAM => $this->nextTokenParam]
             );
 
             $response          = $this->formatResponse($this->client->post(null, [], $this->parameters)->send());
             $this->responses[] = $response;
             $this->applyRecoveryRate($action);
-            $this->processNextTokenRequest($action, $response['result'], $response['result_root']);
+            $this->nextTokenParam = (string)$response['result']->{$response['result_root']}->{self::NEXT_TOKEN_PARAM};
         }
+
+        return $this->responses;
     }
 
     /**
