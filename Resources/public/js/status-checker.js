@@ -19,7 +19,7 @@ define([
          * Check url
          * @property string
          */
-        route: 'orocrm_amazon_rest_check',
+        route: 'orocrm_amazon_check_status',
         url: null,
         id: null,
         requiredOptions: [],
@@ -74,7 +74,7 @@ define([
                 return field.name.indexOf('[transport]') !== -1;
             });
             data = _.map(data, function(field) {
-                field.name = field.name.replace(/.+\[(.+)\]$/, 'rest-check[$1]');
+                field.name = field.name.replace(/.+\[(.+)\]$/, 'check-status[$1]');
                 return field;
             });
             mediator.execute('showLoading');

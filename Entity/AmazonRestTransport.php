@@ -16,42 +16,42 @@ class AmazonRestTransport extends Transport
     /**
      * @var string
      *
-     * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=true)
+     * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=false)
      */
     protected $wsdlUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_access_key_id", type="string", length=2048, nullable=true)
+     * @ORM\Column(name="aws_access_key_id", type="string", length=2048, nullable=false)
      */
     protected $keyId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_secret_access_key", type="string", length=255, nullable=true)
+     * @ORM\Column(name="aws_secret_access_key", type="string", length=255, nullable=false)
      */
     protected $secret;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_merchant_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="aws_merchant_id", type="string", length=255, nullable=false)
      */
     protected $merchantId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aws_marketplace_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="aws_marketplace_id", type="string", length=255, nullable=false)
      */
     protected $marketplaceId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sync_start_date", type="date", nullable=true)
+     * @ORM\Column(name="sync_start_date", type="date", nullable=false)
      */
     protected $syncStartDate;
 

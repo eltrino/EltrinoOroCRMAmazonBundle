@@ -59,15 +59,15 @@ class OroCRMAmazonBundle implements Migration
     {
         $table = $schema->getTable('oro_integration_transport');
         if (!$table->hasColumn('wsdl_url')) {
-            $table->addColumn('wsdl_url', 'string', ['notnull' => false, 'length' => 255]);
+            $table->addColumn('wsdl_url', 'string', ['length' => 255]);
         }
         if (!$table->hasColumn('sync_start_date')) {
-            $table->addColumn('sync_start_date', 'date', ['notnull' => false]);
+            $table->addColumn('sync_start_date', 'date');
         }
-        $table->addColumn('aws_access_key_id', 'string', ['notnull' => false, 'length' => 2048]);
-        $table->addColumn('aws_secret_access_key', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('aws_merchant_id', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('aws_marketplace_id', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('aws_access_key_id', 'string', ['length' => 2048]);
+        $table->addColumn('aws_secret_access_key', 'string', ['length' => 255]);
+        $table->addColumn('aws_merchant_id', 'string', ['length' => 255]);
+        $table->addColumn('aws_marketplace_id', 'string', ['length' => 255]);
     }
 
     /**

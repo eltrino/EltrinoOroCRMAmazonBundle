@@ -8,20 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-/**
- * @Route("/rest")
- */
-class AmazonRestController extends Controller
+class AmazonController extends Controller
 {
     /**
-     * @Route("/check", name="orocrm_amazon_rest_check")
+     * @Route("/check-status", name="orocrm_amazon_check_status")
      * @param Request $request
      * @return JsonResponse
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      */
-    public function checkAction(Request $request)
+    public function checkStatusAction(Request $request)
     {
         $transport = $this->get('orocrm_amazon.amazon_rest_transport');
         $data      = null;
@@ -31,7 +28,7 @@ class AmazonRestController extends Controller
         }
 
         $form = $this->get('form.factory')
-            ->createNamed('rest-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
+            ->createNamed('check-status', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
         $form->submit($request);
         $transportEntity = $form->getData();
         $transport->init($transportEntity);
