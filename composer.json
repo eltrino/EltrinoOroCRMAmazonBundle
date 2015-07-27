@@ -1,40 +1,33 @@
 {
-  "name": "eltrino/orocrm-amazon-bundle",
-  "description": "OroCRM Amazon Integration Bundle",
-  "homepage": "https://github.com/eltrino/EltrinoOroCRMAmazonBundle",
-  "license": "OSL-3.0",
-  "authors": [
-    {
-      "name": "Eltrino LLC",
-      "homepage": "http://eltrino.com"
+    "name": "oro/crm-amazon-bundle",
+    "description": "OroCRM Amazon Integration Bundle",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Oro, Inc",
+            "homepage": "http://www.orocrm.com"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "OroCRM\\Bundle\\AmazonBundle": "src/"
+        }
+    },
+    "target-dir": "src/OroCRM/Bundle/AmazonBundle",
+    "require": {
+        "php": ">=5.4.4",
+        "oro/platform": ">=1.3.0",
+        "oro/crm": ">=1.3.0",
+        "guzzle/guzzle": "3.7.*"
+    },
+    "require-dev": {
+        "eltrino/phpunit-mockannotations": "1.0.*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
-  ],
-  "autoload": {
-    "psr-0": {
-      "OroCRM\\Bundle\\AmazonBundle": "src/"
-    }
-  },
-  "target-dir": "src/OroCRM/Bundle/AmazonBundle",
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/eltrino/EltrinoOroCRMAmazonBundle.git"
-    }
-  ],
-  "require": {
-    "php": ">=5.4.4",
-    "oro/platform": ">=1.3.0",
-    "oro/crm": ">=1.3.0",
-    "guzzle/guzzle": "3.7.*"
-  },
-  "require-dev": {
-    "eltrino/phpunit-mockannotations": "1.0.*"
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
-    }
-  }
 }

@@ -23,7 +23,7 @@ class OrderConnector extends AbstractConnector
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getImportEntityFQCN()
     {
@@ -31,7 +31,7 @@ class OrderConnector extends AbstractConnector
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getImportJobName()
     {

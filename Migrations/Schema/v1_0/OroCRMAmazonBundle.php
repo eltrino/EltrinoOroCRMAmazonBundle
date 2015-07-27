@@ -10,7 +10,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 class OroCRMAmazonBundle implements Migration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {

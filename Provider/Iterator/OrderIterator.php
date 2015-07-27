@@ -72,7 +72,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -82,7 +82,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -90,7 +90,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -98,7 +98,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function valid()
     {
@@ -108,7 +108,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rewind()
     {
@@ -122,6 +122,9 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function shouldLoad()
     {
         return !isset($this->elements[$this->position]) && ($this->nextToken || !$this->firstRequestSend);
@@ -213,6 +216,11 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
         $this->loadBatch($loaded, $clear);
     }
 
+    /**
+     * @param                    $start
+     * @param RestClientResponse $response
+     * @return array
+     */
     protected function processOrdersResponse($start, RestClientResponse $response)
     {
         $orders = $this->extractOrders($start, $response);

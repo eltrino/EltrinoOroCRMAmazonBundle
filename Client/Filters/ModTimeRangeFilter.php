@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\AmazonBundle\Client\Filters;
 class ModTimeRangeFilter extends AbstractTimeRangeFilter
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function process(array $parameters = [])
     {

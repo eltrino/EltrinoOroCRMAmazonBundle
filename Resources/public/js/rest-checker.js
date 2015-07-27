@@ -7,8 +7,8 @@ define([
     'orotranslation/js/translator',
     'oroui/js/mediator',
     'oroui/js/messenger'
-], function ($, _, routing, Backbone, __, mediator, messenger) {
-    "use strict";
+], function($, _, routing, Backbone, __, mediator, messenger) {
+    'use strict';
 
     return Backbone.View.extend({
         events: {
@@ -36,12 +36,12 @@ define([
             '</div>'
         ),
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
-            var requiredMissed = this.requiredOptions.filter(function (option) {
+            var requiredMissed = this.requiredOptions.filter(function(option) {
                 return _.isUndefined(options[option]);
             });
             if (requiredMissed.length) {
@@ -49,7 +49,7 @@ define([
             }
         },
 
-        getUrl: function (type) {
+        getUrl: function(type) {
             var params = {id: this.id};
             if (type !== undefined) {
                 params.type = type;
@@ -61,27 +61,27 @@ define([
         /**
          * Click handler
          */
-        processClick: function () {
+        processClick: function() {
             var data = this.$el.parents('form').serializeArray();
-            var typeData = _.filter(data, function (field) {
+            var typeData = _.filter(data, function(field) {
                 return field.name.indexOf('[type]') !== -1;
             });
             if (typeData.length) {
                 typeData = typeData[0].value;
             }
 
-            data = _.filter(data, function (field) {
+            data = _.filter(data, function(field) {
                 return field.name.indexOf('[transport]') !== -1;
             });
-            data = _.map(data, function (field) {
+            data = _.map(data, function(field) {
                 field.name = field.name.replace(/.+\[(.+)\]$/, 'rest-check[$1]');
                 return field;
             });
             mediator.execute('showLoading');
             $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
-                .always(_.bind(function (response, status) {
+                .always(_.bind(function(response, status) {
                     mediator.execute('hideLoading');
-                    if (status !== 'success') {
+                    if(status !== 'success') {
                         this.renderResult('error', __('orocrm.amazon.transport_check_message.error'));
                     }
                 }, this));
@@ -92,9 +92,10 @@ define([
          *
          * @param res {}
          */
-        responseHandler: function (res) {
-            var success = res.success || false,
-                message = success ? 'orocrm.amazon.transport_check_message.success' : 'orocrm.amazon.transport_check_message.invalid';
+        responseHandler: function(res) {
+            var success = res.success || false;
+            var messagePrefix = 'orocrm.amazon.transport_check_message.';
+            var message = success ? messagePrefix + 'success' : messagePrefix + 'invalid';
 
             if (success) {
                 var form = this.$el.parents('form');
@@ -109,7 +110,7 @@ define([
          * @param type string
          * @param message string
          */
-        renderResult: function (type, message) {
+        renderResult: function(type, message) {
             messenger.notificationFlashMessage(type, message, {
                 container: this.$el.parent(),
                 template: this.resultTemplate

@@ -204,11 +204,14 @@ class RestClient implements LoggerAwareInterface
     {
         sleep($restoreRateSeconds);
         $this->requestsCounters[$action]--;
-        array_walk($this->requestsExtraTime, function (&$val, $key) use ($action, $restoreRateSeconds) {
-            if ($key !== $action) {
-                $val += $restoreRateSeconds;
-            };
-        });
+        array_walk(
+            $this->requestsExtraTime,
+            function (&$val, $key) use ($action, $restoreRateSeconds) {
+                if ($key !== $action) {
+                    $val += $restoreRateSeconds;
+                };
+            }
+        );
         $this->restoreRateRequests[$action]++;
     }
 }

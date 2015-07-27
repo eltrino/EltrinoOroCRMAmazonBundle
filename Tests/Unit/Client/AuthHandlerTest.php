@@ -79,7 +79,7 @@ class AuthHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGettersDataProvider()
     {
-        $gmdate = str_replace('[_]', '[\d]', gmdate("(Y-m-d\TH:i:)([_]{2})(\.\\0\\0\\0\\Z)", time()));
+        $gmdate = str_replace('[_]', '[\d]', gmdate("(Y-m-d\TH:)([_]{2})(:)([_]{2})(\.\\0\\0\\0\\Z)", time()));
 
         return [
             ['getKeyId', 'testKeyId'],

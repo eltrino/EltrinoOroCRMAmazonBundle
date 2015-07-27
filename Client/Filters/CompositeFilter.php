@@ -10,7 +10,7 @@ class CompositeFilter implements FilterInterface
     protected $filters = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function process(array $parameters = [])
     {

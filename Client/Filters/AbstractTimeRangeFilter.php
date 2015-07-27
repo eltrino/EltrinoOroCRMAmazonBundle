@@ -30,7 +30,7 @@ abstract class AbstractTimeRangeFilter implements FilterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     abstract public function process(array $parameters = []);
 }

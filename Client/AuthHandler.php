@@ -43,7 +43,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getKeyId()
     {
@@ -51,7 +51,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getMarketplaceId()
     {
@@ -59,7 +59,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getMerchantId()
     {
@@ -67,7 +67,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSecret()
     {
@@ -75,7 +75,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getFormattedTimestamp()
     {
@@ -83,7 +83,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getVersion()
     {
@@ -91,7 +91,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSignatureVersion()
     {
@@ -99,7 +99,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSignatureMethod()
     {
@@ -107,7 +107,7 @@ class AuthHandler implements AuthHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSignature(array $parameters, $baseUrl)
     {

@@ -18,7 +18,7 @@ class AmazonOrderIdFilter implements FilterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function process(array $parameters = [])
     {
