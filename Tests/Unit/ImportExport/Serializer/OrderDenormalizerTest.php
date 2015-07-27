@@ -1,22 +1,10 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace OroCRM\Bundle\AmazonBundle\Tests\ImportExport\Serializer;
+
+namespace OroCRM\Bundle\AmazonBundle\Tests\Unit\ImportExport\Serializer;
 
 use OroCRM\Bundle\AmazonBundle\ImportExport\Serializer\OrderDenormalizer;
-use OroCRM\Bundle\AmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
+use OroCRM\Bundle\AmazonBundle\Provider\Connector\OrderConnector;
 
 class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -117,7 +105,6 @@ class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
         $orderDenormilizer = new OrderDenormalizer($this->em, $this->orderFactory);
         $this->assertFalse($orderDenormilizer->supportsDenormalization([], 'TEST_TYPE'));
         $this->assertFalse($orderDenormilizer->supportsDenormalization('string', 'TEST_TYPE'));
-        $this->assertTrue($orderDenormilizer->supportsDenormalization($testObject, AmazonOrderConnector::ORDER_TYPE));
+        $this->assertTrue($orderDenormilizer->supportsDenormalization($testObject, OrderConnector::ORDER_TYPE));
     }
-
 }

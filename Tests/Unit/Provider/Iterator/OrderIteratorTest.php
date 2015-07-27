@@ -7,6 +7,7 @@ use OroCRM\Bundle\AmazonBundle\Client\Filters\CompositeFilter;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\CreateTimeRangeFilter;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Client\RestClient;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientResponse;
 use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
 use Psr\Log\LoggerInterface;
 
@@ -43,6 +44,11 @@ class OrderIteratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->client
+            ->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('https://mws.amazonservices.com/Orders');
+
         $this->object = new OrderIterator(
             $this->client,
             $this->filtersFactory,
@@ -78,20 +84,35 @@ class OrderIteratorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($amazonOrderIdFilter);
 
         $xml = new \SimpleXMLElement(file_get_contents(__DIR__ . '/../../Fixtures/OrdersResult.xml'));
+        $itemsXml = new \SimpleXMLElement(file_get_contents(__DIR__ . '/../../Fixtures/OrderItemsResult.xml'));
 
-        $this->client
-            ->expects($this->at(0))
-            ->method('requestAction')
-            ->with('ListOrders', $compositeFilter)
-            ->willReturn([['result' => $xml->children(), 'result_root' => 'ListOrdersResult']]);
+
+        $listOrdersResponse = new RestClientResponse($xml->children(), 'ListOrdersResult');
         $this->client
             ->expects($this->at(1))
             ->method('requestAction')
-            ->with('ListOrderItems', $amazonOrderIdFilter)
-            ->willReturn([['result' => [], 'result_root' => 'ListOrderItemsResult']]);
+            ->with('ListOrders', $compositeFilter)
+            ->willReturn($listOrdersResponse);
+        $orderIdCompositeFilter = new CompositeFilter();
+        $orderIdCompositeFilter->addFilter($amazonOrderIdFilter);
+        $this->client
+            ->expects($this->at(2))
+            ->method('requestAction')
+            ->with('ListOrderItems', $orderIdCompositeFilter)
+            ->willReturn(new RestClientResponse($itemsXml->children(), 'ListOrderItemsResult'));
+
+        $this->client
+            ->expects($this->at(3))
+            ->method('requestAction')
+            ->with('ListOrderItems', $orderIdCompositeFilter)
+            ->willReturn(new RestClientResponse($itemsXml->children(), 'ListOrderItemsResult'));
+        $orders = [];
+        foreach ($xml->children()->ListOrdersResult->Orders->children() as $order) {
+            $orders[] = $order;
+        }
 
         $this->assertEquals(
-            [$xml->children()->ListOrdersResult->Orders->children()],
+            $orders,
             iterator_to_array($this->object)
         );
     }

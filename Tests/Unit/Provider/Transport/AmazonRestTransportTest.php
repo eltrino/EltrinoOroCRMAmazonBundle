@@ -6,6 +6,7 @@ use OroCRM\Bundle\AmazonBundle\Client\Filters\CompositeFilter;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Client\RestClient;
 use OroCRM\Bundle\AmazonBundle\Client\RestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientResponse;
 use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
 use OroCRM\Bundle\AmazonBundle\Provider\Transport\AmazonRestTransport;
 use OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport as EntityAmazonRestTransport;
@@ -87,14 +88,14 @@ class AmazonRestTransportTest extends \PHPUnit_Framework_TestCase
             ->willReturn($compositeFilter);
 
 
-        $result = new \stdClass;
-        $result->GetServiceStatusResult = new \StdClass;
-        $result->GetServiceStatusResult->Status = 'GREEN';
+        $xml = new \SimpleXMLElement(file_get_contents(__DIR__ . '/../../Fixtures/GetServiseStatusResult.xml'));
+
+
         $this->client
             ->expects($this->once())
-            ->method('makeRequest')
-            ->with(RestClient::GET_SERVICE_STATUS_ACTION, $compositeFilter)
-            ->willReturn([['result' => $result, 'result_root' => 'GetServiceStatusResult']]);
+            ->method('requestAction')
+            ->with(RestClient::GET_SERVICE_STATUS, $compositeFilter)
+            ->willReturn(new RestClientResponse($xml->children(), 'GetServiceStatusResult'));
 
         $this->assertTrue($this->object->getStatus());
     }

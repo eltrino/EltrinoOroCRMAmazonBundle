@@ -9,6 +9,7 @@ use OroCRM\Bundle\AmazonBundle\Client\AuthHandler;
 use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
 use OroCRM\Bundle\AmazonBundle\Client\RestClient;
 use OroCRM\Bundle\AmazonBundle\Client\RestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientResponse;
 use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
 
 class AmazonRestTransport implements TransportInterface
@@ -92,23 +93,19 @@ class AmazonRestTransport implements TransportInterface
      */
     public function getStatus()
     {
-        $status    = false;
         $filter    = $this->filtersFactory->createCompositeFilter();
-        $responses = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS, $filter);
-        if (isset($responses[0])) {
-            $status = $this->getStatusFromResponse($responses[0]);
-        }
+        $response = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS, $filter);
 
-        return $status;
+        return $this->getStatusFromResponse($response);
     }
 
     /**
-     * @param array $response
+     * @param RestClientResponse $response
      * @return bool
      */
-    protected function getStatusFromResponse(array $response)
+    protected function getStatusFromResponse(RestClientResponse $response)
     {
-        return (string)$response['result']->{$response['result_root']}->Status === RestClient::STATUS_GREEN;
+        return (string)$response->getResult()->{$response->getResultRoot()}->Status === RestClient::STATUS_GREEN;
     }
 
     /**

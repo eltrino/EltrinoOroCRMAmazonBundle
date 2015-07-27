@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\AmazonBundle\Client;
 
-use Guzzle\Http\Message\Response;
 use Guzzle\Http\ClientInterface;
 
 use Psr\Log\LoggerAwareInterface;
@@ -116,6 +115,7 @@ class RestClient implements LoggerAwareInterface
             $this->requestsCounters[$shareAction]++;
         }
         $namespace = $this->client->getBaseUrl() . '/' . $this->authHandler->getVersion();
+
         $result             = $response->xml()->children($namespace);
         $resultRoot         = $requestParameters[self::ACTION_PARAM] . 'Result';
         $restClientResponse = new RestClientResponse(
@@ -155,7 +155,6 @@ class RestClient implements LoggerAwareInterface
             $parameters,
             $filterParameters
         );
-
         $requestParameters['Signature'] = $this->authHandler->getSignature(
             $requestParameters,
             $this->client->getBaseUrl()
