@@ -70,6 +70,7 @@ class Order
      * @var OrderItem[]|ArrayCollection
      *
      * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"})
+     * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $items;
 

@@ -120,7 +120,7 @@ class AuthHandler implements AuthHandlerInterface
         $data .= "\n";
 
         $uri = array_key_exists('path', $endpoint) ? $endpoint['path'] : null;
-        if (!isset ($uri)) {
+        if (!isset($uri)) {
             $uri = "/";
         }
 
