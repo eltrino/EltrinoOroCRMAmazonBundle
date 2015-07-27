@@ -16,7 +16,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
 
     const INITIAL_MODE  = 'initial';
     const MODIFIED_MODE = 'modified';
-    const LOAD_BATCH_SIZE = 200;
+    const LOAD_BATCH_SIZE = 1000;
 
     /**
      * @var RestClient
@@ -134,7 +134,8 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     protected function loadBatch($loaded, $clear)
     {
         $max   = count($this->elements) ? max(array_keys($this->elements)) : false;
-        $start = $max ? $max + 1 : 0;
+        $start = $max === false ? 0 : $max + 1;
+        $this->logger->info(sprintf('Start loading orders from %d position', $start));
         $orders = [];
         while ($this->nextToken && ($loaded < self::LOAD_BATCH_SIZE)) {
             $response = $this->amazonClient->requestAction(
@@ -142,13 +143,16 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
                 null,
                 [RestClient::NEXT_TOKEN_PARAM => $this->nextToken]
             );
-            $orders = $this->processOrdersResponse($start, $response);
-            $loaded += count($orders);
+            $processed = $this->processOrdersResponse($start, $response);
+            $orders += $processed;
+            $countProcessed = count($processed);
+            $loaded += $countProcessed;
+            $start += $countProcessed;
         }
         if ($clear) {
             $this->elements = $orders;
         } else {
-            $this->elements = array_merge($this->elements, $orders);
+            $this->elements += $orders;
         }
     }
 
@@ -212,7 +216,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     protected function processOrdersResponse($start, RestClientResponse $response)
     {
         $orders = $this->extractOrders($start, $response);
-        //$this->loadOrderItems($orders);
+        $this->loadOrderItems($orders);
         if ($nextToken = $response->getNextToken()) {
             $this->nextToken = $nextToken;
         }
@@ -226,6 +230,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     protected function loadOrderItems(array $orders)
     {
         $compositeFilter = $this->filtersFactory->createCompositeFilter();
+        /** @var \SimpleXmlElement $order */
         foreach ($orders as $key => $order) {
             $amazonOrderId = (string)$order->AmazonOrderId;
             if ($amazonOrderId) {
@@ -234,7 +239,6 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
                 $compositeFilter->addFilter($amazonOrderIdFilter);
 
                 $items = $this->getOrderItems($compositeFilter);
-
                 foreach ($items as $item) {
                     $this->appendSimpleXML($order->OrderItems[], $item);
                 }
@@ -246,7 +250,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
      * @param \SimpleXMLElement $to
      * @param \SimpleXMLElement $from
      */
-    protected function appendSimpleXML(\SimpleXMLElement &$to, \SimpleXMLElement $from)
+    protected function appendSimpleXML(\SimpleXMLElement &$to, \SimpleXMLElement &$from)
     {
         foreach ($from->children() as $fromChild) {
             $temp = $to->addChild($fromChild->getName(), htmlentities((string)$fromChild));

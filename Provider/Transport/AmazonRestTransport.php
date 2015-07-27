@@ -94,7 +94,7 @@ class AmazonRestTransport implements TransportInterface
     {
         $status    = false;
         $filter    = $this->filtersFactory->createCompositeFilter();
-        $responses = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS_ACTION, $filter);
+        $responses = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS, $filter);
         if (isset($responses[0])) {
             $status = $this->getStatusFromResponse($responses[0]);
         }

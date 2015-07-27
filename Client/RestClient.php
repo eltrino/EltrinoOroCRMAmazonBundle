@@ -63,6 +63,26 @@ class RestClient implements LoggerAwareInterface
 
     /**
      * @var array
+     * Time in seconds which left from other actions recovery rate and
+     * can be used to decrease request counter for current action
+     */
+    protected $requestsExtraTime = [
+        self::GET_SERVICE_STATUS => 0,
+        self::LIST_ORDERS        => 0,
+        self::LIST_ORDER_ITEMS   => 0
+    ];
+
+    /**
+     * @var array
+     */
+    protected $restoreRateRequests = [
+        self::GET_SERVICE_STATUS => 0,
+        self::LIST_ORDERS        => 0,
+        self::LIST_ORDER_ITEMS   => 0
+    ];
+
+    /**
+     * @var array
      */
     protected $parameters = [];
 
@@ -89,10 +109,13 @@ class RestClient implements LoggerAwareInterface
         }
         $requestParameters = $this->getRequestParameters($action, $filter, $parameters);
 
+        $shareAction = str_replace('ByNextToken', '', $action);
+        $this->applyRecoveryRate($shareAction);
         $response = $this->client->post(null, [], $requestParameters)->send();
-        $this->applyRecoveryRate(str_replace(self::NEXT_TOKEN_PARAM, '', $action));
+        if ($this->restoreRateRequests[$shareAction] === 0) {
+            $this->requestsCounters[$shareAction]++;
+        }
         $namespace = $this->client->getBaseUrl() . '/' . $this->authHandler->getVersion();
-
         $result             = $response->xml()->children($namespace);
         $resultRoot         = $requestParameters[self::ACTION_PARAM] . 'Result';
         $restClientResponse = new RestClientResponse(
@@ -146,19 +169,47 @@ class RestClient implements LoggerAwareInterface
      */
     protected function applyRecoveryRate($action)
     {
-        $this->requestsCounters[$action]++;
+        $restoreRateSeconds = static::$throttlingParams[$action]['restore_rate'];
         $maxRequestsQuota = static::$throttlingParams[$action]['max_requests_quota'];
 
-        if ($this->requestsCounters[$action] === $maxRequestsQuota) {
-            $restoreRate    = static::$throttlingParams[$action]['restore_rate'];
-            $restoreSeconds = $restoreRate * $maxRequestsQuota;
-            if (null !== $this->logger) {
-                $this->logger->info(
-                    sprintf('Sleeping to avoid throttling for %d secs', $restoreSeconds)
-                );
+        if ($this->restoreRateRequests[$action] > 0) {
+            if ($this->restoreRateRequests[$action] == $maxRequestsQuota) {
+                $this->restoreRateRequests[$action] = 0;
+                $this->logger->info('End recovery rate for action ' . $action);
+            } else {
+                $this->useRecoveryRate($action, $restoreRateSeconds);
             }
-            sleep($restoreSeconds);
-            $this->requestsCounters[$action] = 0;
+        } else {
+            if ($this->requestsCounters[$action] == $maxRequestsQuota) {
+                if (($extraRequests = floor($this->requestsExtraTime[$action] / $restoreRateSeconds)) > 0) {
+                    if ($extraRequests <= $this->requestsCounters[$action]) {
+                        $this->requestsCounters[$action] = $this->requestsCounters[$action] - $extraRequests;
+                        $this->requestsExtraTime[$action] = $this->requestsExtraTime[$action] % $restoreRateSeconds;
+                    } else {
+                        $this->requestsCounters[$action] = 0;
+                        $this->requestsExtraTime[$action] = 0;
+                    }
+                } else {
+                    $this->logger->info('Start recovery rate for action ' . $action);
+                    $this->useRecoveryRate($action, $restoreRateSeconds);
+                }
+            }
         }
+    }
+
+    /**
+     * @param $action
+     * @param $restoreRateSeconds
+     */
+    protected function useRecoveryRate($action, $restoreRateSeconds)
+    {
+        sleep($restoreRateSeconds);
+        $this->requestsCounters[$action]--;
+        array_walk($this->requestsExtraTime, function (&$val, $key) use ($action, $restoreRateSeconds) {
+            if ($key !== $action) {
+                $val += $restoreRateSeconds;
+            };
+        });
+        $this->restoreRateRequests[$action]++;
     }
 }

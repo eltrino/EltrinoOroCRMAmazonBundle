@@ -61,7 +61,7 @@ class OrderFactory
      * @param Order $order
      * @return ArrayCollection
      */
-    protected function processOrderItems(array $items, Order $order)
+    protected function processOrderItems($items, Order $order)
     {
         foreach ($items as $item) {
             $asin                     = (string)$item->ASIN;
