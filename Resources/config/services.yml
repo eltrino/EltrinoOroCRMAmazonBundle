@@ -18,12 +18,20 @@ parameters:
 
     eltrino_amazon.navigation.listener_class:                                Eltrino\OroCrmAmazonBundle\EventListener\AmazonNavigationListener
 
+    eltrino_amazon.client.rest_client_factory.class:                         Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory
+
 services:
    # transport
     eltrino_amazon.amazon_rest_transport:
         class: %eltrino_amazon.amazon_rest_transport.class%
+        arguments:
+            - @eltrino_amazon.client_rest_client_factory
+            - @eltrino_amazon.filters.factory
         tags:
             - { name: oro_integration.transport, type: amazon_rest, channel_type: amazon}
+
+    eltrino_amazon.client_rest_client_factory:
+        class: %eltrino_amazon.client.rest_client_factory.class%
 
    # providers
     eltrino_amazon.provider.amazon_channel_type:

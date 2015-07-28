@@ -15,8 +15,18 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
+use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
+use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
+use Eltrino\OroCrmAmazonBundle\Amazon\Client\Response;
+use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory;
+use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\OrderIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+
+use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
+use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
+use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
 
 /**
  * Amazon REST transport
@@ -27,6 +37,31 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  */
 class AmazonRestTransport implements TransportInterface
 {
+    /** @var RestClient */
+    protected $amazonClient;
+
+    /** @var FiltersFactory */
+    protected $filtersFactory;
+
+    /** @var array */
+    protected $settings = [];
+
+    /** @var DefaultAuthorizationHandler */
+    protected $authHandler;
+
+    /** @var AmazonRestClientFactory */
+    protected $clientFactory;
+
+    /**
+     * @param RestClientFactory $clientFactory
+     * @param FiltersFactory          $filtersFactory
+     */
+    public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
+    {
+        $this->clientFactory = $clientFactory;
+        $this->filtersFactory = $filtersFactory;
+    }
+
     /**
      * @return string
      */
@@ -52,11 +87,18 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @param Transport $transportEntity
+     * {@inheritdoc}
      */
     public function init(Transport $transportEntity)
     {
-
+        $settings           = $transportEntity->getSettingsBag();
+        $this->amazonClient = $this->clientFactory->create(
+            $settings->get('wsdl_url'),
+            $settings->get('aws_access_key_id'),
+            $settings->get('aws_secret_access_key'),
+            $settings->get('aws_merchant_id'),
+            $settings->get('aws_marketplace_id')
+        );
     }
 
     /**
@@ -69,4 +111,79 @@ class AmazonRestTransport implements TransportInterface
     {
 
     }
-} 
+
+    /**
+     * @return bool
+     */
+    public function getStatus()
+    {
+        $response = $this->amazonClient->sendRequest(new Request(RestClient::GET_SERVICE_STATUS));
+
+        return $this->getStatusFromResponse($response);
+    }
+
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
+    public function getModOrders(\DateTime $from)
+    {
+        $now = $this->getNowDate();
+        $filter = $this
+            ->filtersFactory
+            ->createModTimeRangeFilter($from, $now);
+
+        return $this->getOrders($from, $filter);
+    }
+
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
+    public function getInitialOrders(\DateTime $from)
+    {
+        $now = $this->getNowDate();
+        $filter = $filter = $this
+            ->filtersFactory
+            ->createCreateTimeRangeFilter($from, $now);
+
+        return $this->getOrders($from, $filter);
+    }
+
+    /**
+     * @param Response $response
+     * @return bool
+     */
+    protected function getStatusFromResponse(Response $response)
+    {
+        return (string)$response->getResult()->{$response->getResultRoot()}->Status === RestClient::STATUS_GREEN;
+    }
+
+    /**
+     * @param \DateTime|null $startSyncDate
+     * @param Filter         $filter
+     * @return OrderIterator
+     */
+    protected function getOrders(\DateTime $startSyncDate = null, Filter $filter)
+    {
+        $compositeFilter = $this->filtersFactory->createCompositeFilter();
+        $compositeFilter->addFilter($filter);
+
+        return new OrderIterator($this->amazonClient, $this->filtersFactory, $startSyncDate, $filter);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    protected function getNowDate()
+    {
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        /**
+         * Amazon mws api requirement:
+         * Must be no later than two minutes before the time that the request was submitted.
+         */
+        $now->sub(new \DateInterval('PT3M'));
+
+        return $now;
+    }
+}

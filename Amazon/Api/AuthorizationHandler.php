@@ -41,18 +41,6 @@ interface AuthorizationHandler
     function getMarketplaceId();
 
     /**
-     * Formats date as ISO 8601 timestamp
-     * @return string
-     */
-    function getFormattedTimestamp();
-
-    /**
-     * Retrieves service version
-     * @return string
-     */
-    function getVersion();
-
-    /**
      * Retrieves signature version
      * @return string
      */

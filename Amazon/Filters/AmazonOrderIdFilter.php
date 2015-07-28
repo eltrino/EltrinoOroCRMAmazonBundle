@@ -21,16 +21,18 @@ class AmazonOrderIdFilter implements Filter
      */
     private $amazonOrderId;
 
+    /**
+     * @param string $amazonOrderId
+     */
     public function __construct($amazonOrderId)
     {
         $this->amazonOrderId = $amazonOrderId;
     }
 
     /**
-     * @param string $parameters
-     * @return string
+     * {@inheritdoc}
      */
-    public function process($parameters)
+    public function process(array $parameters)
     {
         $parameters['AmazonOrderId']  = $this->amazonOrderId;
 
