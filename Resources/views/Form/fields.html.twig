@@ -3,12 +3,12 @@
         <div class="controls">
             {{ form_widget(form, {attr: {class: 'btn btn-primary' }}) }}
             <script type="text/javascript">
-                require(['eltrino/amazon/rest-checker'], function (RestChecker) {
+                require(['orocrmamazon/status-checker'], function (StatusChecker) {
                     "use strict";
 
-                    new RestChecker({
-                        el:                     '#{{ form.vars.id }}',
-                        transportEntityId:      {{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }}
+                    new StatusChecker({
+                        el: '#{{ form.vars.id }}',
+                        transportEntityId: '{{ form.parent.vars.value ? form.parent.vars.value.id|json_encode|raw : 'null' }}'
                     });
                 });
             </script>

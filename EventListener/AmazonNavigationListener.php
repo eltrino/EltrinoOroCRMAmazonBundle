@@ -1,18 +1,6 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\EventListener;
+
+namespace OroCRM\Bundle\AmazonBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
@@ -20,24 +8,24 @@ use Knp\Menu\ItemInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\NavigationBundle\Event\ConfigureMenuEvent;
-use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
+use OroCRM\Bundle\AmazonBundle\Provider\AmazonChannelType;
 
 /**
  * Class AmazonNavigationListener.
- * @package Eltrino\OroCrmAmazonBundle\EventListener
+ * @package OroCRM\Bundle\AmazonBundle\EventListener
  */
 class AmazonNavigationListener
 {
     const ORDER_MENU_ITEM = 'amazon_order';
 
     protected static $map = [
-        'order'    => [
-            'parent'       => 'sales_tab',
-            'prefix'       => self::ORDER_MENU_ITEM,
-            'label'        => 'Amazon Orders',
-            'route'        => 'eltrino_amazon_order_index',
+        'order' => [
+            'parent' => 'sales_tab',
+            'prefix' => self::ORDER_MENU_ITEM,
+            'label'  => 'orocrm.amazon.order.entity_plural_label',
+            'route'  => 'orocrm_amazon_order_index',
             'extras' => [
-                'routes'   => '/^eltrino_amazon_order_(index|view)$/',
+                'routes'   => '/^orocrm_amazon_order_(index|view)$/',
                 'position' => 50
             ]
         ]
@@ -46,10 +34,14 @@ class AmazonNavigationListener
     /** @var EntityManager */
     protected $em;
 
+    /**
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
-        $this->em     = $em;
+        $this->em = $em;
     }
+
     /**
      * Adds dynamically menu entries depends on configured channels
      *

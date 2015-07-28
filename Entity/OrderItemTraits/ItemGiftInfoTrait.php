@@ -1,20 +1,8 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
+
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemGiftInfo;
 
 trait ItemGiftInfoTrait
 {
@@ -23,36 +11,40 @@ trait ItemGiftInfoTrait
      *
      * @ORM\Column(name="gift_message_text", type="string", length=2048, nullable=true)
      */
-    private $giftMessageText;
+    protected $giftMessageText;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_price_currency_id", type="string", length=32, nullable=true)
+     * @ORM\Column(name="gift_price_currency", type="string", length=32, nullable=true)
      */
-    private $giftWrapPriceCurrencyId;
+    protected $giftWrapPriceCurrencyId;
 
     /**
      * @var float
      *
      * @ORM\Column(name="gift_price_amount", type="float", nullable=true)
      */
-    private $giftWrapPriceAmount;
+    protected $giftWrapPriceAmount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="gift_level", type="string", length=256, nullable=true)
      */
-    private $giftWrapLevel;
+    protected $giftWrapLevel;
 
     /**
      * @return ItemGiftInfo
      */
     protected function initItemGiftInfo()
     {
-        return new ItemGiftInfo($this->giftMessageText, $this->giftWrapPriceCurrencyId,
-            $this->giftWrapPriceAmount, $this->giftWrapLevel);
+        return new ItemGiftInfo(
+            $this->giftMessageText,
+            $this->giftWrapPriceCurrencyId,
+            $this->giftWrapPriceAmount,
+            $this->giftWrapLevel
+        );
     }
 
     /**
@@ -65,4 +57,36 @@ trait ItemGiftInfoTrait
         $this->giftWrapPriceAmount     = $itemGiftInfo->getGiftWrapPriceAmount();
         $this->giftWrapLevel           = $itemGiftInfo->getGiftWrapLevel();
     }
-} 
+
+    /**
+     * @return string
+     */
+    public function getGiftMessageText()
+    {
+        return $this->giftMessageText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapPriceCurrencyId()
+    {
+        return $this->giftWrapPriceCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapPriceAmount()
+    {
+        return $this->giftWrapPriceAmount;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiftWrapLevel()
+    {
+        return $this->giftWrapLevel;
+    }
+}

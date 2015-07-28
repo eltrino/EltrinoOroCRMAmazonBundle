@@ -1,25 +1,14 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\ImportExport\Strategy;
+
+namespace OroCRM\Bundle\AmazonBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 
-use Eltrino\OroCrmAmazonBundle\Entity\Order;
-use Eltrino\OroCrmAmazonBundle\Entity\OrderItem;
-
+use Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException;
+use Oro\Bundle\ImportExportBundle\Exception\LogicException;
+use OroCRM\Bundle\AmazonBundle\Entity\Order;
+use OroCRM\Bundle\AmazonBundle\Entity\OrderItem;
 use Oro\Bundle\ImportExportBundle\Context\ContextAwareInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -28,10 +17,10 @@ use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 class OrderStrategy implements StrategyInterface, ContextAwareInterface
 {
     /** @var ImportStrategyHelper */
-    private $strategyHelper;
+    protected $strategyHelper;
 
     /** @var ContextInterface */
-    private $context;
+    protected $context;
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -44,16 +33,20 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
     /**
      * @param mixed $importedOrder
      * @return mixed|null|object
-     * @throws \Oro\Bundle\ImportExportBundle\Exception\InvalidArgumentException
-     * @throws \Oro\Bundle\ImportExportBundle\Exception\LogicException
+     * @throws InvalidArgumentException
+     * @throws LogicException
      */
     public function process($importedOrder)
     {
-        $criteria = ['amazonOrderId' => $importedOrder->getAmazonOrderId(), 'channel' => $importedOrder->getChannel()];
+        /** @var Order $importedOrder */
+        $criteria = [
+            'amazonOrderId' => $importedOrder->getAmazonOrderId(),
+            'channel'       => $importedOrder->getChannel()
+        ];
         $order    = $this->getEntityByCriteria($criteria, $importedOrder);
 
         if ($order) {
-            $this->strategyHelper->importEntity($order, $importedOrder, array('id', 'amazonOrderId', 'items'));
+            $this->strategyHelper->importEntity($order, $importedOrder, ['id', 'amazonOrderId', 'items']);
         } else {
             $order = $importedOrder;
         }
@@ -92,12 +85,9 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
                 $item = $existingItem;
             }
 
-            if (!$item->getOrder()) {
-                $item->setOrder($entityToUpdate);
-            }
-
             if (!$entityToUpdate->getItems()->contains($item)) {
                 $entityToUpdate->getItems()->add($item);
+                $item->assignOrder($entityToUpdate);
             }
         }
 
@@ -108,7 +98,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
             }
         );
         foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->remove($item);
+            $item->assignOrder(null);
         }
     }
 
@@ -126,7 +116,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return object
      */
-    private function getEntityByCriteria(array $criteria, $entity)
+    protected function getEntityByCriteria(array $criteria, $entity)
     {
         if (is_object($entity)) {
             $entityClass = ClassUtils::getClass($entity);
@@ -142,7 +132,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return EntityRepository
      */
-    private function getEntityRepository($entityName)
+    protected function getEntityRepository($entityName)
     {
         return $this->strategyHelper->getEntityManager($entityName)->getRepository($entityName);
     }
@@ -152,7 +142,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
      *
      * @return null|object
      */
-    private function validateAndUpdateContext($entity)
+    protected function validateAndUpdateContext($entity)
     {
         // validate entity
         $validationErrors = $this->strategyHelper->validateEntity($entity);

@@ -1,19 +1,6 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
 
-namespace Eltrino\OroCrmAmazonBundle\Entity;
+namespace OroCRM\Bundle\AmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -21,7 +8,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
 /**
  * Class AmazonRestTransport
- * @package Eltrino\OroCrmAmazonBundle\Entity
+ * @package OroCRM\Bundle\AmazonBundle\Entity
  * @ORM\Entity()
  */
 class AmazonRestTransport extends Transport
@@ -31,42 +18,42 @@ class AmazonRestTransport extends Transport
      *
      * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=false)
      */
-    private $wsdlUrl;
+    protected $wsdlUrl;
 
     /**
      * @var string
      *
      * @ORM\Column(name="aws_access_key_id", type="string", length=2048, nullable=false)
      */
-    private $keyId;
+    protected $keyId;
 
     /**
      * @var string
      *
      * @ORM\Column(name="aws_secret_access_key", type="string", length=255, nullable=false)
      */
-    private $secret;
+    protected $secret;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="merchant_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="aws_merchant_id", type="string", length=255, nullable=false)
      */
-    private $merchantId;
+    protected $merchantId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="marketplace_id", type="string", length=255, nullable=false)
+     * @ORM\Column(name="aws_marketplace_id", type="string", length=255, nullable=false)
      */
-    private $marketplaceId;
+    protected $marketplaceId;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="sync_start_date", type="date")
+     * @ORM\Column(name="sync_start_date", type="date", nullable=false)
      */
-    private $syncStartDate;
+    protected $syncStartDate;
 
     public function __construct()
     {
@@ -197,11 +184,11 @@ class AmazonRestTransport extends Transport
             [
                 'aws_access_key_id'     => $this->getKeyId(),
                 'aws_secret_access_key' => $this->getSecret(),
-                'merchant_id'           => $this->getMerchantId(),
-                'marketplace_id'        => $this->getMarketplaceId(),
+                'aws_merchant_id'           => $this->getMerchantId(),
+                'aws_marketplace_id'        => $this->getMarketplaceId(),
                 'start_sync_date'       => $this->getSyncStartDate(),
                 'wsdl_url'              => $this->getWsdlUrl(),
             ]
         );
     }
-} 
+}

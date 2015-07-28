@@ -1,70 +1,73 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemInfo
 {
     /**
-     * @var string
+     * @var integer
      */
-    private $orderItemId;
+    protected $orderItemId;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
+
+    /**
+     * @var integer
+     */
+    protected $quantityOrdered;
+
+    /**
+     * @var integer
+     */
+    protected $quantityShipped;
 
     /**
      * @var string
      */
-    private $quantityOrdered;
+    protected $itemPriceCurrencyId;
+
+    /**
+     * @var float
+     */
+    protected $itemPriceAmount;
 
     /**
      * @var string
      */
-    private $quantityShipped;
+    protected $condition;
 
     /**
-     * @var string
+     * @param integer $orderItemId
+     * @param string  $title
+     * @param integer $quantityOrdered
+     * @param integer $quantityShipped
+     * @param string  $itemPriceCurrencyId
+     * @param float   $itemPriceAmount
+     * @param string  $condition
      */
-    private $itemPriceCurrencyId;
-
-    /**
-     * @var string
-     */
-    private $itemPriceAmount;
-
-    /**
-     * @var string
-     */
-    private $condition;
-
-    public function __construct($orderItemId, $title, $quantityOrdered, $quantityShipped,
-                                $itemPriceCurrencyId, $itemPriceAmount, $condition)
-    {
-        $this->orderItemId           = $orderItemId;
-        $this->title                 = $title;
-        $this->quantityOrdered       = $quantityOrdered;
-        $this->quantityShipped       = $quantityShipped;
-        $this->itemPriceCurrencyId   = $itemPriceCurrencyId;
-        $this->itemPriceAmount       = $itemPriceAmount;
-        $this->condition             = $condition;
+    public function __construct(
+        $orderItemId,
+        $title,
+        $quantityOrdered,
+        $quantityShipped,
+        $itemPriceCurrencyId,
+        $itemPriceAmount,
+        $condition
+    ) {
+        $this->orderItemId         = $orderItemId;
+        $this->title               = $title;
+        $this->quantityOrdered     = $quantityOrdered;
+        $this->quantityShipped     = $quantityShipped;
+        $this->itemPriceCurrencyId = $itemPriceCurrencyId;
+        $this->itemPriceAmount     = $itemPriceAmount;
+        $this->condition           = $condition;
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getOrderItemId()
     {
@@ -80,7 +83,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getQuantityOrdered()
     {
@@ -88,7 +91,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getQuantityShipped()
     {
@@ -104,7 +107,7 @@ class ItemInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getItemPriceAmount()
     {

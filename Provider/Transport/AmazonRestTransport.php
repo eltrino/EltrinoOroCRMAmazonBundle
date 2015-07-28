@@ -1,72 +1,128 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
 
-namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
+namespace OroCRM\Bundle\AmazonBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
-/**
- * Amazon REST transport
- * used to fetch and pull data to/from Amazon instance
- * with sessionId param using REST requests
- *
- * @package Eltrino\OroCrmAmazonBundle
- */
+use OroCRM\Bundle\AmazonBundle\Client\AuthHandler;
+use OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory;
+use OroCRM\Bundle\AmazonBundle\Client\RestClient;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientFactory;
+use OroCRM\Bundle\AmazonBundle\Client\RestClientResponse;
+use OroCRM\Bundle\AmazonBundle\Provider\Iterator\OrderIterator;
+
 class AmazonRestTransport implements TransportInterface
 {
+    /** @var RestClient */
+    protected $amazonClient;
+
+    /** @var FiltersFactory */
+    protected $filtersFactory;
+
+    /** @var array */
+    protected $settings = [];
+
+    /** @var AuthHandler */
+    protected $authHandler;
+
+    /** @var RestClientFactory */
+    protected $clientFactory;
+
     /**
-     * @return string
+     * @param RestClientFactory $clientFactory
+     * @param FiltersFactory    $filtersFactory
+     */
+    public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
+    {
+        $this->clientFactory = $clientFactory;
+        $this->filtersFactory = $filtersFactory;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getLabel()
     {
-        return 'eltrino.amazon.transport.rest.label';
+        return 'orocrm.amazon.transport.rest.label';
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
-        return 'eltrino_amazon_rest_transport_setting_form_type';
+        return 'orocrm_amazon_rest_transport_setting_form_type';
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsEntityFQCN()
     {
-        return 'Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport';
+        return 'OroCRM\Bundle\AmazonBundle\Entity\AmazonRestTransport';
     }
 
     /**
-     * @param Transport $transportEntity
+     * {@inheritdoc}
      */
     public function init(Transport $transportEntity)
     {
-
+        $settings           = $transportEntity->getSettingsBag();
+        $this->amazonClient = $this->clientFactory->create(
+            $settings->get('wsdl_url'),
+            $settings->get('aws_access_key_id'),
+            $settings->get('aws_secret_access_key'),
+            $settings->get('aws_merchant_id'),
+            $settings->get('aws_marketplace_id')
+        );
     }
 
     /**
-     * @param string $action
-     * @param array $params
-     * @return array|mixed
-     * @throws \Symfony\Component\DependencyInjection\Exception\RuntimeException
+     * @param \DateTime|null $startSyncDate
+     * @param string         $mode
+     * @return OrderIterator
      */
-    public function call($action, $params = [])
+    protected function getOrders(\DateTime $startSyncDate = null, $mode = OrderIterator::MODIFIED_MODE)
     {
-
+        return new OrderIterator($this->amazonClient, $this->filtersFactory, $startSyncDate, $mode);
     }
-} 
+
+    /**
+     * @return bool
+     */
+    public function getStatus()
+    {
+        $filter    = $this->filtersFactory->createCompositeFilter();
+        $response = $this->amazonClient->requestAction(RestClient::GET_SERVICE_STATUS, $filter);
+
+        return $this->getStatusFromResponse($response);
+    }
+
+    /**
+     * @param RestClientResponse $response
+     * @return bool
+     */
+    protected function getStatusFromResponse(RestClientResponse $response)
+    {
+        return (string)$response->getResult()->{$response->getResultRoot()}->Status === RestClient::STATUS_GREEN;
+    }
+
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
+    public function getModOrders(\DateTime $from)
+    {
+        return $this->getOrders($from);
+    }
+
+    /**
+     * @param \DateTime $from
+     * @return OrderIterator
+     */
+    public function getInitialOrders(\DateTime $from)
+    {
+        return $this->getOrders($from, OrderIterator::INITIAL_MODE);
+    }
+}

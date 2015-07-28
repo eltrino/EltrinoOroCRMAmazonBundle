@@ -1,63 +1,58 @@
 parameters:
     # transport
-    eltrino_amazon.amazon_rest_transport.class:                              Eltrino\OroCrmAmazonBundle\Provider\Transport\AmazonRestTransport
+    orocrm_amazon.amazon_rest_transport.class:                              OroCRM\Bundle\AmazonBundle\Provider\Transport\AmazonRestTransport
 
     # providers
-    eltrino_amazon.provider.amazon_channel_type.class:                       Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType
+    orocrm_amazon.provider.amazon_channel_type.class:                       OroCRM\Bundle\AmazonBundle\Provider\AmazonChannelType
 
     # forms
-    eltrino_amazon.form.type.amazon_rest_transport_setting.class:            Eltrino\OroCrmAmazonBundle\Form\Type\AmazonRestTransportSettingFormType
+    orocrm_amazon.form.type.amazon_rest_transport_setting.class:            OroCRM\Bundle\AmazonBundle\Form\Type\AmazonRestTransportSettingFormType
 
-    eltrino_amazon.order.factory.class:                                      Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
-
-    eltrino_amazon.amazon_rest_client.factory_class:                         Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
-
-    eltrino_amazon.rest_client.class:                                        Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientImpl
-
-    eltrino_amazon.filters.factory_class:                                    Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-
-    eltrino_amazon.navigation.listener_class:                                Eltrino\OroCrmAmazonBundle\EventListener\AmazonNavigationListener
+    orocrm_amazon.order.factory.class:                                      OroCRM\Bundle\AmazonBundle\Model\Order\OrderFactory
+    orocrm_amazon.client.rest_client_factory.class:                         OroCRM\Bundle\AmazonBundle\Client\RestClientFactory
+    orocrm_amazon.client.filters_factory.class:                             OroCRM\Bundle\AmazonBundle\Client\Filters\FiltersFactory
+    orocrm_amazon.navigation.listener_class:                                OroCRM\Bundle\AmazonBundle\EventListener\AmazonNavigationListener
 
 services:
    # transport
-    eltrino_amazon.amazon_rest_transport:
-        class: %eltrino_amazon.amazon_rest_transport.class%
+    orocrm_amazon.amazon_rest_transport:
+        class: %orocrm_amazon.amazon_rest_transport.class%
+        arguments:
+            - @orocrm_amazon.client_rest_client_factory
+            - @orocrm_amazon.client_filters_factory
         tags:
             - { name: oro_integration.transport, type: amazon_rest, channel_type: amazon}
 
    # providers
-    eltrino_amazon.provider.amazon_channel_type:
-        class: %eltrino_amazon.provider.amazon_channel_type.class%
+    orocrm_amazon.provider.amazon_channel_type:
+        class: %orocrm_amazon.provider.amazon_channel_type.class%
         tags:
             - { name: oro_integration.channel, type: amazon }
 
     # forms
-    eltrino_amazon.form.type.amazon_rest_transport_setting:
-        class: %eltrino_amazon.form.type.amazon_rest_transport_setting.class%
+    orocrm_amazon.form.type.amazon_rest_transport_setting:
+        class: %orocrm_amazon.form.type.amazon_rest_transport_setting.class%
         tags:
-            - { name: form.type, alias: eltrino_amazon_rest_transport_setting_form_type }
+            - { name: form.type, alias: orocrm_amazon_rest_transport_setting_form_type }
 
-    eltrino_amazon.order.factory:
-        class: %eltrino_amazon.order.factory.class%
+    orocrm_amazon.order.factory:
+        class: %orocrm_amazon.order.factory.class%
 
-    eltrino_amazon.amazon_rest_client.factory:
-        class: %eltrino_amazon.amazon_rest_client.factory_class%
+    orocrm_amazon.client_rest_client_factory:
+        class: %orocrm_amazon.client.rest_client_factory.class%
 
-    eltrino_amazon.rest_client:
-        class: %eltrino_amazon.rest_client.class%
-
-    eltrino_amazon.filters.factory:
-        class: %eltrino_amazon.filters.factory_class%
+    orocrm_amazon.client_filters_factory:
+        class: %orocrm_amazon.client.filters_factory.class%
 
     # event listeners
-    eltrino_amazon.event_listener.navigation:
-        class: %eltrino_amazon.navigation.listener_class%
+    orocrm_amazon.event_listener.navigation:
+        class: %orocrm_amazon.navigation.listener_class%
         arguments:
             - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure, priority: -10 }
 
-    eltrino_amazon.event_listener.order_items_grid_listener:
+    orocrm_amazon.event_listener.order_items_grid_listener:
         class: %oro_datagrid.event_listener.base_orm_relation.class%
         arguments:
             - 'id'

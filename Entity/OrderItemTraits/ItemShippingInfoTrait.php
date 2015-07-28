@@ -1,36 +1,24 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits;
 
-use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderItemTraits;
+
+use OroCRM\Bundle\AmazonBundle\Model\OrderItem\ItemShippingInfo;
 
 trait ItemShippingInfoTrait
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="shipping_price_currency_id", type="string", length=32, nullable=true)
+     * @ORM\Column(name="ship_price_currency", type="string", length=32, nullable=true)
      */
-    private $shippingPriceCurrencyId;
+    protected $shippingPriceCurrencyId;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="shipping_price_amount", type="float", nullable=true)
+     * @ORM\Column(name="ship_price_amount", type="float", nullable=true)
      */
-    private $shippingPriceAmount;
+    protected $shippingPriceAmount;
 
     /**
      * @return ItemShippingInfo
@@ -45,7 +33,23 @@ trait ItemShippingInfoTrait
      */
     protected function initFromItemShippingInfo(ItemShippingInfo $itemShippingInfo)
     {
-        $this->shippingPriceCurrencyId    = $itemShippingInfo->getShippingPriceCurrencyId();
-        $this->shippingPriceAmount        = $itemShippingInfo->getShippingPriceAmount();
+        $this->shippingPriceCurrencyId = $itemShippingInfo->getShippingPriceCurrencyId();
+        $this->shippingPriceAmount     = $itemShippingInfo->getShippingPriceAmount();
     }
-} 
+
+    /**
+     * @return string
+     */
+    public function getShippingPriceCurrencyId()
+    {
+        return $this->shippingPriceCurrencyId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingPriceAmount()
+    {
+        return $this->shippingPriceAmount;
+    }
+}

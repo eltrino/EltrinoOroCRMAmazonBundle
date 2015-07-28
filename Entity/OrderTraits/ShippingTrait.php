@@ -1,57 +1,50 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Entity\OrderTraits;
-use Eltrino\OroCrmAmazonBundle\Model\Order\Shipping;
+
+namespace OroCRM\Bundle\AmazonBundle\Entity\OrderTraits;
+
+use OroCRM\Bundle\AmazonBundle\Model\Order\Shipping;
 
 trait ShippingTrait
 {
     /**
      * @var string
      *
-     * @ORM\Column(name="ship_service_level", type="string", length=300)
+     * @ORM\Column(name="ship_service_lev", type="string", length=300)
      */
-    private $shipServiceLevel;
+    protected $shipServiceLevel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ship_service_level_category", type="string", length=300)
+     * @ORM\Column(name="ship_service_lev_cat", type="string", length=300)
      */
-    private $shipmentServiceLevelCategory;
+    protected $shipmentServiceLevelCategory;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="number_of_items_shipped", type="integer", nullable=true)
+     * @ORM\Column(name="num_items_shipped", type="integer", nullable=true)
      */
-    private $numberOfItemsShipped;
+    protected $numberOfItemsShipped;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="number_of_items_unshipped", type="integer", nullable=true)
+     * @ORM\Column(name="num_items_unshipped", type="integer", nullable=true)
      */
-    private $numberOfItemsUnshipped;
+    protected $numberOfItemsUnshipped;
 
     /**
      * @return Shipping
      */
     protected function initShipping()
     {
-        return new Shipping($this->shipServiceLevel, $this->shipmentServiceLevelCategory,
-            $this->numberOfItemsShipped, $this->numberOfItemsUnshipped);
+        return new Shipping(
+            $this->shipServiceLevel,
+            $this->shipmentServiceLevelCategory,
+            $this->numberOfItemsShipped,
+            $this->numberOfItemsUnshipped
+        );
     }
 
     /**
@@ -63,5 +56,37 @@ trait ShippingTrait
         $this->shipmentServiceLevelCategory = $shipping->getShipmentServiceLevelCategory();
         $this->numberOfItemsShipped         = $shipping->getNumberOfItemsShipped();
         $this->numberOfItemsUnshipped       = $shipping->getNumberOfItemsUnshipped();
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipServiceLevel()
+    {
+        return $this->shipServiceLevel;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShipmentServiceLevelCategory()
+    {
+        return $this->shipmentServiceLevelCategory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfItemsShipped()
+    {
+        return $this->numberOfItemsShipped;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumberOfItemsUnshipped()
+    {
+        return $this->numberOfItemsUnshipped;
     }
 }

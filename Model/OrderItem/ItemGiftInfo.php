@@ -1,48 +1,45 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Model\OrderItem;
+
+namespace OroCRM\Bundle\AmazonBundle\Model\OrderItem;
 
 class ItemGiftInfo
 {
     /**
      * @var string
      */
-    private $giftMessageText;
+    protected $giftMessageText;
 
     /**
      * @var string
      */
-    private $giftWrapPriceCurrencyId;
+    protected $giftWrapPriceCurrencyId;
+
+    /**
+     * @var float
+     */
+    protected $giftWrapPriceAmount;
 
     /**
      * @var string
      */
-    private $giftWrapPriceAmount;
+    protected $giftWrapLevel;
 
     /**
-     * @var string
+     * @param string  $giftMessageText
+     * @param string  $giftWrapPriceCurrencyId
+     * @param float   $giftWrapPriceAmount
+     * @param string  $giftWrapLevel
      */
-    private $giftWrapLevel;
-
-    public function __construct($giftMessageText, $giftWrapPriceCurrencyId, $giftWrapPriceAmount,
-                                $giftWrapLevel)
-    {
-        $this->giftMessageText           = $giftMessageText;
-        $this->giftWrapPriceCurrencyId   = $giftWrapPriceCurrencyId;
-        $this->giftWrapPriceAmount       = $giftWrapPriceAmount;
-        $this->giftWrapLevel             = $giftWrapLevel;
+    public function __construct(
+        $giftMessageText,
+        $giftWrapPriceCurrencyId,
+        $giftWrapPriceAmount,
+        $giftWrapLevel
+    ) {
+        $this->giftMessageText         = $giftMessageText;
+        $this->giftWrapPriceCurrencyId = $giftWrapPriceCurrencyId;
+        $this->giftWrapPriceAmount     = $giftWrapPriceAmount;
+        $this->giftWrapLevel           = $giftWrapLevel;
     }
 
     /**
@@ -62,7 +59,7 @@ class ItemGiftInfo
     }
 
     /**
-     * @return string
+     * @return float
      */
     public function getGiftWrapPriceAmount()
     {
@@ -76,4 +73,4 @@ class ItemGiftInfo
     {
         return $this->giftWrapLevel;
     }
-} 
+}

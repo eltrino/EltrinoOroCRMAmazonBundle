@@ -1,48 +1,45 @@
 <?php
-/*
- * Copyright (c) 2014 Eltrino LLC (http://eltrino.com)
- *
- * Licensed under the Open Software License (OSL 3.0).
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://opensource.org/licenses/osl-3.0.php
- *
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@eltrino.com so we can send you a copy immediately.
- */
-namespace Eltrino\OroCrmAmazonBundle\Model\Order;
+
+namespace OroCRM\Bundle\AmazonBundle\Model\Order;
 
 /**
  * Class File, Value Object
- * @package Eltrino\OroCrmAmazonBundle\Model
+ * @package OroCRM\Bundle\AmazonBundle\Model
  */
 class Shipping
 {
     /**
      * @var string
      */
-    private $shipServiceLevel;
+    protected $shipServiceLevel;
 
     /**
      * @var string
      */
-    private $shipmentServiceLevelCategory;
+    protected $shipmentServiceLevelCategory;
 
     /**
-     * @var string
+     * @var integer
      */
-    private $numberOfItemsShipped;
+    protected $numberOfItemsShipped;
 
     /**
-     * @var string
+     * @var integer
      */
-    private $numberOfItemsUnshipped;
+    protected $numberOfItemsUnshipped;
 
-    public function __construct($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped,
-                                $numberOfItemsUnshipped)
-    {
+    /**
+     * @param string  $shipServiceLevel
+     * @param string  $shipmentServiceLevelCategory
+     * @param integer $numberOfItemsShipped
+     * @param integer $numberOfItemsUnshipped
+     */
+    public function __construct(
+        $shipServiceLevel,
+        $shipmentServiceLevelCategory,
+        $numberOfItemsShipped,
+        $numberOfItemsUnshipped
+    ) {
         $this->shipServiceLevel             = $shipServiceLevel;
         $this->shipmentServiceLevelCategory = $shipmentServiceLevelCategory;
         $this->numberOfItemsShipped         = $numberOfItemsShipped;
@@ -66,7 +63,7 @@ class Shipping
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfItemsShipped()
     {
@@ -74,7 +71,7 @@ class Shipping
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getNumberOfItemsUnshipped()
     {
