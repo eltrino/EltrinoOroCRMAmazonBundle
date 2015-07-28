@@ -23,14 +23,14 @@ trait ItemCodFeeInfoTrait
     /**
      * @var string
      *
-     * @ORM\Column(name="cod_fee_discount_currency_id", type="string", length=32, nullable=true)
+     * @ORM\Column(name="cod_fee_disc_currency", type="string", length=32, nullable=true)
      */
     protected $codFeeDiscountCurrencyId;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="cod_fee_discount_amount", type="float", nullable=true)
+     * @ORM\Column(name="cod_fee_disc_amount", type="float", nullable=true)
      */
     protected $codFeeDiscountAmount;
 

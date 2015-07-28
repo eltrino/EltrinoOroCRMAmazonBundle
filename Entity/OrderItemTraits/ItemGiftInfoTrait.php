@@ -16,7 +16,7 @@ trait ItemGiftInfoTrait
     /**
      * @var string
      *
-     * @ORM\Column(name="gift_price_currency_id", type="string", length=32, nullable=true)
+     * @ORM\Column(name="gift_price_currency", type="string", length=32, nullable=true)
      */
     protected $giftWrapPriceCurrencyId;
 

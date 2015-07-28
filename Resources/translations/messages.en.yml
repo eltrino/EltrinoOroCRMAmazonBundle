@@ -16,7 +16,7 @@ orocrm:
             total_amount.label: Total Amount
             number_of_items_shipped.label: Number Of Shipped Items
             number_of_items_unshipped.label: Number Of Unshipped Items
-            customer_email.label: 'orocrm.amazon.order.customer_email.label'
+            customer_email.label: 'Customer Email'
             entity_plural_label: Amazon Orders
 
         order_item:

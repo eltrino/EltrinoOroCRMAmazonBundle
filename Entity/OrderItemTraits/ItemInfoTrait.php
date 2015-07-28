@@ -37,7 +37,7 @@ trait ItemInfoTrait
     /**
      * @var string
      *
-     * @ORM\Column(name="item_price_currency_id", type="string", length=32, nullable=true)
+     * @ORM\Column(name="item_price_currency", type="string", length=32, nullable=true)
      */
     protected $itemPriceCurrencyId;
 

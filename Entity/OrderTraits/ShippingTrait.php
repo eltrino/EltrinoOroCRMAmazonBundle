@@ -9,28 +9,28 @@ trait ShippingTrait
     /**
      * @var string
      *
-     * @ORM\Column(name="ship_service_level", type="string", length=300)
+     * @ORM\Column(name="ship_service_lev", type="string", length=300)
      */
     protected $shipServiceLevel;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ship_service_level_category", type="string", length=300)
+     * @ORM\Column(name="ship_service_lev_cat", type="string", length=300)
      */
     protected $shipmentServiceLevelCategory;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="number_of_items_shipped", type="integer", nullable=true)
+     * @ORM\Column(name="num_items_shipped", type="integer", nullable=true)
      */
     protected $numberOfItemsShipped;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="number_of_items_unshipped", type="integer", nullable=true)
+     * @ORM\Column(name="num_items_unshipped", type="integer", nullable=true)
      */
     protected $numberOfItemsUnshipped;
 
