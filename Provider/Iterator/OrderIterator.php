@@ -225,6 +225,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
     {
         $orders = $this->extractOrders($start, $response);
         $this->loadOrderItems($orders);
+        $this->nextToken = null;
         if ($nextToken = $response->getNextToken()) {
             $this->nextToken = $nextToken;
         }
@@ -266,7 +267,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
                 $temp->addAttribute($attrKey, $attrValue);
             }
 
-            $this->appendSimplexml($temp, $fromChild);
+            $this->appendSimpleXML($temp, $fromChild);
         }
     }
 
@@ -286,6 +287,7 @@ class OrderIterator implements \Iterator, LoggerAwareInterface
                 [RestClient::NEXT_TOKEN_PARAM => $nextToken]
             );
             $items = array_merge($items, $this->extractItems($response));
+            $nextToken = $response->getNextToken();
         }
         return $items;
     }
