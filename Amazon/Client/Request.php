@@ -14,17 +14,18 @@ class Request
 
     public function __construct($action, Filter $filter = null, array $parameters = [])
     {
-        $this->action = $action;
-        $this->filter = $filter;
+        $this->action     = $action;
+        $this->filter     = $filter;
         $this->parameters = $parameters;
     }
 
     /**
+     * @param array $parameters
      * @return array
      */
-    public function getFiltersParameters()
+    public function processFiltersParameters(array $parameters = [])
     {
-        return (null !== $this->filter) ? $this->filter->process() : [];
+        return (null !== $this->filter) ? $this->filter->process($parameters) : [];
     }
 
     /**

@@ -17,16 +17,17 @@ namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
-use Eltrino\OroCrmAmazonBundle\Amazon\Client\Response;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\OrderIterator;
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\OrderLoader;
 use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
-use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
+
+use Guzzle\Http\Message\Response;
+
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
 /**
  * Amazon REST transport
@@ -43,27 +44,24 @@ class AmazonRestTransport implements TransportInterface
     /** @var FiltersFactory */
     protected $filtersFactory;
 
-    /** @var array */
-    protected $settings = [];
-
-    /** @var DefaultAuthorizationHandler */
-    protected $authHandler;
-
     /** @var AmazonRestClientFactory */
     protected $clientFactory;
 
+    /** @var string */
+    protected $namespace;
+
     /**
      * @param RestClientFactory $clientFactory
-     * @param FiltersFactory          $filtersFactory
+     * @param FiltersFactory    $filtersFactory
      */
     public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
     {
-        $this->clientFactory = $clientFactory;
+        $this->clientFactory  = $clientFactory;
         $this->filtersFactory = $filtersFactory;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLabel()
     {
@@ -71,7 +69,7 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
@@ -79,7 +77,7 @@ class AmazonRestTransport implements TransportInterface
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsEntityFQCN()
     {
@@ -92,18 +90,20 @@ class AmazonRestTransport implements TransportInterface
     public function init(Transport $transportEntity)
     {
         $settings           = $transportEntity->getSettingsBag();
+        $baseUrl            = $settings->get('wsdl_url');
         $this->amazonClient = $this->clientFactory->create(
-            $settings->get('wsdl_url'),
+            $baseUrl,
             $settings->get('aws_access_key_id'),
             $settings->get('aws_secret_access_key'),
-            $settings->get('aws_merchant_id'),
-            $settings->get('aws_marketplace_id')
+            $settings->get('merchant_id'),
+            $settings->get('marketplace_id')
         );
+        $this->namespace    = $baseUrl . '/' . $this->amazonClient->getVersion();
     }
 
     /**
      * @param string $action
-     * @param array $params
+     * @param array  $params
      * @return array|mixed
      * @throws \Symfony\Component\DependencyInjection\Exception\RuntimeException
      */
@@ -124,30 +124,32 @@ class AmazonRestTransport implements TransportInterface
 
     /**
      * @param \DateTime $from
-     * @return OrderIterator
+     * @return AmazonDataIterator
      */
     public function getModOrders(\DateTime $from)
     {
-        $now = $this->getNowDate();
+        $now    = $this->getNowDate();
+        $from   = $this->validateFrom($from, $now);
         $filter = $this
             ->filtersFactory
             ->createModTimeRangeFilter($from, $now);
 
-        return $this->getOrders($from, $filter);
+        return $this->getOrders($filter);
     }
 
     /**
      * @param \DateTime $from
-     * @return OrderIterator
+     * @return AmazonDataIterator
      */
     public function getInitialOrders(\DateTime $from)
     {
-        $now = $this->getNowDate();
+        $now    = $this->getNowDate();
+        $from   = $this->validateFrom($from, $now);
         $filter = $filter = $this
             ->filtersFactory
             ->createCreateTimeRangeFilter($from, $now);
 
-        return $this->getOrders($from, $filter);
+        return $this->getOrders($filter);
     }
 
     /**
@@ -156,20 +158,24 @@ class AmazonRestTransport implements TransportInterface
      */
     protected function getStatusFromResponse(Response $response)
     {
-        return (string)$response->getResult()->{$response->getResultRoot()}->Status === RestClient::STATUS_GREEN;
+        if (null === $this->namespace) {
+            throw new \LogicException('Namespace must be initialized!');
+        }
+        $xml  = $response->xml()->children($this->namespace);
+        $root = RestClient::GET_SERVICE_STATUS . 'Result';
+
+        return (string)$xml->{$root}->Status === RestClient::STATUS_GREEN;
     }
 
     /**
-     * @param \DateTime|null $startSyncDate
-     * @param Filter         $filter
-     * @return OrderIterator
+     * @param Filter $filter
+     * @return AmazonDataIterator
      */
-    protected function getOrders(\DateTime $startSyncDate = null, Filter $filter)
+    protected function getOrders(Filter $filter)
     {
-        $compositeFilter = $this->filtersFactory->createCompositeFilter();
-        $compositeFilter->addFilter($filter);
+        $loader = new OrderLoader($this->amazonClient, $filter, $this->namespace);
 
-        return new OrderIterator($this->amazonClient, $this->filtersFactory, $startSyncDate, $filter);
+        return new AmazonDataIterator($loader);
     }
 
     /**
@@ -185,5 +191,22 @@ class AmazonRestTransport implements TransportInterface
         $now->sub(new \DateInterval('PT3M'));
 
         return $now;
+    }
+
+    /**
+     * @param \DateTime $from
+     * @param \DateTime $now
+     * @return \DateTime
+     *
+     * Check that from time not > now after now time was subbed.
+     */
+    protected function validateFrom(\DateTime $from, \DateTime $now)
+    {
+        if($from >= $now) {
+            $from = clone $now;
+            $from->sub(new \DateInterval('PT3M'));
+        }
+
+        return $from;
     }
 }

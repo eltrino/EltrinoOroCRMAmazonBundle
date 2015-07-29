@@ -38,10 +38,9 @@ class ModTimeRangeFilter implements Filter
     }
 
     /**
-     * @param string $parameters
-     * @return string
+     * {@inheritdoc}
      */
-    public function process($parameters)
+    public function process(array $parameters)
     {
         //'CreatedBefore' Must be no later than two minutes before the time that the request was submitted.
         $now = new \DateTime('now', new \DateTimeZone('UTC'));

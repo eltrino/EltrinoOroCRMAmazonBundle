@@ -4,17 +4,12 @@ namespace Eltrino\OroCrmAmazonBundle\Amazon;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
 
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Response;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
-class RestClient implements LoggerAwareInterface
+class RestClient
 {
-    use LoggerAwareTrait;
-
     const GET_SERVICE_STATUS             = 'GetServiceStatus';
     const LIST_ORDERS                    = 'ListOrders';
     const LIST_ORDER_ITEMS               = 'ListOrderItems';
@@ -114,6 +109,7 @@ class RestClient implements LoggerAwareInterface
         $shareAction = str_replace('ByNextToken', '', $action);
         $this->applyRecoveryRate($shareAction);
         $response = $this->client->post(null, [], $requestParameters)->send();
+
         if ($this->restoreRateRequests[$shareAction] === 0) {
             $this->requestsCounters[$shareAction]++;
         }
@@ -147,7 +143,7 @@ class RestClient implements LoggerAwareInterface
                 'SignatureVersion'   => $this->authHandler->getSignatureVersion(),
                 'SignatureMethod'    => $this->authHandler->getSignatureMethod(),
             ],
-            $request->getFiltersParameters(),
+            $request->processFiltersParameters(),
             $request->getParameters()
         );
         $requestParameters['Signature'] = $this->authHandler->getSignature(
@@ -169,7 +165,6 @@ class RestClient implements LoggerAwareInterface
         if ($this->restoreRateRequests[$action] > 0) {
             if ($this->restoreRateRequests[$action] == $maxRequestsQuota) {
                 $this->restoreRateRequests[$action] = 0;
-                $this->logger->info('End recovery rate for action ' . $action);
             } else {
                 $this->useRecoveryRate($action, $restoreRateSeconds);
             }
@@ -184,7 +179,6 @@ class RestClient implements LoggerAwareInterface
                         $this->requestsExtraTime[$action] = 0;
                     }
                 } else {
-                    $this->logger->info('Start recovery rate for action ' . $action);
                     $this->useRecoveryRate($action, $restoreRateSeconds);
                 }
             }
