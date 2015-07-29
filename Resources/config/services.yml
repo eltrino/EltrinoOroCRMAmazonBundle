@@ -10,10 +10,6 @@ parameters:
 
     eltrino_amazon.order.factory.class:                                      Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
 
-    eltrino_amazon.amazon_rest_client.factory_class:                         Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
-
-    eltrino_amazon.rest_client.class:                                        Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientImpl
-
     eltrino_amazon.filters.factory_class:                                    Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
 
     eltrino_amazon.navigation.listener_class:                                Eltrino\OroCrmAmazonBundle\EventListener\AmazonNavigationListener
@@ -47,12 +43,6 @@ services:
 
     eltrino_amazon.order.factory:
         class: %eltrino_amazon.order.factory.class%
-
-    eltrino_amazon.amazon_rest_client.factory:
-        class: %eltrino_amazon.amazon_rest_client.factory_class%
-
-    eltrino_amazon.rest_client:
-        class: %eltrino_amazon.rest_client.class%
 
     eltrino_amazon.filters.factory:
         class: %eltrino_amazon.filters.factory_class%
