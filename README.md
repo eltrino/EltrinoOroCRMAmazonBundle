@@ -30,4 +30,4 @@ php app/console oro:platform:update
 
 ## Contributing
 
-We welcome all kinds of contributions in the form of bug reporting, patches submition, feature requests or documentation enhancement. Please refer to our [guidelines for contributing](https://github.com/https://github.com/eltrino/EltrinoOroCRMAmazonBundle/blob/master/Contributing.md) if you wish to be a part of the project.
+We welcome all kinds of contributions in the form of bug reporting, patches submition, feature requests or documentation enhancement. Please refer to our [guidelines for contributing](https://github.com/eltrino/EltrinoOroCRMAmazonBundle/blob/master/Contributing.md) if you wish to be a part of the project.
