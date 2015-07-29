@@ -6,12 +6,20 @@ use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
 
 class Request
 {
+    /** @var Filter */
     protected $filter;
 
+    /** @var string */
     protected $action;
 
+    /** @var array */
     protected $parameters;
 
+    /**
+     * @param string      $action
+     * @param Filter|null $filter
+     * @param array       $parameters
+     */
     public function __construct($action, Filter $filter = null, array $parameters = [])
     {
         $this->action     = $action;
@@ -29,7 +37,7 @@ class Request
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getAction()
     {

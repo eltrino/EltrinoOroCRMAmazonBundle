@@ -80,11 +80,6 @@ class RestClient
     ];
 
     /**
-     * @var array
-     */
-    protected $parameters = [];
-
-    /**
      * @param ClientInterface      $client
      * @param AuthorizationHandler $authHandler
      */
@@ -126,7 +121,7 @@ class RestClient
     }
 
     /**
-     * @param         $action
+     * @param string  $action
      * @param Request $request
      * @return array
      */
@@ -186,8 +181,8 @@ class RestClient
     }
 
     /**
-     * @param $action
-     * @param $restoreRateSeconds
+     * @param string $action
+     * @param int    $restoreRateSeconds
      */
     protected function useRecoveryRate($action, $restoreRateSeconds)
     {
