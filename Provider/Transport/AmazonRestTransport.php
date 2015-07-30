@@ -15,7 +15,6 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
@@ -44,7 +43,7 @@ class AmazonRestTransport implements TransportInterface
     /** @var FiltersFactory */
     protected $filtersFactory;
 
-    /** @var AmazonRestClientFactory */
+    /** @var RestClientFactory */
     protected $clientFactory;
 
     /** @var string */
