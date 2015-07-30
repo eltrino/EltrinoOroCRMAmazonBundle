@@ -144,7 +144,7 @@ class AmazonRestTransport implements TransportInterface
     {
         $now    = $this->getNowDate();
         $from   = $this->validateFrom($from, $now);
-        $filter = $filter = $this
+        $filter = $this
             ->filtersFactory
             ->createCreateTimeRangeFilter($from, $now);
 
