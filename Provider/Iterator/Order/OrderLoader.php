@@ -122,7 +122,8 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
         $firstResponse = $this->client->sendRequest($firstRequest);
         $result        = $firstResponse->xml()->children($this->namespace);
         $root          = RestClient::LIST_ORDER_ITEMS . 'Result';
-        $items         = $this->extractItems($result->{$root}->OrderItems);
+        $itemsXml      = $result->{$root}->OrderItems;
+        $items         = null !== $itemsXml ? $this->extractItems($itemsXml) : [];
         $nextToken     = (string)$result->{$root}->NextToken;
         $nextTokenRoot = RestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN . 'Result';
 
@@ -132,10 +133,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
                 [],
                 [RestClient::NEXT_TOKEN_PARAM => $nextToken]
             );
-            $response  = $this->client->sendRequest($request);
-            $result    = $response->xml()->children($this->namespace);
-            $items     = array_merge($items, $this->extractItems($result->{$nextTokenRoot}->OrderItems));
-            $nextToken = (string)$result->{$nextTokenRoot}->NextToken;
+            $response   = $this->client->sendRequest($request);
+            $result     = $response->xml()->children($this->namespace);
+            $itemsXmlNT = $result->{$nextTokenRoot}->OrderItems;
+            $items      = null !== $itemsXmlNT ? array_merge($items, $this->extractItems($itemsXmlNT)) : $items;
+            $nextToken  = (string)$result->{$nextTokenRoot}->NextToken;
         }
 
         return $items;

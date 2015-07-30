@@ -65,7 +65,7 @@ abstract class AbstractNextTokenLoader implements NextTokenLoaderInterface
         $loaded           = count($elements);
         $nextTokenRequest = $this->getNextTokenRequest();
 
-        while (null !== $nextTokenRequest && ($loaded <= $batchSize)) {
+        while (null !== $nextTokenRequest && ($loaded < $batchSize)) {
             $response  = $this->client->sendRequest($nextTokenRequest);
             $processed = $this->processResponse($nextTokenRequest->getAction(), $response);
             $loaded += count($processed);
