@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\ImportExport\Serializer;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\ImportExport\Serializer;
 
 use Eltrino\OroCrmAmazonBundle\ImportExport\Serializer\OrderDenormalizer;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;

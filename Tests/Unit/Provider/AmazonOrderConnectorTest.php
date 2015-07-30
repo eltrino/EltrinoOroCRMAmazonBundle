@@ -13,7 +13,7 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider;
 
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
@@ -33,24 +33,21 @@ class AmazonOrderConnectorTest extends \PHPUnit_Framework_TestCase
     private $contextMediator;
 
     /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
+     * @var \Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy
+     * @Mock Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy
      */
-    private $amazonRestClientFactory;
-
-    /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-     * @Mock Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-     */
-    private $filtersFactory;
+    private $logger;
 
     private $amazonOrderConnector;
 
     public function setUp()
     {
         MockAnnotations::init($this);
-        $this->amazonOrderConnector = new AmazonOrderConnector($this->contextRegistry,
-            $this->contextMediator, $this->amazonRestClientFactory, $this->filtersFactory);
+        $this->amazonOrderConnector = new AmazonOrderConnector(
+            $this->contextRegistry,
+            $this->logger,
+            $this->contextMediator
+        );
     }
 
     public function testGetLabel()

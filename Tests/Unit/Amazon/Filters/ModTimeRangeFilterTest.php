@@ -12,11 +12,11 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Amazon\Filters;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Filters;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\CreateTimeRangeFilter;
+use Eltrino\OroCrmAmazonBundle\Amazon\Filters\ModTimeRangeFilter;
 
-class CreateTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
+class ModTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testProcess()
     {
@@ -29,7 +29,7 @@ class CreateTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
             $to = $now->sub(new \DateInterval('PT3M'));
         }
 
-        $filter = new CreateTimeRangeFilter($from, $to);
+        $filter = new ModTimeRangeFilter($from, $to);
 
         $parameters = array();
         $processedParameters = $filter->process($parameters);
@@ -41,8 +41,8 @@ class CreateTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
         $expectedTo   = $to->format('Y-m-d\TH:i:sO');
 
         $expected = array(
-            'CreatedAfter'  => $expectedFrom,
-            'CreatedBefore' => $expectedTo
+            'LastUpdatedAfter'  => $expectedFrom,
+            'LastUpdatedBefore' => $expectedTo
         );
 
         $this->assertEquals($expected, $processedParameters);

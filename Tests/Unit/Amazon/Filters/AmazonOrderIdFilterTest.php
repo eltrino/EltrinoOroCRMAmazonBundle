@@ -12,7 +12,7 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Amazon\Filters;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Filters;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 

@@ -13,13 +13,13 @@
  * to license@eltrino.com so we can send you a copy immediately.
  */
 
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider;
 
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
 
 class AmazonChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ChannelType */
+    /** @var AmazonChannelType */
     private $channel;
 
     public function setUp()

@@ -12,9 +12,10 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Tests\Provider\Iterator;
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider\Iterator;
 
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\NextTokenLoaderInterface;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
 class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
@@ -25,8 +26,8 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
     private $iterator;
 
     /**
-     * @var Loader
-     * @Mock Eltrino\OroCrmAmazonBundle\Provider\Iterator\Loader
+     * @var \PHPUnit_Framework_MockObject_MockObject|NextTokenLoaderInterface
+     * @Mock Eltrino\OroCrmAmazonBundle\Provider\Iterator\NextTokenLoaderInterface
      */
     private $loader;
 
@@ -78,14 +79,9 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->loader
-            ->expects($this->at(0))
+            ->expects($this->at(2))
             ->method('load')
             ->will($this->returnValue($elements));
-
-        $this->loader
-            ->expects($this->at(1))
-            ->method('load')
-            ->will($this->returnValue(array()));
 
         $this->assertTrue($this->iterator->valid());
         $this->iterator->next();
@@ -117,19 +113,14 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->loader
-            ->expects($this->at(0))
+            ->expects($this->at(2))
             ->method('load')
             ->will($this->returnValue($elements1));
 
         $this->loader
-            ->expects($this->at(1))
+            ->expects($this->at(5))
             ->method('load')
             ->will($this->returnValue($elements2));
-
-        $this->loader
-            ->expects($this->at(2))
-            ->method('load')
-            ->will($this->returnValue(array()));
 
         $elm1 = $this->iterator->current();
         $this->iterator->next();
