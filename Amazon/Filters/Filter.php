@@ -17,8 +17,8 @@ namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
 interface Filter
 {
     /**
-     * @param string $parameters
-     * @return string
+     * @param array $parameters
+     * @return array
      */
-    function process($parameters);
+    function process(array $parameters);
 }

@@ -14,60 +14,55 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
 
-class AmazonDataIterator implements \Iterator
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+
+class AmazonDataIterator implements \Iterator, LoggerAwareInterface
 {
-    /**
-     * @var Loader
-     */
-    private $loader;
+    const LOAD_BATCH_SIZE = 1000;
+
+    /** @var LoggerInterface */
+    protected $logger;
+
+    /** @var integer */
+    protected $position = 0;
 
     /**
-     * @var int
+     * @var \SimpleXmlElement[]
      */
-    private $position = 0;
+    protected $elements = [];
+
+    /** @var NextTokenLoaderInterface */
+    protected $loader;
+
+    /** @var int */
+    protected $loaded = 0;
+
+    /** @var int */
+    protected $batchSize = 0;
 
     /**
-     * @var array of \SimpleXmlElement's
+     * @param NextTokenLoaderInterface $loader
+     * @param int                      $batchSize
      */
-    private $elements = array();
-
-    public function __construct(Loader $loader)
+    public function __construct(NextTokenLoaderInterface $loader, $batchSize = self::LOAD_BATCH_SIZE)
     {
-        $this->loader = $loader;
-    }
-
-    private function load()
-    {
-        if ($this->shouldLoad()) {
-            $elements = $this->loader->load();
-            if ($elements) {
-                $this->elements = array_merge($this->elements, $elements);
-            }
-        }
-    }
-
-    /**
-     * Check whether need to load extra elements
-     * @return bool
-     */
-    private function shouldLoad()
-    {
-        return empty($this->elements) || $this->position == count($this->elements);
+        $this->loader    = $loader;
+        $this->batchSize = $batchSize;
     }
 
     /**
-     * Return the current element
-     * @return null|\SimpleXMLElement
+     * {@inheritdoc}
      */
     public function current()
     {
         $this->load();
-        return isset($this->elements[$this->position])?$this->elements[$this->position]:null;
+
+        return isset($this->elements[$this->position]) ? $this->elements[$this->position] : null;
     }
 
     /**
-     * Move forward to next element
-     * @return void
+     * {@inheritdoc}
      */
     public function next()
     {
@@ -75,8 +70,7 @@ class AmazonDataIterator implements \Iterator
     }
 
     /**
-     * Return the key of the current element
-     * @return int
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -84,21 +78,59 @@ class AmazonDataIterator implements \Iterator
     }
 
     /**
-     * Checks if current position is valid
-     * @return boolean
+     * {@inheritdoc}
      */
     public function valid()
     {
         $this->load();
+
         return isset($this->elements[$this->position]);
     }
 
     /**
-     * Rewind the Iterator to the first element
-     * @return void
+     * {@inheritdoc}
      */
     public function rewind()
     {
         $this->position = 0;
+    }
+
+    /**
+     * {$@inheritdoc}
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        if ($this->loader instanceof LoggerAwareInterface) {
+            $this->loader->setLogger($logger);
+        }
+    }
+
+    protected function load()
+    {
+        if ($this->shouldLoad()) {
+            $this->loadElements();
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function shouldLoad()
+    {
+        return !isset($this->elements[$this->position]) && ($this->loader->getNextToken() || !$this->loader->isFirstRequestSend());
+    }
+
+    /**
+     * @return array
+     */
+    protected function loadElements()
+    {
+        $elements = $this->loader->load($this->batchSize);
+        $loaded   = count($elements);
+        $start    = $this->loaded;
+        $this->loaded += $loaded;
+        $end            = $loaded ? $start + $loaded - 1 : false;
+        $this->elements = $end !== false ? array_combine(range($start, $end), $elements) : [];
     }
 } 

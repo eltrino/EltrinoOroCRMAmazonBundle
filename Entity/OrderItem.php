@@ -51,7 +51,7 @@ class OrderItem
 
     /**
      * @var Order
-     * @ORM\ManyToOne(targetEntity="Order", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Order", inversedBy="items")
      * @ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $order;

@@ -17,7 +17,9 @@ namespace Eltrino\OroCrmAmazonBundle\ImportExport\Serializer;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 
+use Eltrino\OroCrmAmazonBundle\Entity\Order;
 use Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
 

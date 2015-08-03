@@ -17,10 +17,9 @@ services:
     eltrino_amazon.provider.amazon_order_connector:
         class: %eltrino_amazon.provider.amazon_order_connector.class%
         arguments:
-          - @oro_importexport.context_registry
-          - @oro_integration.provider.connector_context_mediator
-          - @eltrino_amazon.amazon_rest_client.factory
-          - @eltrino_amazon.filters.factory
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
         tags:
           - { name: oro_integration.connector, type: order, channel_type: amazon }
 

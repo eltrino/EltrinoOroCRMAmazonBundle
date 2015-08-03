@@ -84,7 +84,7 @@ class Order
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order",cascade={"all"})
+     * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order", cascade={"all"}, orphanRemoval=true)
      */
     private $items;
 

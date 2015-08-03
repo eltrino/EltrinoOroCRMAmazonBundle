@@ -12,30 +12,23 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
+namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
 
-class AmazonOrderIdFilter implements Filter
+interface NextTokenLoaderInterface
 {
     /**
-     * @var string
+     * @return null|string
      */
-    private $amazonOrderId;
+    public function getNextToken();
 
     /**
-     * @param string $amazonOrderId
+     * @return boolean
      */
-    public function __construct($amazonOrderId)
-    {
-        $this->amazonOrderId = $amazonOrderId;
-    }
+    public function isFirstRequestSend();
 
     /**
-     * {@inheritdoc}
+     * @param int $batchSize
+     * @return array
      */
-    public function process(array $parameters)
-    {
-        $parameters['AmazonOrderId']  = $this->amazonOrderId;
-
-        return $parameters;
-    }
-} 
+    public function load($batchSize);
+}
