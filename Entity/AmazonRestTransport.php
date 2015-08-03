@@ -204,4 +204,4 @@ class AmazonRestTransport extends Transport
             ]
         );
     }
-} 
+}

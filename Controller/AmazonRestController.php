@@ -36,7 +36,7 @@ class AmazonRestController extends Controller
     public function checkAction(Request $request)
     {
         $transport = $this->get('eltrino_amazon.amazon_rest_transport');
-        $data = null;
+        $data      = null;
 
         if ($id = $request->get('id', false)) {
             $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
@@ -45,25 +45,9 @@ class AmazonRestController extends Controller
         $form = $this->get('form.factory')
             ->createNamed('rest-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
         $form->submit($request);
+        $transportEntity = $form->getData();
+        $transport->init($transportEntity);
 
-        $amazonRestClientFactory = $this->get('eltrino_amazon.amazon_rest_client.factory');
-        $filtersFactory          = $this->get('eltrino_amazon.filters.factory');
-
-        $amazonRestClient = $amazonRestClientFactory->create(
-            $data->getWsdlUrl(),
-            $data->getKeyId(),
-            $data->getSecret(),
-            $data->getMerchantId(),
-            $data->getMarketplaceId()
-        );
-
-        $filter = $filtersFactory->createCompositeFilter();
-        $result = $amazonRestClient->getCheckRestClient()->getStatus($filter);
-
-        return new JsonResponse(
-            [
-                'success' => $result
-            ]
-        );
+        return new JsonResponse(['success' => $transport->getStatus()]);
     }
 }

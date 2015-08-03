@@ -17,15 +17,14 @@ namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
 class CompositeFilter implements Filter
 {
     /**
-     * @var array
+     * @var Filter[]
      */
     private $filters = array();
 
     /**
-     * @param string $parameters
-     * @return string
+     * {@inheritdoc}
      */
-    public function process($parameters)
+    public function process(array $parameters)
     {
         foreach ($this->filters as $filter) {
             $parameters = $filter->process($parameters);

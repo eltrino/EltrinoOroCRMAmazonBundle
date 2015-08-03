@@ -12,30 +12,28 @@
  * obtain it through the world-wide-web, please send an email
  * to license@eltrino.com so we can send you a copy immediately.
  */
-namespace Eltrino\OroCrmAmazonBundle\Amazon\Filters;
 
-class AmazonOrderIdFilter implements Filter
+namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider;
+
+use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
+
+class AmazonChannelTypeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var string
-     */
-    private $amazonOrderId;
+    /** @var AmazonChannelType */
+    private $channel;
 
-    /**
-     * @param string $amazonOrderId
-     */
-    public function __construct($amazonOrderId)
+    public function setUp()
     {
-        $this->amazonOrderId = $amazonOrderId;
+        $this->channel = new AmazonChannelType();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function process(array $parameters)
+    public function tearDown()
     {
-        $parameters['AmazonOrderId']  = $this->amazonOrderId;
-
-        return $parameters;
+        unset($this->channel);
     }
-} 
+
+    public function testPublicInterface()
+    {
+        $this->assertEquals('Amazon', $this->channel->getLabel());
+    }
+}
