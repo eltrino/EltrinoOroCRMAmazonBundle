@@ -12,7 +12,7 @@
 5. The **Available Packages** screen opens. You can find all the packages available for installation here. In this example we are looking for **eltrino/orocrm-amazon-bundle**. After you find it, click **Install** to initiate installation process.
 ![Installation](img/install.png)6.	After the installation starts, the system analyzes the requirements, checks the available packages and offers to installed all missing ones. Click **Continue** to confirm installation of missing packages.
 ![Installation](img/notification.png)7.	After the bundle has been successfully installed, the system redirects you to the **Installed Packages** screen and shows the following success message:
-8. ![Installation](img/success.png)
+![Installation](img/success.png)
 
 ###Installation via Composer
 
