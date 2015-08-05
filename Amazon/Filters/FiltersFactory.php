@@ -45,15 +45,6 @@ class FiltersFactory
     }
 
     /**
-     * @param $nextToken
-     * @return NextTokenFilter
-     */
-    public function createNextTokenFilter($nextToken)
-    {
-        return new NextTokenFilter($nextToken);
-    }
-
-    /**
      * @param $amazonOrderId
      * @return AmazonOrderIdFilter
      */

@@ -92,11 +92,8 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
                 $item = $existingItem;
             }
 
-            if (!$item->getOrder()) {
-                $item->setOrder($entityToUpdate);
-            }
-
             if (!$entityToUpdate->getItems()->contains($item)) {
+                $item->assignOrder($entityToUpdate);
                 $entityToUpdate->getItems()->add($item);
             }
         }
@@ -108,7 +105,7 @@ class OrderStrategy implements StrategyInterface, ContextAwareInterface
             }
         );
         foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->remove($item);
+            $entityToUpdate->getItems()->removeElement($item);
         }
     }
 

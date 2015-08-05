@@ -10,20 +10,24 @@ parameters:
 
     eltrino_amazon.order.factory.class:                                      Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory
 
-    eltrino_amazon.amazon_rest_client.factory_class:                         Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory
-
-    eltrino_amazon.rest_client.class:                                        Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientImpl
-
     eltrino_amazon.filters.factory_class:                                    Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
 
     eltrino_amazon.navigation.listener_class:                                Eltrino\OroCrmAmazonBundle\EventListener\AmazonNavigationListener
+
+    eltrino_amazon.client.rest_client_factory.class:                         Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory
 
 services:
    # transport
     eltrino_amazon.amazon_rest_transport:
         class: %eltrino_amazon.amazon_rest_transport.class%
+        arguments:
+            - @eltrino_amazon.client_rest_client_factory
+            - @eltrino_amazon.filters.factory
         tags:
             - { name: oro_integration.transport, type: amazon_rest, channel_type: amazon}
+
+    eltrino_amazon.client_rest_client_factory:
+        class: %eltrino_amazon.client.rest_client_factory.class%
 
    # providers
     eltrino_amazon.provider.amazon_channel_type:
@@ -39,12 +43,6 @@ services:
 
     eltrino_amazon.order.factory:
         class: %eltrino_amazon.order.factory.class%
-
-    eltrino_amazon.amazon_rest_client.factory:
-        class: %eltrino_amazon.amazon_rest_client.factory_class%
-
-    eltrino_amazon.rest_client:
-        class: %eltrino_amazon.rest_client.class%
 
     eltrino_amazon.filters.factory:
         class: %eltrino_amazon.filters.factory_class%

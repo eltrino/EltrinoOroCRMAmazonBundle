@@ -15,62 +15,26 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider;
 
-use Eltrino\OroCrmAmazonBundle\Amazon\AmazonRestClientFactory;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\InitialModeLoader;
-use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\UpdateModeLoader;
-use Oro\Bundle\ImportExportBundle\Reader\IteratorBasedReader;
+use Eltrino\OroCrmAmazonBundle\Provider\Transport\AmazonRestTransport;
 
+use Oro\Bundle\ImportExportBundle\Reader\IteratorBasedReader;
+use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 
-class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInterface
+class AmazonOrderConnector extends AbstractConnector
 {
     const ORDER_TYPE = 'Eltrino\OroCrmAmazonBundle\Entity\Order';
+    const TYPE       = 'order';
+
+    /** @var AmazonRestTransport */
+    protected $transport;
 
     /**
-     * @var ContextRegistry
-     */
-    protected $contextRegistry;
-
-    /**
-     * @var ConnectorContextMediator
-     */
-    protected $contextMediator;
-
-    /**
-     * @var AmazonRestClientFactory
-     */
-    private $amazonRestClientFactory;
-
-    /**
-     * @var \Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory
-     */
-    private $filtersFactory;
-
-    /**
-     * @param ContextRegistry $contextRegistry
-     * @param ConnectorContextMediator $contextMediator
-     * @param AmazonRestClientFactory $amazonRestClientFactory
-     * @param FiltersFactory $filtersFactory
-     */
-    public function __construct(ContextRegistry $contextRegistry,
-                                ConnectorContextMediator $contextMediator, AmazonRestClientFactory $amazonRestClientFactory,
-                                FiltersFactory $filtersFactory)
-    {
-        $this->contextRegistry = $contextRegistry;
-        $this->contextMediator = $contextMediator;
-        $this->amazonRestClientFactory = $amazonRestClientFactory;
-        $this->filtersFactory = $filtersFactory;
-    }
-
-    /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getLabel()
     {
@@ -78,67 +42,7 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
     }
 
     /**
-     * Placeholder function for "akeneo/batch-bundle"
-     *
-     * @return $this
-     */
-    public function initialize()
-    {
-        return $this;
-    }
-
-    /**
-     * Placeholder function for "akeneo/batch-bundle"
-     *
-     * @return $this
-     */
-    public function flush()
-    {
-        return $this;
-    }
-
-    /**
-     * @param ContextInterface $context
-     */
-    protected function initializeFromContext(ContextInterface $context)
-    {
-        $channel = $this->contextMediator->getChannel($context);
-        $settings = $channel->getTransport()->getSettingsBag();
-
-        $amazonRestClient = $this->initializeAmazonRestClient($settings);
-
-        /** @var Status $status */
-        $status = $channel
-            ->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)
-            ->first();
-
-        $loader = null;
-        if (false !== $status) { // update_mode
-            $loader = new UpdateModeLoader($amazonRestClient, $this->filtersFactory, $status->getDate());
-        } else { // initial_mode
-            $loader = new InitialModeLoader($amazonRestClient, $this->filtersFactory, $settings->get('start_sync_date'));
-        }
-        $orderIterator = new AmazonDataIterator($loader);
-        $this->setSourceIterator($orderIterator);
-    }
-
-    private function initializeAmazonRestClient(ParameterBag $settings)
-    {
-        $amazonRestClient = $this->amazonRestClientFactory->create(
-            $settings->get('wsdl_url'),
-            $settings->get('aws_access_key_id'),
-            $settings->get('aws_secret_access_key'),
-            $settings->get('merchant_id'),
-            $settings->get('marketplace_id')
-        );
-
-        return $amazonRestClient;
-    }
-
-    /**
-     * Returns entity name that will be used for matching "import processor"
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getImportEntityFQCN()
     {
@@ -146,9 +50,7 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
     }
 
     /**
-     * Returns job name for import
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getImportJobName()
     {
@@ -156,12 +58,27 @@ class AmazonOrderConnector extends IteratorBasedReader implements ConnectorInter
     }
 
     /**
-     * Returns type name, the same as registered in service tag
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {
-        return 'order';
+        return static::TYPE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getConnectorSource()
+    {
+        $settings = $this->channel->getTransport()->getSettingsBag();
+        /** @var Status $status */
+        $status = $this->channel
+            ->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)
+            ->first();
+        if (false !== $status) {
+            return $this->transport->getModOrders($status->getDate());
+        } else {
+            return $this->transport->getInitialOrders($settings->get('start_sync_date'));
+        }
     }
 }

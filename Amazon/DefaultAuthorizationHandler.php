@@ -18,8 +18,6 @@ use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 
 class DefaultAuthorizationHandler implements AuthorizationHandler
 {
-    const SERVICE_VERSION   = '2013-09-01';
-
     const SIGNATURE_VERSION = '2';
 
     const SIGNATURE_METHOD  = 'HmacSHA256';
@@ -86,23 +84,6 @@ class DefaultAuthorizationHandler implements AuthorizationHandler
     public function getSecret()
     {
         return $this->secret;
-    }
-
-    /**
-     * Formats date as ISO 8601 timestamp
-     * @return string
-     */
-    public function getFormattedTimestamp()
-    {
-        return gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z", time());
-    }
-
-    /**
-     * @return string
-     */
-    public function getVersion()
-    {
-        return self::SERVICE_VERSION;
     }
 
     /**
