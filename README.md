@@ -21,6 +21,9 @@ Add as dependency in composer:
 ```bash
 composer require eltrino/orocrm-amazon-bundle:dev-master
 ```
+For this bundle to function properly, clear cache by issuing the following command:
+
+```php app/console cache:clear --no-warmup```
 
 In addition, run platform update:
 ```bash
