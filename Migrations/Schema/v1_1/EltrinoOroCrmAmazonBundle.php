@@ -18,6 +18,7 @@ namespace Eltrino\OroCrmAmazonBundle\Migrations\Schema\v1_1;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Doctrine\DBAL\Types\Type;
 
 class EltrinoOroCrmAmazonBundle implements Migration
 {
