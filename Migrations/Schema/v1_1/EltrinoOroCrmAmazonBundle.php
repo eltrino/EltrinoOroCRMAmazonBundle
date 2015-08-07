@@ -42,10 +42,9 @@ class EltrinoOroCrmAmazonBundle implements Migration
         $table = $schema->getTable(self::TABLE_NAME);
 
         if ($table->hasColumn('total_amount')) {
-            $table->changeColumn('total_amount', array(
-                'type'      => 'money',
-                'default'   => 0
-            ));
+            $column = $table->getColumn('total_amount');
+            $column->setType(Type::getType('money'));
+            $column->setOptions(['default' => 0]);
         }
     }
 } 
