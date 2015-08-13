@@ -17,11 +17,13 @@ namespace Eltrino\OroCrmAmazonBundle\Amazon;
 use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 
+use Guzzle\Plugin\Backoff\BackoffPlugin;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Message\Response;
 
 class RestClient
 {
+    const BACK_OFF_RETRIES               = 4;
     const GET_SERVICE_STATUS             = 'GetServiceStatus';
     const LIST_ORDERS                    = 'ListOrders';
     const LIST_ORDER_ITEMS               = 'ListOrderItems';
@@ -99,6 +101,9 @@ class RestClient
     {
         $this->client      = $client;
         $this->authHandler = $authHandler;
+
+        $backoffPlugin = BackoffPlugin::getExponentialBackoff(self::BACK_OFF_RETRIES);
+        $this->client->addSubscriber($backoffPlugin);
     }
 
     /**
