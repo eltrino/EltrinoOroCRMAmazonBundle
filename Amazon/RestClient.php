@@ -17,22 +17,13 @@ namespace Eltrino\OroCrmAmazonBundle\Amazon;
 use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 
+use Guzzle\Common\Event;
+use Guzzle\Plugin\Backoff\BackoffPlugin;
 use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Message\Response;
 
-class RestClient
+class RestClient extends AbstractRestClient
 {
-    const GET_SERVICE_STATUS             = 'GetServiceStatus';
-    const LIST_ORDERS                    = 'ListOrders';
-    const LIST_ORDER_ITEMS               = 'ListOrderItems';
-    const LIST_ORDERS_BY_NEXT_TOKEN      = 'ListOrdersByNextToken';
-    const LIST_ORDER_ITEMS_BY_NEXT_TOKEN = 'ListOrderItemsByNextToken';
-
-    const ACTION_PARAM     = 'Action';
-    const NEXT_TOKEN_PARAM = 'NextToken';
-
-    const STATUS_GREEN = 'GREEN';
-
+    const BACK_OFF_RETRIES  = 4;
     const SERVICE_VERSION   = '2013-09-01';
 
     /**
@@ -92,6 +83,11 @@ class RestClient
     ];
 
     /**
+     * @var string|null
+     */
+    protected $shareAction;
+
+    /**
      * @param ClientInterface      $client
      * @param AuthorizationHandler $authHandler
      */
@@ -99,11 +95,17 @@ class RestClient
     {
         $this->client      = $client;
         $this->authHandler = $authHandler;
+        /**
+         *  BackoffPlugin handle unexpected error responses(500 and 503) and will
+         *  apply backoff exponential strategy and resend requests to the api.
+         */
+        $backoffPlugin = BackoffPlugin::getExponentialBackoff(self::BACK_OFF_RETRIES);
+        $this->client->addSubscriber($backoffPlugin);
+        $backoffPlugin->getEventDispatcher()->addListener(BackoffPlugin::RETRY_EVENT, [$this, 'onRetryEvent']);
     }
 
     /**
-     * @param Request $request
-     * @return Response
+     * {@inheritdoc}
      */
     public function sendRequest(Request $request)
     {
@@ -113,23 +115,30 @@ class RestClient
         }
         $requestParameters = $this->createRequestParameters($action, $request);
 
-        $shareAction = str_replace('ByNextToken', '', $action);
-        $this->applyRecoveryRate($shareAction);
+        $this->shareAction = str_replace('ByNextToken', '', $action);
+        $this->applyRecoveryRate();
         $response = $this->client->post(null, [], $requestParameters)->send();
-
-        if ($this->restoreRateRequests[$shareAction] === 0) {
-            $this->requestsCounters[$shareAction]++;
-        }
+        $this->incrementCounters();
 
         return $response;
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getVersion()
     {
         return self::SERVICE_VERSION;
+    }
+
+    /**
+     * Apply recovery rate on backoff plugin retry event.
+     * @param Event $event
+     */
+    public function onRetryEvent(Event $event)
+    {
+        $this->applyRecoveryRate();
+        $this->incrementCounters();
     }
 
     /**
@@ -161,54 +170,51 @@ class RestClient
         return $requestParameters;
     }
 
-    /**
-     * @param string $action
-     */
-    protected function applyRecoveryRate($action)
+    protected function applyRecoveryRate()
     {
-        $restoreRateSeconds = static::$throttlingParams[$action]['restore_rate'];
-        $maxRequestsQuota = static::$throttlingParams[$action]['max_requests_quota'];
+        $restoreRateSeconds = static::$throttlingParams[$this->shareAction]['restore_rate'];
+        $maxRequestsQuota = static::$throttlingParams[$this->shareAction]['max_requests_quota'];
 
-        if ($this->restoreRateRequests[$action] > 0) {
-            if ($this->restoreRateRequests[$action] == $maxRequestsQuota) {
-                $this->restoreRateRequests[$action] = 0;
+        if ($this->restoreRateRequests[$this->shareAction] > 0) {
+            if ($this->restoreRateRequests[$this->shareAction] == $maxRequestsQuota) {
+                $this->restoreRateRequests[$this->shareAction] = 0;
             } else {
-                $this->useRecoveryRate($action, $restoreRateSeconds);
+                $this->useRecoveryRate($restoreRateSeconds);
             }
         } else {
-            if ($this->requestsCounters[$action] == $maxRequestsQuota) {
-                if (($extraRequests = floor($this->requestsExtraTime[$action] / $restoreRateSeconds)) > 0) {
-                    if ($extraRequests <= $this->requestsCounters[$action]) {
-                        $this->requestsCounters[$action] = $this->requestsCounters[$action] - $extraRequests;
-                        $this->requestsExtraTime[$action] = $this->requestsExtraTime[$action] % $restoreRateSeconds;
+            if ($this->requestsCounters[$this->shareAction] == $maxRequestsQuota) {
+                if (($extraRequests = floor($this->requestsExtraTime[$this->shareAction] / $restoreRateSeconds)) > 0) {
+                    if ($extraRequests <= $this->requestsCounters[$this->shareAction]) {
+                        $this->requestsCounters[$this->shareAction] -= $extraRequests;
+                        $this->requestsExtraTime[$this->shareAction] =
+                            $this->requestsExtraTime[$this->shareAction] % $restoreRateSeconds;
                     } else {
-                        $this->requestsCounters[$action] = 0;
-                        $this->requestsExtraTime[$action] = 0;
+                        $this->requestsCounters[$this->shareAction] = 0;
+                        $this->requestsExtraTime[$this->shareAction] = 0;
                     }
                 } else {
-                    $this->useRecoveryRate($action, $restoreRateSeconds);
+                    $this->useRecoveryRate($restoreRateSeconds);
                 }
             }
         }
     }
 
     /**
-     * @param string $action
      * @param int    $restoreRateSeconds
      */
-    protected function useRecoveryRate($action, $restoreRateSeconds)
+    protected function useRecoveryRate($restoreRateSeconds)
     {
         sleep($restoreRateSeconds);
-        $this->requestsCounters[$action]--;
+        $this->requestsCounters[$this->shareAction]--;
         array_walk(
             $this->requestsExtraTime,
-            function (&$val, $key) use ($action, $restoreRateSeconds) {
-                if ($key !== $action) {
+            function (&$val, $key) use ($restoreRateSeconds) {
+                if ($key !== $this->shareAction) {
                     $val += $restoreRateSeconds;
                 };
             }
         );
-        $this->restoreRateRequests[$action]++;
+        $this->restoreRateRequests[$this->shareAction]++;
     }
 
     /**
@@ -218,5 +224,12 @@ class RestClient
     protected function getFormattedTimestamp()
     {
         return gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z", time());
+    }
+
+    protected function incrementCounters()
+    {
+        if ($this->restoreRateRequests[$this->shareAction] === 0) {
+            $this->requestsCounters[$this->shareAction]++;
+        }
     }
 }

@@ -14,10 +14,11 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order;
 
+use Eltrino\OroCrmAmazonBundle\Amazon\AbstractRestClient;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
-use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
+use Eltrino\OroCrmAmazonBundle\Amazon\RestClientInterface;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AbstractNextTokenLoader;
 
 use Guzzle\Http\Message\Response;
@@ -35,11 +36,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
     protected $namespace;
 
     /**
-     * @param RestClient $client
+     * @param RestClientInterface $client
      * @param Filter     $firstFilter
      * @param string     $nameSpace
      */
-    public function __construct(RestClient $client, Filter $firstFilter, $nameSpace)
+    public function __construct(RestClientInterface $client, Filter $firstFilter, $nameSpace)
     {
         $this->firstFilter = $firstFilter;
         $this->namespace   = $nameSpace;
@@ -51,7 +52,7 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
      */
     protected function getFirstRequest()
     {
-        return new Request(RestClient::LIST_ORDERS, $this->firstFilter);
+        return new Request(AbstractRestClient::LIST_ORDERS, $this->firstFilter);
     }
 
     /**
@@ -61,9 +62,9 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
     {
         return $this->nextToken
             ? new Request(
-                RestClient::LIST_ORDERS_BY_NEXT_TOKEN,
+                AbstractRestClient::LIST_ORDERS_BY_NEXT_TOKEN,
                 null,
-                [RestClient::NEXT_TOKEN_PARAM => $this->nextToken]
+                [AbstractRestClient::NEXT_TOKEN_PARAM => $this->nextToken]
             )
             : null;
     }
@@ -77,7 +78,7 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
         $root   = $action . 'Result';
 
         $this->nextToken = null;
-        if ($nextToken = (string)$result->{$root}->{RestClient::NEXT_TOKEN_PARAM}) {
+        if ($nextToken = (string)$result->{$root}->{AbstractRestClient::NEXT_TOKEN_PARAM}) {
             $this->nextToken = $nextToken;
         }
         $ordersXml = $result->{$root}->Orders;
@@ -118,20 +119,20 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
         if (null !== $this->logger) {
             $this->logger->info('Loading order items for order #' . $amazonOrderId);
         }
-        $firstRequest  = new Request(RestClient::LIST_ORDER_ITEMS, new AmazonOrderIdFilter($amazonOrderId));
+        $firstRequest  = new Request(AbstractRestClient::LIST_ORDER_ITEMS, new AmazonOrderIdFilter($amazonOrderId));
         $firstResponse = $this->client->sendRequest($firstRequest);
         $result        = $firstResponse->xml()->children($this->namespace);
-        $root          = RestClient::LIST_ORDER_ITEMS . 'Result';
+        $root          = AbstractRestClient::LIST_ORDER_ITEMS . 'Result';
         $itemsXml      = $result->{$root}->OrderItems;
         $items         = null !== $itemsXml ? $this->extractItems($itemsXml) : [];
         $nextToken     = (string)$result->{$root}->NextToken;
-        $nextTokenRoot = RestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN . 'Result';
+        $nextTokenRoot = AbstractRestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN . 'Result';
 
         while ($nextToken) {
             $request   = new Request(
-                RestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN,
+                AbstractRestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN,
                 [],
-                [RestClient::NEXT_TOKEN_PARAM => $nextToken]
+                [AbstractRestClient::NEXT_TOKEN_PARAM => $nextToken]
             );
             $response   = $this->client->sendRequest($request);
             $result     = $response->xml()->children($this->namespace);

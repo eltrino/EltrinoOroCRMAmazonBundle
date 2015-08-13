@@ -15,7 +15,7 @@
 namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
-use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
+use Eltrino\OroCrmAmazonBundle\Amazon\RestClientInterface;
 use Guzzle\Http\Message\Response;
 
 abstract class AbstractNextTokenLoader implements NextTokenLoaderInterface
@@ -23,16 +23,16 @@ abstract class AbstractNextTokenLoader implements NextTokenLoaderInterface
     /** @var bool */
     protected $firstRequestSend = false;
 
-    /** @var RestClient */
+    /** @var RestClientInterface */
     protected $client;
 
     /** @var null|string */
     protected $nextToken;
 
     /**
-     * @param RestClient $client
+     * @param RestClientInterface $client
      */
-    public function __construct(RestClient $client)
+    public function __construct(RestClientInterface $client)
     {
         $this->client = $client;
     }

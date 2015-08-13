@@ -132,5 +132,6 @@ class AmazonDataIterator implements \Iterator, LoggerAwareInterface
         $this->loaded += $loaded;
         $end            = $loaded ? $start + $loaded - 1 : false;
         $this->elements = $end !== false ? array_combine(range($start, $end), $elements) : [];
+        $this->logger->info('Loaded %s elements', $end);
     }
 } 
