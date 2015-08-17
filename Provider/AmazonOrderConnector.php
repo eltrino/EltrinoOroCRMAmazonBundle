@@ -17,12 +17,7 @@ namespace Eltrino\OroCrmAmazonBundle\Provider;
 
 use Eltrino\OroCrmAmazonBundle\Provider\Transport\AmazonRestTransport;
 
-use Oro\Bundle\ImportExportBundle\Reader\IteratorBasedReader;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 
 class AmazonOrderConnector extends AbstractConnector

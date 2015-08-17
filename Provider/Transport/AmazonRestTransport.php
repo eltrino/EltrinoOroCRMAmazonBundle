@@ -15,12 +15,17 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Repository\RepositoryFactory;
+use Eltrino\OroCrmAmazonBundle\Amazon\AbstractRestClient;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
-use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactory;
+use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactoryInterface;
+use Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
+use Eltrino\OroCrmAmazonBundle\Amazon\RestClientInterface;
+use Eltrino\OroCrmAmazonBundle\Entity\Order;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\OrderLoader;
-use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
 
 use Guzzle\Http\Message\Response;
@@ -37,23 +42,23 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  */
 class AmazonRestTransport implements TransportInterface
 {
-    /** @var RestClient */
+    /** @var RestClientInterface */
     protected $amazonClient;
 
     /** @var FiltersFactory */
     protected $filtersFactory;
 
-    /** @var RestClientFactory */
+    /** @var RestClientFactoryInterface */
     protected $clientFactory;
 
     /** @var string */
     protected $namespace;
 
     /**
-     * @param RestClientFactory $clientFactory
-     * @param FiltersFactory    $filtersFactory
+     * @param RestClientFactoryInterface $clientFactory
+     * @param FiltersFactory             $filtersFactory
      */
-    public function __construct(RestClientFactory $clientFactory, FiltersFactory $filtersFactory)
+    public function __construct(RestClientFactoryInterface $clientFactory, FiltersFactory $filtersFactory)
     {
         $this->clientFactory  = $clientFactory;
         $this->filtersFactory = $filtersFactory;
@@ -116,7 +121,7 @@ class AmazonRestTransport implements TransportInterface
      */
     public function getStatus()
     {
-        $response = $this->amazonClient->sendRequest(new Request(RestClient::GET_SERVICE_STATUS));
+        $response = $this->amazonClient->sendRequest(new Request(AbstractRestClient::GET_SERVICE_STATUS));
 
         return $this->getStatusFromResponse($response);
     }
@@ -161,9 +166,9 @@ class AmazonRestTransport implements TransportInterface
             throw new \LogicException('Namespace must be initialized!');
         }
         $xml  = $response->xml()->children($this->namespace);
-        $root = RestClient::GET_SERVICE_STATUS . 'Result';
+        $root = AbstractRestClient::GET_SERVICE_STATUS . 'Result';
 
-        return (string)$xml->{$root}->Status === RestClient::STATUS_GREEN;
+        return (string)$xml->{$root}->Status === AbstractRestClient::STATUS_GREEN;
     }
 
     /**
@@ -201,7 +206,7 @@ class AmazonRestTransport implements TransportInterface
      */
     protected function validateFrom(\DateTime $from, \DateTime $now)
     {
-        if($from >= $now) {
+        if ($from >= $now) {
             $from = clone $now;
             $from->sub(new \DateInterval('PT3M'));
         }
