@@ -18,6 +18,7 @@ use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 
 use Guzzle\Common\Event;
+use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Plugin\Backoff\BackoffPlugin;
 use Guzzle\Http\ClientInterface;
 
@@ -74,15 +75,6 @@ class RestClient extends AbstractRestClient
     ];
 
     /**
-     * @var array
-     */
-    protected $restoreRateRequests = [
-        self::GET_SERVICE_STATUS => 0,
-        self::LIST_ORDERS        => 0,
-        self::LIST_ORDER_ITEMS   => 0
-    ];
-
-    /**
      * @var string|null
      */
     protected $shareAction;
@@ -118,7 +110,7 @@ class RestClient extends AbstractRestClient
         $this->shareAction = str_replace('ByNextToken', '', $action);
         $this->applyRecoveryRate();
         $response = $this->client->post(null, [], $requestParameters)->send();
-        $this->incrementCounters();
+        $this->requestsCounters[$this->shareAction]++;
 
         return $response;
     }
@@ -138,7 +130,7 @@ class RestClient extends AbstractRestClient
     public function onRetryEvent(Event $event)
     {
         $this->applyRecoveryRate();
-        $this->incrementCounters();
+        $this->requestsCounters[$this->shareAction]++;
     }
 
     /**
@@ -174,27 +166,25 @@ class RestClient extends AbstractRestClient
     {
         $restoreRateSeconds = static::$throttlingParams[$this->shareAction]['restore_rate'];
         $maxRequestsQuota = static::$throttlingParams[$this->shareAction]['max_requests_quota'];
-
-        if ($this->restoreRateRequests[$this->shareAction] > 0) {
-            if ($this->restoreRateRequests[$this->shareAction] == $maxRequestsQuota) {
-                $this->restoreRateRequests[$this->shareAction] = 0;
+        if ($this->requestsCounters[$this->shareAction] >= $maxRequestsQuota) {
+            if (($extraRequests = floor($this->requestsExtraTime[$this->shareAction] / $restoreRateSeconds)) > 0) {
+                if ($extraRequests <= $this->requestsCounters[$this->shareAction]) {
+                    $this->requestsCounters[$this->shareAction] -= $extraRequests;
+                    $this->requestsExtraTime[$this->shareAction] =
+                        $this->requestsExtraTime[$this->shareAction] % $restoreRateSeconds;
+                } else {
+                    $this->requestsCounters[$this->shareAction] = 0;
+                    $this->requestsExtraTime[$this->shareAction] = 0;
+                }
             } else {
-                $this->useRecoveryRate($restoreRateSeconds);
+                $this->useRecoveryRate($maxRequestsQuota * $restoreRateSeconds);
             }
         } else {
-            if ($this->requestsCounters[$this->shareAction] == $maxRequestsQuota) {
-                if (($extraRequests = floor($this->requestsExtraTime[$this->shareAction] / $restoreRateSeconds)) > 0) {
-                    if ($extraRequests <= $this->requestsCounters[$this->shareAction]) {
-                        $this->requestsCounters[$this->shareAction] -= $extraRequests;
-                        $this->requestsExtraTime[$this->shareAction] =
-                            $this->requestsExtraTime[$this->shareAction] % $restoreRateSeconds;
-                    } else {
-                        $this->requestsCounters[$this->shareAction] = 0;
-                        $this->requestsExtraTime[$this->shareAction] = 0;
-                    }
-                } else {
-                    $this->useRecoveryRate($restoreRateSeconds);
-                }
+            if ($this->requestsExtraTime[$this->shareAction] > 0) {
+                $extra = $this->requestsExtraTime[$this->shareAction];
+                $this->requestsExtraTime[$this->shareAction] = $extra <= $restoreRateSeconds
+                    ? 0
+                    : $extra - $restoreRateSeconds;
             }
         }
     }
@@ -205,7 +195,6 @@ class RestClient extends AbstractRestClient
     protected function useRecoveryRate($restoreRateSeconds)
     {
         sleep($restoreRateSeconds);
-        $this->requestsCounters[$this->shareAction]--;
         array_walk(
             $this->requestsExtraTime,
             function (&$val, $key) use ($restoreRateSeconds) {
@@ -214,7 +203,8 @@ class RestClient extends AbstractRestClient
                 };
             }
         );
-        $this->restoreRateRequests[$this->shareAction]++;
+        $this->requestsCounters[$this->shareAction] = 0;
+        $this->requestsExtraTime[$this->shareAction] = 0;
     }
 
     /**
@@ -224,12 +214,5 @@ class RestClient extends AbstractRestClient
     protected function getFormattedTimestamp()
     {
         return gmdate("Y-m-d\TH:i:s.\\0\\0\\0\\Z", time());
-    }
-
-    protected function incrementCounters()
-    {
-        if ($this->restoreRateRequests[$this->shareAction] === 0) {
-            $this->requestsCounters[$this->shareAction]++;
-        }
     }
 }

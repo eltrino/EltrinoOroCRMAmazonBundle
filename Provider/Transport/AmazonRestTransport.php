@@ -15,11 +15,15 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Repository\RepositoryFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\AbstractRestClient;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\RestClientFactoryInterface;
+use Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
 use Eltrino\OroCrmAmazonBundle\Amazon\RestClientInterface;
+use Eltrino\OroCrmAmazonBundle\Entity\Order;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\OrderLoader;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\FiltersFactory;
@@ -208,5 +212,68 @@ class AmazonRestTransport implements TransportInterface
         }
 
         return $from;
+    }
+
+    public function loadItems(EntityRepository $ordersRepo)
+    {
+        $orders = $ordersRepo->findAll();
+        $items = [];
+        /**@var Order $order */
+        foreach ($orders as $order) {
+            $amazonOrderId = $order->getAmazonOrderId();
+            $orderItems            = $this->getOrderItems($amazonOrderId);
+            if ($orderItems === null) {
+                break;
+            }
+            $items[$amazonOrderId] = $orderItems;
+        }
+
+        return $items;
+    }
+
+    protected function getOrderItems($amazonOrderId)
+    {
+        $firstRequest  = new Request(AbstractRestClient::LIST_ORDER_ITEMS, new AmazonOrderIdFilter($amazonOrderId));
+        $firstResponse = $this->amazonClient->sendRequest($firstRequest);
+        if ($firstResponse === null) {
+            return null;
+        }
+        $result        = $firstResponse->xml()->children($this->namespace);
+        $root          = AbstractRestClient::LIST_ORDER_ITEMS . 'Result';
+        $itemsXml      = $result->{$root}->OrderItems;
+        $items         = null !== $itemsXml ? $this->extractItems($itemsXml) : [];
+        $nextToken     = (string)$result->{$root}->NextToken;
+        $nextTokenRoot = AbstractRestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN . 'Result';
+
+        while ($nextToken) {
+            $request   = new Request(
+                AbstractRestClient::LIST_ORDER_ITEMS_BY_NEXT_TOKEN,
+                [],
+                [AbstractRestClient::NEXT_TOKEN_PARAM => $nextToken]
+            );
+            $response   = $this->amazonClient->sendRequest($request);
+            $result     = $response->xml()->children($this->namespace);
+            $itemsXmlNT = $result->{$nextTokenRoot}->OrderItems;
+            $items      = null !== $itemsXmlNT ? array_merge($items, $this->extractItems($itemsXmlNT)) : $items;
+            $nextToken  = (string)$result->{$nextTokenRoot}->NextToken;
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param \SimpleXMLElement $itemsXml
+     * @return array
+     */
+    protected function extractItems(\SimpleXMLElement $itemsXml)
+    {
+        $items = [];
+        if ($itemsXml->count() && $itemsXml->children()->count()) {
+            foreach ($itemsXml->children() as $item) {
+                $items[] = $item;
+            }
+        }
+
+        return $items;
     }
 }
