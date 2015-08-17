@@ -59,7 +59,7 @@ class ItemInfo
         $this->quantityOrdered       = $quantityOrdered;
         $this->quantityShipped       = $quantityShipped;
         $this->itemPriceCurrencyId   = $itemPriceCurrencyId;
-        $this->itemPriceAmount       = $itemPriceAmount;
+        $this->itemPriceAmount       = empty($itemPriceAmount) ? null : $itemPriceAmount;
         $this->condition             = $condition;
     }
 

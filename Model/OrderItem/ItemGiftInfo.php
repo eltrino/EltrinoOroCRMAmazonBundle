@@ -41,7 +41,7 @@ class ItemGiftInfo
     {
         $this->giftMessageText           = $giftMessageText;
         $this->giftWrapPriceCurrencyId   = $giftWrapPriceCurrencyId;
-        $this->giftWrapPriceAmount       = $giftWrapPriceAmount;
+        $this->giftWrapPriceAmount       = empty($giftWrapPriceAmount) ? null : $giftWrapPriceAmount;
         $this->giftWrapLevel             = $giftWrapLevel;
     }
 

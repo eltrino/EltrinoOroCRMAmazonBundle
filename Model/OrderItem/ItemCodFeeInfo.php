@@ -40,9 +40,9 @@ class ItemCodFeeInfo
                                 $codFeeDiscountAmount)
     {
         $this->codFeeCurrencyId           = $codFeeCurrencyId;
-        $this->codFeeAmount               = $codFeeAmount;
+        $this->codFeeAmount               = empty($codFeeAmount) ? null : $codFeeAmount;
         $this->codFeeDiscountCurrencyId   = $codFeeDiscountCurrencyId;
-        $this->codFeeDiscountAmount       = $codFeeDiscountAmount;
+        $this->codFeeDiscountAmount       = empty($codFeeDiscountAmount) ? null : $codFeeDiscountAmount;
     }
 
     /**
