@@ -1,0 +1,22 @@
+oro_menu_config:
+  items:
+    eltrino_amazon_orders:
+      label: 'eltrino.amazon.orders.label'
+      route: 'eltrino_amazon_order_index'
+      extras:
+        routes: ['eltrino_amazon_*']
+        position: 20
+
+    eltrino_sales:
+      label: 'eltrino.amazon.nav.sales'
+      uri: "#"
+
+  tree:
+    application_menu:
+      children:
+        eltrino_sales:
+          children:
+            eltrino_amazon_orders: ~
+
+oro_titles:
+  eltrino_amazon_orders: 'Amazon Orders'

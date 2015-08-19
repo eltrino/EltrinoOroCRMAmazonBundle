@@ -1,0 +1,9 @@
+eltrino:
+  amazon:
+    transport:
+      rest:
+        label: Amazon
+    orders:
+      label:   Amazon Orders
+    nav:
+      sales:   Sales
