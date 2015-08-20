@@ -19,7 +19,7 @@ Navigate to `System > Package Manager` to install it from [OroCRM Marketplace][1
 
 Add as dependency in composer:
 ```bash
-composer require eltrino/orocrm-amazon-bundle:dev-master
+composer require eltrino/orocrm-amazon-bundle:2.0.3
 ```
 For this bundle to function properly, clear cache by issuing the following command:
 
@@ -27,7 +27,7 @@ For this bundle to function properly, clear cache by issuing the following comma
 
 In addition, run platform update:
 ```bash
-php app/console oro:platform:update
+php app/console oro:platform:update --force --timeout=0
 ```
 
 [1]: http://www.orocrm.com/marketplace/oro-crm/package/orocrm-amazon-integration
