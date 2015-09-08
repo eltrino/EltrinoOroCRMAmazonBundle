@@ -1,0 +1,5 @@
+
+ls:
+    external_code_coverage:
+        timeout: 900
+        runs: 3
