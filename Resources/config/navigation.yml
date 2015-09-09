@@ -19,4 +19,4 @@ oro_menu_config:
             eltrino_amazon_orders: ~
 
 oro_titles:
-  eltrino_amazon_orders: 'Amazon Orders'
+  eltrino_amazon_order_index: 'Amazon Orders'
