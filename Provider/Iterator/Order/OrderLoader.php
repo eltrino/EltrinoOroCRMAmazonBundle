@@ -75,6 +75,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
     protected function processResponse($action, Response $response)
     {
         $result = $response->xml()->children($this->namespace);
+
+        if (empty($result)) {
+            $result = $response->xml();
+        }
+
         $root   = $action . 'Result';
 
         $this->nextToken = null;

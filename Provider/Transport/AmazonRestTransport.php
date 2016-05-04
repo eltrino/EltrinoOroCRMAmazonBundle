@@ -166,6 +166,11 @@ class AmazonRestTransport implements TransportInterface
             throw new \LogicException('Namespace must be initialized!');
         }
         $xml  = $response->xml()->children($this->namespace);
+
+        if (empty($xml)) {
+            $xml  = $response->xml();
+        }
+
         $root = AbstractRestClient::GET_SERVICE_STATUS . 'Result';
 
         return (string)$xml->{$root}->Status === AbstractRestClient::STATUS_GREEN;
