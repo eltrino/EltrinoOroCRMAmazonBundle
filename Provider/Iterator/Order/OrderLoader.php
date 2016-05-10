@@ -127,6 +127,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
         $firstRequest  = new Request(AbstractRestClient::LIST_ORDER_ITEMS, new AmazonOrderIdFilter($amazonOrderId));
         $firstResponse = $this->client->sendRequest($firstRequest);
         $result        = $firstResponse->xml()->children($this->namespace);
+
+        if (empty($result)) {
+            $result = $firstResponse->xml();
+        }
+
         $root          = AbstractRestClient::LIST_ORDER_ITEMS . 'Result';
         $itemsXml      = $result->{$root}->OrderItems;
         $items         = null !== $itemsXml ? $this->extractItems($itemsXml) : [];
@@ -141,6 +146,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
             );
             $response   = $this->client->sendRequest($request);
             $result     = $response->xml()->children($this->namespace);
+
+            if (empty($result)) {
+                $result = $response->xml();
+            }
+
             $itemsXmlNT = $result->{$nextTokenRoot}->OrderItems;
             $items      = null !== $itemsXmlNT ? array_merge($items, $this->extractItems($itemsXmlNT)) : $items;
             $nextToken  = (string)$result->{$nextTokenRoot}->NextToken;
