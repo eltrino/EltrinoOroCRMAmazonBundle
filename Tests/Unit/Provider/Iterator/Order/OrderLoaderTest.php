@@ -78,6 +78,15 @@ class OrderLoaderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->at(2))
             ->method('xml')
             ->willReturn($empty);
+        $this->response
+            ->expects($this->at(3))
+            ->method('xml')
+            ->willReturn($empty);
+        $this->response
+            ->expects($this->at(4))
+            ->method('xml')
+            ->willReturn($empty);
+
         $this->object->load(2);
 
         $this->assertTrue($this->object->isFirstRequestSend());
@@ -104,13 +113,29 @@ class OrderLoaderTest extends \PHPUnit_Framework_TestCase
         $this->response
             ->expects($this->at(3))
             ->method('xml')
-            ->willReturn($ordersByNTXml);
+            ->willReturn($empty);
         $this->response
             ->expects($this->at(4))
             ->method('xml')
             ->willReturn($empty);
         $this->response
             ->expects($this->at(5))
+            ->method('xml')
+            ->willReturn($ordersByNTXml);
+        $this->response
+            ->expects($this->at(6))
+            ->method('xml')
+            ->willReturn($empty);
+        $this->response
+            ->expects($this->at(7))
+            ->method('xml')
+            ->willReturn($empty);
+        $this->response
+            ->expects($this->at(8))
+            ->method('xml')
+            ->willReturn($empty);
+        $this->response
+            ->expects($this->at(9))
             ->method('xml')
             ->willReturn($empty);
 

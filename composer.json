@@ -18,12 +18,14 @@
       {
         "type": "git",
         "url": "https://github.com/orocrm/composer.git"
+      },
+      {
+        "type": "composer",
+        "url": "https://packagist.orocrm.com"
       }
     ],
     "target-dir": "Eltrino/OroCrmAmazonBundle",
     "require": {
-        "php": ">=5.4.4",
-        "oro/platform": ">=2.0.0",
         "oro/crm": ">=2.0.0",
         "guzzle/guzzle": "3.7.*"
     },
