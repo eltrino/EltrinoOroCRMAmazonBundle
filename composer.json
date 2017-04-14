@@ -23,8 +23,8 @@
     "target-dir": "Eltrino/OroCrmAmazonBundle",
     "require": {
         "php": ">=5.4.4",
-        "oro/platform": ">=1.7.0",
-        "oro/crm": ">=1.7.0",
+        "oro/platform": ">=2.0.0",
+        "oro/crm": ">=2.0.0",
         "guzzle/guzzle": "3.7.*"
     },
     "require-dev": {
