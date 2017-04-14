@@ -19,7 +19,7 @@ use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Guzzle\Http\Client;
 
-class RestClientFactoryTest extends \PHPUnit_Framework_TestCase
+class RestClientFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RestClientFactory */
     protected $object;

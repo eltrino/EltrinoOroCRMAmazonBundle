@@ -18,7 +18,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
-class AmazonOrderConnectorTest extends \PHPUnit_Framework_TestCase
+class AmazonOrderConnectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Oro\Bundle\ImportExportBundle\Context\ContextRegistry

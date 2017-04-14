@@ -18,7 +18,7 @@ use Eltrino\OroCrmAmazonBundle\ImportExport\Serializer\OrderDenormalizer;
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonOrderConnector;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
-class OrderDenormalizerTest extends \PHPUnit_Framework_TestCase
+class OrderDenormalizerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Eltrino\OroCrmAmazonBundle\Model\Order\OrderFactory

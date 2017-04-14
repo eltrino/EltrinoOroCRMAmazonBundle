@@ -17,7 +17,7 @@ use Eltrino\OroCrmAmazonBundle\ImportExport\Strategy\OrderStrategy;
 use Doctrine\Common\Collections\ArrayCollection;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
-class OrderStrategyTest extends \PHPUnit_Framework_TestCase
+class OrderStrategyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper

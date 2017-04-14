@@ -16,7 +16,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Filters;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\AmazonOrderIdFilter;
 
-class AmazonOrderIdFilterTest extends \PHPUnit_Framework_TestCase
+class AmazonOrderIdFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {

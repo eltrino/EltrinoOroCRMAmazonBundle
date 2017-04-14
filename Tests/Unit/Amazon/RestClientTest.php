@@ -19,15 +19,15 @@ use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Guzzle\Http\ClientInterface;
 
-class RestClientTest extends \PHPUnit_Framework_TestCase
+class RestClientTest extends \PHPUnit\Framework\TestCase
 {
     /** @var RestClient */
     protected $object;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|ClientInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|ClientInterface */
     protected $client;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultAuthorizationHandler */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultAuthorizationHandler */
     protected $authHandler;
 
     public function setUp()

@@ -16,7 +16,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
 
-class DefaultAuthorizationHandlerTest extends \PHPUnit_Framework_TestCase
+class DefaultAuthorizationHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /** @var DefaultAuthorizationHandler */
     protected $object;

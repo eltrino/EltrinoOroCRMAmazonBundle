@@ -20,20 +20,20 @@ use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Eltrino\OroCrmAmazonBundle\Provider\Transport\AmazonRestTransport;
 use Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport as TransportEntity;
 
-class AmazonRestTransportTest extends \PHPUnit_Framework_TestCase
+class AmazonRestTransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RestClientFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|RestClientFactory
      */
     protected $clientFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FiltersFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|FiltersFactory
      */
     protected $filtersFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RestClient
+     * @var \PHPUnit\Framework\MockObject\MockObject|RestClient
      */
     protected $client;
 

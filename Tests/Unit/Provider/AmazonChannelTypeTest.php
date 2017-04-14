@@ -17,7 +17,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Provider;
 
 use Eltrino\OroCrmAmazonBundle\Provider\AmazonChannelType;
 
-class AmazonChannelTypeTest extends \PHPUnit_Framework_TestCase
+class AmazonChannelTypeTest extends \PHPUnit\Framework\TestCase
 {
     /** @var AmazonChannelType */
     private $channel;

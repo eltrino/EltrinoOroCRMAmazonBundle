@@ -17,12 +17,12 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Client;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\Filter;
 
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit\Framework\TestCase
 {
     /** @var Request */
     protected $object;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Filter */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Filter */
     protected $filter;
 
     public function setUp()

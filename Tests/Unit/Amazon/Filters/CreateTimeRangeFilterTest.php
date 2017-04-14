@@ -16,7 +16,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Filters;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\CreateTimeRangeFilter;
 
-class CreateTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
+class CreateTimeRangeFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {

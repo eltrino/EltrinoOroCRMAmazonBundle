@@ -20,15 +20,15 @@ use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\Order\OrderLoader;
 use Guzzle\Http\Message\Response;
 
-class OrderLoaderTest extends \PHPUnit_Framework_TestCase
+class OrderLoaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RestClient */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|RestClient */
     protected $client;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Filter */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Filter */
     protected $firstFilter;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Response */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Response */
     protected $response;
 
     /** @var OrderLoader */

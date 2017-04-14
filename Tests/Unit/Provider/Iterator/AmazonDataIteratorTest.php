@@ -18,7 +18,7 @@ use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
 use Eltrino\OroCrmAmazonBundle\Provider\Iterator\NextTokenLoaderInterface;
 use Eltrino\PHPUnit\MockAnnotations\MockAnnotations;
 
-class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
+class AmazonDataIteratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var AmazonDataIterator
@@ -26,7 +26,7 @@ class AmazonDataIteratorTest extends \PHPUnit_Framework_TestCase
     private $iterator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|NextTokenLoaderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|NextTokenLoaderInterface
      * @Mock Eltrino\OroCrmAmazonBundle\Provider\Iterator\NextTokenLoaderInterface
      */
     private $loader;

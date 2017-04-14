@@ -16,7 +16,7 @@ namespace Eltrino\OroCrmAmazonBundle\Tests\Unit\Amazon\Filters;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Filters\ModTimeRangeFilter;
 
-class ModTimeRangeFilterTest extends \PHPUnit_Framework_TestCase
+class ModTimeRangeFilterTest extends \PHPUnit\Framework\TestCase
 {
     public function testProcess()
     {
