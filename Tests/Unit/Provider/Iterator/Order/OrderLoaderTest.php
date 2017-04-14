@@ -22,13 +22,13 @@ use Guzzle\Http\Message\Response;
 
 class OrderLoaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|RestClient */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|RestClient */
     protected $client;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|Filter */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Filter */
     protected $firstFilter;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|Response */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Response */
     protected $response;
 
     /** @var OrderLoader */

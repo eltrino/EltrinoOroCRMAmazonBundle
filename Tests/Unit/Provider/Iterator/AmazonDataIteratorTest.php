@@ -26,7 +26,7 @@ class AmazonDataIteratorTest extends \PHPUnit\Framework\TestCase
     private $iterator;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|NextTokenLoaderInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|NextTokenLoaderInterface
      * @Mock Eltrino\OroCrmAmazonBundle\Provider\Iterator\NextTokenLoaderInterface
      */
     private $loader;

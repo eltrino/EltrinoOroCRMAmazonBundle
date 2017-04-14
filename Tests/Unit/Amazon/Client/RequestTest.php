@@ -22,7 +22,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /** @var Request */
     protected $object;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|Filter */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|Filter */
     protected $filter;
 
     public function setUp()

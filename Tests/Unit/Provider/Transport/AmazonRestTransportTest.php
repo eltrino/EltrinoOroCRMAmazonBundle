@@ -23,17 +23,17 @@ use Eltrino\OroCrmAmazonBundle\Entity\AmazonRestTransport as TransportEntity;
 class AmazonRestTransportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RestClientFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|RestClientFactory
      */
     protected $clientFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FiltersFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|FiltersFactory
      */
     protected $filtersFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RestClient
+     * @var \PHPUnit_Framework_MockObject_MockObject|RestClient
      */
     protected $client;
 

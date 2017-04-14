@@ -24,10 +24,10 @@ class RestClientTest extends \PHPUnit\Framework\TestCase
     /** @var RestClient */
     protected $object;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ClientInterface */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ClientInterface */
     protected $client;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|DefaultAuthorizationHandler */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultAuthorizationHandler */
     protected $authHandler;
 
     public function setUp()

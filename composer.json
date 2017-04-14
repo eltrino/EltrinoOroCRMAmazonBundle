@@ -30,7 +30,8 @@
         "guzzle/guzzle": "3.7.*"
     },
     "require-dev": {
-        "eltrino/phpunit-mockannotations": "1.0.*"
+        "phpunit/phpunit":"~6.1",
+        "eltrino/phpunit-mockannotations": "~2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
