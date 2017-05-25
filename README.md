@@ -11,27 +11,13 @@ Eltrino team is working on improvements for this bundle, as well as on support f
 
 ## Installation
 
-### Marketplace
+Please refer to the instruction described in [How to Manage OroPlatform Extensions][2] article. 
 
-Navigate to `System > Package Manager` to install it from [OroCRM Marketplace][1]
-
-### Composer
-
-Add as dependency in composer:
-```bash
-composer require eltrino/orocrm-amazon-bundle:2.*
-```
-For this bundle to function properly, clear cache by issuing the following command:
-
-```php app/console cache:clear --no-warmup```
-
-In addition, run platform update:
-```bash
-php app/console oro:platform:update --force --timeout=0
-```
-
-[1]: http://www.orocrm.com/marketplace/oro-crm/package/orocrm-amazon-integration
+Package/Extension name to use is `eltrino/orocrm-amazon-bundle`
 
 ## Contributing
 
 We welcome all kinds of contributions in the form of bug reporting, patches submitting, feature requests or documentation enhancement. Please refer to our [guidelines for contributing](https://github.com/eltrino/EltrinoOroCRMAmazonBundle/blob/master/Contributing.md) if you wish to be a part of the project.
+
+[1]: http://www.orocrm.com/marketplace/oro-crm/package/orocrm-amazon-integration
+[2]: https://www.orocrm.com/documentation/current/cookbook/how-to-install-extension-from-command-line#using-the-package-manager
