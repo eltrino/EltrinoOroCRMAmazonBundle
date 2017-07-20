@@ -1,4 +1,4 @@
-datagrid:
+datagrids:
     amazon-orders-grid:
         source:
             type: orm
