@@ -46,6 +46,19 @@ class OrderFactory
         $paymentMethod                = (string) $data->PaymentMethod;
         $currencyId                   = (string) $data->OrderTotal->CurrencyCode;
         $totalAmount                  = (string) $data->OrderTotal->Amount;
+        
+        // Contingency for strict SQL checks in MySQL 5.7
+        // See: https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-strict
+        
+        // Decimal
+        foreach (['totalAmount'] as $k) {
+            ${$k} = ('' === ${$k}) ? null : (float)${$k};
+        }
+        
+        // Integer
+        foreach (['numberOfItemsShipped', 'numberOfItemsUnshipped'] as $k) {
+            ${$k} = ('' === ${$k}) ? null : (int)${$k};
+        }
 
         $shipping     = new Shipping($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped, $numberOfItemsUnshipped);
         $payment      = new Payment($paymentMethod, $currencyId, $totalAmount);
@@ -82,6 +95,19 @@ class OrderFactory
             $giftWrapPriceAmount         = (string) $item->GiftWrapPrice->Amount;
             $giftWrapLevel               = (string) $item->GiftWrapLevel;
             $condition                   = (string) $item->ConditionId;
+        
+            // Contingency for strict SQL checks in MySQL 5.7
+            // See: https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-strict
+
+            // Decimal
+            foreach (['itemPriceAmount', 'shippingPriceAmount', 'codFeeAmount', 'codFeeDiscountAmount', 'giftWrapPriceAmount'] as $k) {
+                ${$k} = ('' === ${$k}) ? null : (float)${$k};
+            }
+
+            // Integer
+            foreach (['quantityOrdered', 'quantityShipped'] as $k) {
+                ${$k} = ('' === ${$k}) ? null : (int)${$k};
+            }
 
             $itemInfo         = new ItemInfo($orderItemId, $title, $quantityOrdered, $quantityShipped,
                 $itemPriceCurrencyId, $itemPriceAmount, $condition);
