@@ -13,38 +13,38 @@ datagrids:
                         - { join: o.channel, alias: ch }
         columns:
             channelName:
-                label: Channel
+                label: eltrino.orocrmamazon.order.channel.label
             amazonOrderId:
-                label: Amazon Order Id
+                label: eltrino.orocrmamazon.order.amazon_order_id.label
             marketPlaceId:
-                label: Market Place ID
+                label: eltrino.orocrmamazon.order.market_place_id.label
             salesChannel:
-                label: Sales Channel
+                label: eltrino.orocrmamazon.order.sales_channel.label
             orderType:
-                label: Order Type
+                label: eltrino.orocrmamazon.order.order_type.label
             orderStatus:
-                label: Order Status
+                label: eltrino.orocrmamazon.order.order_status.label
             fulfillmentChannel:
-                label: Fulfillment Channel
+                label: eltrino.orocrmamazon.order.fulfillment_channel.label
             shipServiceLevel:
-                label: Ship Service Level
+                label: eltrino.orocrmamazon.order.ship_service_level.label
             shipmentServiceLevelCategory:
-                label: Shipment Service Level Category
+                label: eltrino.orocrmamazon.order.shipment_service_level_category.label
             numberOfItemsShipped:
-                label: Number Of Shipped Items
+                label: eltrino.orocrmamazon.order.number_of_items_shipped.label
             numberOfItemsUnshipped:
-                label: Number Of Unshipped Items
+                label: eltrino.orocrmamazon.order.number_of_items_unshipped.label
             currencyId:
-                label: Currency
+                label: eltrino.orocrmamazon.order.currency_id.label
             paymentMethod:
-                label: Payment Method
+                label: eltrino.orocrmamazon.order.payment_method.label
             totalAmount:
-                label: Total Amount
+                label: eltrino.orocrmamazon.order.total_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
             createdAt:
-                label: Created At
+                label: eltrino.orocrmamazon.order.created_at.label
                 frontend_type: datetime
         properties:
             id: ~
@@ -124,7 +124,7 @@ datagrids:
         actions:
             view:
                 type:         navigate
-                label:        eltrino.amazon.datagrid.actions.view.label
+                label:        eltrino.orocrmamazon.datagrid.actions.view.label
                 link:         view_link
                 icon:         eye-open
                 rowAction:    true
@@ -144,31 +144,31 @@ datagrids:
                         - o.order = :id
         columns:
             asin:
-                label: asin
+                label: eltrino.orocrmamazon.orderitem.asin.label
             orderItemId:
-                label: Order Item ID
+                label: eltrino.orocrmamazon.orderitem.order_item_id.label
             sellerSku:
-                label: Seller Sku
+                label: eltrino.orocrmamazon.orderitem.seller_sku.label
             title:
-                label: Title
+                label: eltrino.orocrmamazon.orderitem.title.label
             quantityOrdered:
-                label: Qty Ordered
+                label: eltrino.orocrmamazon.orderitem.quantity_ordered.label
             quantityShipped:
-                label: Qty Shipped
+                label: eltrino.orocrmamazon.orderitem.quantity_shipped.label
             condition:
-                label: Condition
+                label: eltrino.orocrmamazon.orderitem.condition.label
             shippingPriceAmount:
-                label:  Shipping Price
+                label:  eltrino.orocrmamazon.orderitem.shipping_price_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverShippingCurrencyClosure
             giftWrapPriceAmount:
-                label:  Gift Price
+                label:  eltrino.orocrmamazon.orderitem.gift_wrap_price_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverGiftCurrencyClosure
             itemPriceAmount:
-                label:  Item Price
+                label:  eltrino.orocrmamazon.orderitem.item_price_amount.label
                 type:   localized_number
                 method: formatCurrency
                 context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverItemCurrencyClosure

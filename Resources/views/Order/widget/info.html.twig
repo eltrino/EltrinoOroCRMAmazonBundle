@@ -4,17 +4,17 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('Status'|trans, entity.orderStatus|trans) }}
-            {{ ui.renderProperty('Order Type'|trans, entity.orderType|trans) }}
-            {{ ui.renderProperty('Buyer Email'|trans, entity.customerEmail|trans) }}
-            {{ ui.renderProperty('Sales Channel'|trans, entity.salesChannel|trans) }}
-            {{ ui.renderProperty('Shipment Level'|trans, entity.shipServiceLevel|trans) }}
-            {{ ui.renderProperty('Shipment Category'|trans, entity.shipmentServiceLevelCategory|trans) }}
-            {{ ui.renderProperty('Shipped Items'|trans, entity.numberOfItemsShipped|trans) }}
-            {{ ui.renderProperty('Unshipped Items'|trans, entity.numberOfItemsUnshipped|trans) }}
-            {{ ui.renderProperty('Payment Method'|trans, entity.paymentMethod|trans) }}
-            {{ ui.renderProperty('Currency'|trans, entity.currencyId|trans) }}
-            {{ ui.renderProperty('Total'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currencyId})) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.order_status.label'|trans, entity.orderStatus) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.order_type.label'|trans, entity.orderType) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.customer_email.label'|trans, entity.customerEmail) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.sales_channel.label'|trans, entity.salesChannel) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.ship_service_level.label'|trans, entity.shipServiceLevel) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.shipment_service_level_category.label'|trans, entity.shipmentServiceLevelCategory) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_shipped.label'|trans, entity.numberOfItemsShipped) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_unshipped.label'|trans, entity.numberOfItemsUnshipped) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.payment_method.label'|trans, entity.paymentMethod) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.currency_id.label'|trans, entity.currencyId) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currencyId})) }}
         </div>
     </div>
 </div>
