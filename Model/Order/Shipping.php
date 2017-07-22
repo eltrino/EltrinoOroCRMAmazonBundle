@@ -43,10 +43,10 @@ class Shipping
     public function __construct($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped,
                                 $numberOfItemsUnshipped)
     {
-        $this->shipServiceLevel             = $shipServiceLevel;
-        $this->shipmentServiceLevelCategory = $shipmentServiceLevelCategory;
-        $this->numberOfItemsShipped         = $numberOfItemsShipped;
-        $this->numberOfItemsUnshipped       = $numberOfItemsUnshipped;
+        $this->setShipServiceLevel($shipServiceLevel);
+        $this->setShipmentServiceLevelCategory($shipmentServiceLevelCategory);
+        $this->setNumberOfItemsShipped($numberOfItemsShipped);
+        $this->setNumberOfItemsUnshipped($numberOfItemsUnshipped);
     }
 
     /**
@@ -56,6 +56,17 @@ class Shipping
     {
         return $this->shipServiceLevel;
     }
+    
+    /**
+     * @param string $shipServiceLevel
+     * @return $this
+     */
+    public function setShipServiceLevel($shipServiceLevel)
+    {
+        $this->shipServiceLevel = $shipServiceLevel;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -63,6 +74,17 @@ class Shipping
     public function getShipmentServiceLevelCategory()
     {
         return $this->shipmentServiceLevelCategory;
+    }
+    
+    /**
+     * @param string $shipmentServiceLevelCategory
+     * @return $this
+     */
+    public function setShipmentServiceLevelCategory($shipmentServiceLevelCategory)
+    {
+        $this->shipmentServiceLevelCategory = $shipmentServiceLevelCategory;
+        
+        return $this;
     }
 
     /**
@@ -72,6 +94,27 @@ class Shipping
     {
         return $this->numberOfItemsShipped;
     }
+    
+    /**
+     * @param integer $numberOfItemsShipped
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setNumberOfItemsShipped($numberOfItemsShipped)
+    {
+        if (!is_null($numberOfItemsShipped)) {
+            if (!is_int($numberOfItemsShipped) && !ctype_digit($numberOfItemsShipped)) {
+                throw new \InvalidArgumentException(sprintf(
+                        "Expected integer value for numberOfItemsShipped. Received %s",
+                        $numberOfItemsShipped
+                    ));
+            }
+            $numberOfItemsShipped = (int)$numberOfItemsShipped;
+        }
+        $this->numberOfItemsShipped = $numberOfItemsShipped;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -79,5 +122,26 @@ class Shipping
     public function getNumberOfItemsUnshipped()
     {
         return $this->numberOfItemsUnshipped;
+    }
+    
+    /**
+     * @param integer $numberOfItemsUnshipped
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setNumberOfItemsUnshipped($numberOfItemsUnshipped)
+    {
+        if (!is_null($numberOfItemsUnshipped)) {
+            if (!is_int($numberOfItemsUnshipped) && !ctype_digit($numberOfItemsUnshipped)) {
+                throw new \InvalidArgumentException(sprintf(
+                        "Expected integer value for numberOfItemsUnshipped. Received %s",
+                        $numberOfItemsUnshipped
+                    ));
+            }
+            $numberOfItemsUnshipped = (int)$numberOfItemsUnshipped;
+        }
+        $this->numberOfItemsUnshipped = $numberOfItemsUnshipped;
+        
+        return $this;
     }
 }

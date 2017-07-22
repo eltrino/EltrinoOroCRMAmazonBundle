@@ -50,12 +50,12 @@ class OrderDetails
 
     function __construct($salesChannel, $orderType, $fulfillmentChannel, $orderStatus, Payment $payment, Shipping $shipping)
     {
-        $this->salesChannel       = $salesChannel;
-        $this->orderType          = $orderType;
-        $this->fulfillmentChannel = $fulfillmentChannel;
-        $this->orderStatus        = $orderStatus;
-        $this->payment            = $payment;
-        $this->shipping           = $shipping;
+        $this->setSalesChannel($salesChannel);
+        $this->setOrderType($orderType);
+        $this->setFulfillmentChannel($fulfillmentChannel);
+        $this->setOrderStatus($orderStatus);
+        $this->setPayment($payment);
+        $this->setShipping($shipping);
     }
 
     /**
@@ -65,6 +65,17 @@ class OrderDetails
     {
         return $this->salesChannel;
     }
+    
+    /**
+     * @param string $salesChannel
+     * @return $this
+     */
+    public function setSalesChannel($salesChannel)
+    {
+        $this->salesChannel = $salesChannel;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -72,6 +83,17 @@ class OrderDetails
     public function getOrderType()
     {
         return $this->orderType;
+    }
+    
+    /**
+     * @param string $orderType
+     * @return $this
+     */
+    public function setOrderType($orderType)
+    {
+        $this->orderType = $orderType;
+        
+        return $this;
     }
 
     /**
@@ -81,6 +103,17 @@ class OrderDetails
     {
         return $this->fulfillmentChannel;
     }
+    
+    /**
+     * @param string $fulfillmentChannel
+     * @return $this
+     */
+    public function setFulfillmentChannel($fulfillmentChannel)
+    {
+        $this->fulfillmentChannel = $fulfillmentChannel;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -88,6 +121,17 @@ class OrderDetails
     public function getOrderStatus()
     {
         return $this->orderStatus;
+    }
+    
+    /**
+     * @param string $orderStatus
+     * @return $this
+     */
+    public function setOrderStatus($orderStatus)
+    {
+        $this->orderStatus = $orderStatus;
+        
+        return $this;
     }
 
     /**
@@ -97,6 +141,17 @@ class OrderDetails
     {
         return $this->payment;
     }
+    
+    /**
+     * @param Payment|null $payment
+     * @return $this
+     */
+    public function setPayment(Payment $payment=null)
+    {
+        $this->payment = $payment;
+        
+        return $this;
+    }
 
     /**
      * @return Shipping
@@ -104,6 +159,17 @@ class OrderDetails
     public function getShipping()
     {
         return $this->shipping;
+    }
+    
+    /**
+     * @param Shipping|null $shipping
+     * @return $this
+     */
+    public function setShipping(Shipping $shipping = null)
+    {
+        $this->shipping = $shipping;
+        
+        return $this;
     }
 
 }

@@ -102,13 +102,19 @@ class Order
     public function __construct($amazonOrderId, $customerEmail, $marketPlaceId, OrderDetails $orderDetails,
                                 $createdAt = null)
     {
-        $this->amazonOrderId = $amazonOrderId;
-        $this->customerEmail = $customerEmail;
-        $this->marketPlaceId = $marketPlaceId;
-        $this->orderDetails  = $orderDetails;
-        $this->createdAt     = is_null($createdAt) ? new \DateTime('now') : $createdAt;
+        $this->setAmazonOrderId($amazonOrderId);
+        $this->setCustomerEmail($customerEmail);
+        $this->setMarketPlaceId($marketPlaceId);
+        $this->setOrderDetails($orderDetails);
 
-        $this->updatedAt = clone $this->createdAt;
+        if (is_null($createdAt)) {
+            $createdAt = new \DateTime("now");
+        }
+        $this->setCreatedAt($createdAt);
+
+        $updatedAt = clone $createdAt;
+        $this->setUpdatedAt($updatedAt);
+
 
         $this->items = new ArrayCollection();
 
@@ -124,6 +130,17 @@ class Order
     {
         return $this->amazonOrderId;
     }
+    
+    /**
+     * @param string $amazonOrderId
+     * @return $this
+     */
+    public function setAmazonOrderId($amazonOrderId)
+    {
+        $this->amazonOrderId = $amazonOrderId;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -131,6 +148,17 @@ class Order
     public function getCustomerEmail()
     {
         return $this->customerEmail;
+    }
+    
+    /**
+     * @param string $customerEmail
+     * @return $this
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+        
+        return $this;
     }
 
     /**
@@ -148,6 +176,17 @@ class Order
     {
         return $this->marketPlaceId;
     }
+    
+    /**
+     * @param string $marketPlaceId
+     * @return $this
+     */
+    public function setMarketPlaceId($marketPlaceId)
+    {
+        $this->marketPlaceId = $marketPlaceId;
+        
+        return $this;
+    }
 
     /**
      * @return \DateTime
@@ -156,6 +195,17 @@ class Order
     {
         return $this->createdAt;
     }
+    
+    /**
+     * @param \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt=null)
+    {
+        $this->createdAt = $createdAt;
+        
+        return $this;
+    }
 
     /**
      * @return \DateTime
@@ -163,6 +213,17 @@ class Order
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+    
+    /**
+     * @param \DateTime $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt=null)
+    {
+        $this->updatedAt = $updatedAt;
+        
+        return $this;
     }
 
     /**

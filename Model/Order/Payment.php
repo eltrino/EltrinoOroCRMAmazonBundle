@@ -37,9 +37,9 @@ class Payment
 
     public function __construct($paymentMethod, $currencyId, $totalAmount)
     {
-        $this->paymentMethod  = $paymentMethod;
-        $this->currencyId     = $currencyId;
-        $this->totalAmount    = $totalAmount;
+        $this->setPaymentMethod($paymentMethod);
+        $this->setCurrencyId($currencyId);
+        $this->setTotalAmount($totalAmount);
     }
 
     /**
@@ -49,6 +49,20 @@ class Payment
     {
         return $this->totalAmount;
     }
+    
+    /**
+     * @param float $totalAmount
+     * @return $this
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        if (!is_null($totalAmount)) {
+            $totalAmount = (float)$totalAmount;
+        }
+        $this->totalAmount = $totalAmount;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -56,6 +70,17 @@ class Payment
     public function getCurrencyId()
     {
         return $this->currencyId;
+    }
+    
+    /**
+     * @param string $currencyId
+     * @return $this
+     */
+    public function setCurrencyId($currencyId)
+    {
+        $this->currencyId = $currencyId;
+        
+        return $this;
     }
 
     /**
@@ -66,5 +91,15 @@ class Payment
         return $this->paymentMethod;
     }
 
+    /**
+     * @param string $paymentMethod
+     * @return $this
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+        
+        return $this;
+    }
 
 }
