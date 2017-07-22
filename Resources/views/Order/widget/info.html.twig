@@ -21,10 +21,10 @@
             {{ ui.renderProperty('eltrino.orocrmamazon.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currencyId})) }}
         </div>
         <div class="responsive-block">
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_business_order.label'|trans, entity.isBusinessOrder) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_premium_order.label'|trans, entity.isPremiumOrder) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_prime.label'|trans, entity.isPrime) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_replacement_order.label'|trans, entity.isReplacementOrder) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_business_order.label'|trans, (entity.isBusinessOrder ? 'Yes' : 'No')|trans) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_premium_order.label'|trans, (entity.isPremiumOrder ? 'Yes' : 'No')|trans) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_prime.label'|trans, (entity.isPrime ? 'Yes' : 'No')|trans) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_replacement_order.label'|trans, (entity.isReplacementOrder ? 'Yes' : 'No')|trans) }}
         </div>
     </div>
 </div>
