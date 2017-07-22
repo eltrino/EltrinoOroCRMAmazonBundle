@@ -24,6 +24,18 @@ class FormatterContextResolver
      *
      * @return callable
      */
+    public static function getResolverCurrencyClosure()
+    {
+        return function (ResultRecordInterface $record, $value, NumberFormatter $formatter) {
+            return [$record->getValue('currency_id')];
+        };
+    }
+    
+    /**
+     * Return currency from given row
+     *
+     * @return callable
+     */
     public static function getResolverShippingCurrencyClosure()
     {
         return function (ResultRecordInterface $record, $value, NumberFormatter $formatter) {
