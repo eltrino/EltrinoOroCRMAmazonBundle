@@ -80,6 +80,13 @@ class Order
      * @ORM\Column(name="updated_at", type="datetime")
      */
     private $updatedAt;
+    
+    /**
+     * @var \DateTime $lastUpdateDate
+     *
+     * @ORM\Column(name="last_update_date", type="datetime")
+     */
+    private $lastUpdateDate;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -99,8 +106,14 @@ class Order
      * @param OrderDetails $orderDetails
      * @param null $createdAt
      */
-    public function __construct($amazonOrderId, $customerEmail, $marketPlaceId, OrderDetails $orderDetails,
-                                $createdAt = null)
+    public function __construct(
+        $amazonOrderId, 
+        $customerEmail, 
+        $marketPlaceId, 
+        OrderDetails $orderDetails,
+        \DateTime $createdAt = null,
+        \DateTime $lastUpdateDate=null
+    ) 
     {
         $this->setAmazonOrderId($amazonOrderId);
         $this->setCustomerEmail($customerEmail);
@@ -115,6 +128,7 @@ class Order
         $updatedAt = clone $createdAt;
         $this->setUpdatedAt($updatedAt);
 
+        $this->setLastUpdateDate($lastUpdateDate);
 
         $this->items = new ArrayCollection();
 
@@ -227,6 +241,25 @@ class Order
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getLastUpdateDate()
+    {
+        return $this->lastUpdateDate;
+    }
+    
+    /**
+     * @param \DateTime $lastUpdateDate
+     * @return $this
+     */
+    public function setLastUpdateDate(\DateTime $lastUpdateDate=null)
+    {
+        $this->lastUpdateDate = $lastUpdateDate;
+        
+        return $this;
+    }
+    
+    /**
      * @return ArrayCollection
      */
     public function getItems()
@@ -255,12 +288,25 @@ class Order
     private function initOrderDetails()
     {
         if (is_null($this->orderDetails)) {
-            $payment  = $this->initPayment($this->paymentMethod, $this->currencyId, $this->totalAmount);
-            $shipping = $this->initShipping($this->shipServiceLevel, $this->shipmentServiceLevelCategory,
-                $this->numberOfItemsShipped, $this->numberOfItemsUnshipped);
-
-            $this->orderDetails = new OrderDetails($this->salesChannel, $this->orderType, $this->fulfillmentChannel,
-                $this->orderStatus, $payment, $shipping);
+            $payment  = $this->initPayment(
+                    $this->paymentMethod, 
+                    $this->currencyId, 
+                    $this->totalAmount
+                );
+            $shipping = $this->initShipping(
+                    $this->shipServiceLevel, 
+                    $this->shipmentServiceLevelCategory,
+                    $this->numberOfItemsShipped, 
+                    $this->numberOfItemsUnshipped
+                );
+            $this->orderDetails = new OrderDetails(
+                    $this->salesChannel, 
+                    $this->orderType, 
+                    $this->fulfillmentChannel,
+                    $this->orderStatus, 
+                    $payment, 
+                    $shipping
+                );
         }
     }
 }

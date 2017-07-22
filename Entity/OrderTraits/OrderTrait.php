@@ -307,4 +307,187 @@ trait OrderTrait
         
         return $this;
     }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getPurchaseDate()
+    {
+        return $this->purchaseDate;
+    }
+
+    /**
+     * @param \DateTime $purchaseDate
+     * @return $this
+     */
+    public function setPurchaseDate(\DateTime $purchaseDate=null)
+    {
+        $this->purchaseDate = $purchaseDate;
+        
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerName()
+    {
+        return $this->customerName;
+    }
+    
+    /**
+     * @param string $customerName
+     * @return $this
+     */
+    public function setCustomerName($customerName)
+    {
+        $this->customerName = $customerName;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getSellerOrderId()
+    {
+        return $this->sellerOrderId;
+    }
+    
+    /**
+     * @param string $sellerOrderId
+     * @return $this
+     */
+    public function setSellerOrderId($sellerOrderId)
+    {
+        $this->sellerOrderId = $sellerOrderId;
+        
+        return $this;
+    }
+    
+    /**
+     * @return \DateTime
+     */
+    public function getEarliestShipDate()
+    {
+        return $this->earliestShipDate;
+    }
+    
+    /**
+     * @param \DateTime $earliestShipDate
+     * @return $this
+     */
+    public function setEarliestShipDate(\DateTime $earliestShipDate=null)
+    {
+        $this->earliestShipDate = $earliestShipDate;
+        
+        return $this;
+    }
+    
+    /**
+     * @return \DateTime
+     */
+    public function getLatestShipDate()
+    {
+        return $this->latestShipDate;
+    }
+    
+    /**
+     * @param \DateTime $latestShipDate
+     * @return $this
+     */
+    public function setLatestShipDate(\DateTime $latestShipDate=null)
+    {
+        $this->latestShipDate = $latestShipDate;
+        
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsPremiumOrder()
+    {
+        return $this->isPremiumOrder;
+    }
+    
+    /**
+     * @param boolean $isPremiumOrder
+     * @return $this
+     */
+    public function setIsPremiumOrder($isPremiumOrder)
+    {
+        if (!is_null($isPremiumOrder)) {
+            $isPremiumOrder = (bool)$isPremiumOrder;
+        }
+        $this->isPremiumOrder = $isPremiumOrder;
+        
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsReplacementOrder()
+    {
+        return $this->isReplacementOrder;
+    }
+    
+    /**
+     * @param boolean $isReplacementOrder
+     * @return $this
+     */
+    public function setIsReplacementOrder($isReplacementOrder)
+    {
+        if (!is_null($isReplacementOrder)) {
+            $isReplacementOrder = (bool)$isReplacementOrder;
+        }
+        $this->isReplacementOrder = $isReplacementOrder;
+        
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsBusinessOrder()
+    {
+        return $this->isBusinessOrder;
+    }
+    
+    /**
+     * @param boolean $isBusinessOrder
+     * @return $this
+     */
+    public function setIsBusinessOrder($isBusinessOrder)
+    {
+        if (!is_null($isBusinessOrder)) {
+            $isBusinessOrder = (bool)$isBusinessOrder;
+        }
+        $this->isBusinessOrder = $isBusinessOrder;
+        
+        return $this;
+    }
+    
+    /**
+     * @return boolean
+     */
+    public function getIsPrime()
+    {
+        return $this->isPrime;
+    }
+    
+    /**
+     * @param boolean $isPrime
+     * @return $this
+     */
+    public function setIsPrime($isPrime)
+    {
+        if (!is_null($isPrime)) {
+            $isPrime = (bool)$isPrime;
+        }
+        $this->isPrime = $isPrime;
+        
+        return $this;
+    }
 }

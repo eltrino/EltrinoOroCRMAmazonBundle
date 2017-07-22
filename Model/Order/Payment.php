@@ -24,6 +24,11 @@ class Payment
      * @var string
      */
     private $paymentMethod;
+    
+    /**
+     * @var string
+     */
+    private $paymentMethodDetail;
 
     /**
      * @var string
@@ -35,11 +40,22 @@ class Payment
      */
     private $totalAmount;
 
-    public function __construct($paymentMethod, $currencyId, $totalAmount)
-    {
+    /**
+     * @param string $paymentMethod
+     * @param string $currencyId
+     * @param float $totalAmount
+     * @param string $paymentMethodDetail
+     */
+    public function __construct(
+        $paymentMethod=null, 
+        $currencyId=null,
+        $totalAmount=null,
+        $paymentMethodDetail=null
+    ) {
         $this->setPaymentMethod($paymentMethod);
         $this->setCurrencyId($currencyId);
         $this->setTotalAmount($totalAmount);
+        $this->setPaymentMethodDetail($paymentMethodDetail);
     }
 
     /**
@@ -98,6 +114,25 @@ class Payment
     public function setPaymentMethod($paymentMethod)
     {
         $this->paymentMethod = $paymentMethod;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPaymentMethodDetail()
+    {
+        return $this->paymentMethodDetail;
+    }
+    
+    /**
+     * @param string $paymentMethodDetail
+     * @return $this
+     */
+    public function setPaymentMethodDetail($paymentMethodDetail)
+    {
+        $this->paymentMethodDetail = $paymentMethodDetail;
         
         return $this;
     }

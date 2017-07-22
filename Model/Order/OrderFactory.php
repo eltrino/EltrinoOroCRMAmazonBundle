@@ -32,6 +32,8 @@ class OrderFactory
      */
     public function createOrder(SimpleXMLElement $data)
     {
+        $purchaseDate                 = (string) $data->PurchaseDate;
+        $customerName                 = (string) $data->BuyerName;
         $amazonOrderId                = (string) $data->AmazonOrderId;
         $customerEmail                = (string) $data->BuyerEmail;
         $marketPlaceId                = (string) $data->MarketplaceId;
@@ -44,8 +46,17 @@ class OrderFactory
         $numberOfItemsShipped         = (string) $data->NumberOfItemsShipped;
         $numberOfItemsUnshipped       = (string) $data->NumberOfItemsUnshipped;
         $paymentMethod                = (string) $data->PaymentMethod;
+        $paymentMethodDetail          = (string) $data->PaymentMethodDetails->PaymentMethodDetail;
         $currencyId                   = (string) $data->OrderTotal->CurrencyCode;
         $totalAmount                  = (string) $data->OrderTotal->Amount;
+        $sellerOrderId                = (string) $data->SellerOrderId;
+        $earliestShipDate             = (string) $data->EarliestShipDate;
+        $latestShipDate               = (string) $data->LatestShipDate;
+        $isPremiumOrder               = (string) $data->IsPremiumOrder;
+        $isReplacementOrder           = (string) $data->IsReplacementOrder;
+        $isBusinessOrder              = (string) $data->IsBusinessOrder;
+        $isPrime                      = (string) $data->IsPrime;
+        $lastUpdateDate               = (string) $data->LastUpdateDate;
         
         // Contingency for strict SQL checks in MySQL 5.7
         // See: https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-strict
@@ -59,12 +70,55 @@ class OrderFactory
         foreach (['numberOfItemsShipped', 'numberOfItemsUnshipped'] as $k) {
             ${$k} = ('' === ${$k}) ? null : (int)${$k};
         }
+        
+        // Boolean
+        foreach (['isPremiumOrder', 'isReplacementOrder', 'isBusinessOrder', 'isPrime'] as $k) {
+            ${$k} = ('' === ${$k}) ? null : (bool)${$k};
+        }
+        
+        // DateTime
+        foreach (['purchaseDate', 'earliestShipDate', 'latestShipDate', 'lastUpdateDate'] as $k) {
+            ${$k} = ('' === ${$k}) ? null : new \DateTime(${$k});
+        }
 
-        $shipping     = new Shipping($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped, $numberOfItemsUnshipped);
-        $payment      = new Payment($paymentMethod, $currencyId, $totalAmount);
-        $orderDetails = new OrderDetails($salesChannel, $orderType, $fulfillmentChannel, $orderStatus, $payment, $shipping);
+        $shipping = new Shipping(
+                $shipServiceLevel, 
+                $shipmentServiceLevelCategory, 
+                $numberOfItemsShipped, 
+                $numberOfItemsUnshipped
+            );
+        $payment = new Payment(
+                $paymentMethod, 
+                $currencyId, 
+                $totalAmount,
+                $paymentMethodDetail
+            );
+        $orderDetails = new OrderDetails(
+                $salesChannel, 
+                $orderType, 
+                $fulfillmentChannel, 
+                $orderStatus, 
+                $payment, 
+                $shipping,
+                $purchaseDate,
+                $customerName,
+                $sellerOrderId,
+                $earliestShipDate,
+                $latestShipDate,
+                $isPremiumOrder,
+                $isReplacementOrder,
+                $isBusinessOrder,
+                $isPrime
+            );
 
-        $order = new Order($amazonOrderId, $customerEmail, $marketPlaceId, $orderDetails);
+        $order = new Order(
+                $amazonOrderId, 
+                $customerEmail, 
+                $marketPlaceId, 
+                $orderDetails,
+                new \DateTime("now"),
+                $lastUpdateDate
+            );
 
         return $this->processOrderItems($data->OrderItems, $order);
     }

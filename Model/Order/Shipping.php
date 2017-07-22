@@ -40,9 +40,18 @@ class Shipping
      */
     private $numberOfItemsUnshipped;
 
-    public function __construct($shipServiceLevel, $shipmentServiceLevelCategory, $numberOfItemsShipped,
-                                $numberOfItemsUnshipped)
-    {
+    /**
+     * @param string $shipServiceLevel
+     * @param string $shipmentServiceLevelCategory
+     * @param integer $numberOfItemsShipped
+     * @param type $numberOfItemsUnshipped
+     */
+    public function __construct(
+        $shipServiceLevel=null,
+        $shipmentServiceLevelCategory=null, 
+        $numberOfItemsShipped=null,
+        $numberOfItemsUnshipped=null
+    ) {
         $this->setShipServiceLevel($shipServiceLevel);
         $this->setShipmentServiceLevelCategory($shipmentServiceLevelCategory);
         $this->setNumberOfItemsShipped($numberOfItemsShipped);
