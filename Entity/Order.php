@@ -300,6 +300,17 @@ class Order extends ExtendOrder
         $this->initOrderDetails();
         return $this->orderDetails;
     }
+    
+    /**
+     * @param OrderDetails $orderDetails
+     * @return $this
+     */
+    public function setOrderDetails(OrderDetails $orderDetails)
+    {
+        $this->orderDetails = $orderDetails;
+        
+        return $this;
+    }
 
     private function initOrderDetails()
     {
