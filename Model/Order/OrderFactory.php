@@ -71,9 +71,9 @@ class OrderFactory
             ${$k} = ('' === ${$k}) ? null : (int)${$k};
         }
         
-        // Boolean
+        // Boolean (words)
         foreach (['isPremiumOrder', 'isReplacementOrder', 'isBusinessOrder', 'isPrime'] as $k) {
-            ${$k} = ('' === ${$k}) ? null : (bool)${$k};
+            ${$k} = ('' === ${$k}) ? null : ('true' == ${$k});
         }
         
         // DateTime
