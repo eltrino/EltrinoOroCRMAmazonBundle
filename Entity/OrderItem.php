@@ -15,6 +15,10 @@
 namespace Eltrino\OroCrmAmazonBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
 use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\OrderItemTrait;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemGiftInfoTrait;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderItemTraits\ItemCodFeeInfoTrait;
@@ -25,14 +29,25 @@ use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
 
+use Eltrino\OroCrmAmazonBundle\Model\ExtendOrderItem;
 /**
  * Class OrderItem
  *
  * @package Eltrino\OroCrmAmazonBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="eltrino_amazon_order_items")
+ * @Config(
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="fa-list-alt"
+ *          },
+ *          "merge"={
+ *              "enable"=false
+ *          }
+ *      }
+ * )
  */
-class OrderItem
+class OrderItem extends ExtendOrderItem
 {
     use OrderItemTrait;
     use ItemGiftInfoTrait;

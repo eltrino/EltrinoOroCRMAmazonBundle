@@ -20,9 +20,13 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
 use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderTrait;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderDetailsTrait;
 use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
+use Eltrino\OroCrmAmazonBundle\Model\ExtendOrder;
 
 /**
  * Class Order
@@ -30,8 +34,20 @@ use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
  * @package Eltrino\OroCrmAmazonBundle\Entity
  * @ORM\Entity()
  * @ORM\Table(name="eltrino_amazon_order")
+ * @Config(
+ *      routeName="eltrino_amazon_order_index",
+ *      routeView="eltrino_amazon_order_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="fa-list-alt"
+ *          },
+ *          "merge"={
+ *              "enable"=false
+ *          }
+ *      }
+ * )
  */
-class Order
+class Order extends ExtendOrder
 {
     use IntegrationEntityTrait;
     use OrderDetailsTrait;
