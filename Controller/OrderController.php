@@ -53,6 +53,42 @@ class OrderController extends Controller
     {
         return ['entity' => $order];
     }
+    
+    /**
+     * @Route("/system-info/{id}", name="eltrino_amazon_order_widget_system_info", requirements={"id"="\d+"}))
+     * @Template
+     */
+    public function systemInfoAction(Order $order)
+    {
+        return ['entity' => $order];
+    }
+    
+    /**
+     * @Route("/shipping-info/{id}", name="eltrino_amazon_order_widget_shipping_info", requirements={"id"="\d+"}))
+     * @Template
+     */
+    public function shippingInfoAction(Order $order)
+    {
+        return ['entity' => $order];
+    }
+    
+    /**
+     * @Route("/customer-info/{id}", name="eltrino_amazon_order_widget_customer_info", requirements={"id"="\d+"}))
+     * @Template
+     */
+    public function customerInfoAction(Order $order)
+    {
+        return ['entity' => $order];
+    }
+    
+    /**
+     * @Route("/dynamic-fields/{id}", name="eltrino_amazon_order_widget_dynamic_fields", requirements={"id"="\d+"}))
+     * @Template
+     */
+    public function dynamicFieldsAction(Order $order)
+    {
+        return ['entity' => $order];
+    }
 
     /**
      * @Route("/widget/grid/{id}", name="eltrino_amazon_order_widget_items", requirements={"id"="\d+"}))

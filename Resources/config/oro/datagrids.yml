@@ -13,39 +13,104 @@ datagrids:
                         - { join: o.channel, alias: ch }
         columns:
             channelName:
-                label: eltrino.orocrmamazon.order.channel.label
-            amazonOrderId:
-                label: eltrino.orocrmamazon.order.amazon_order_id.label
-            marketPlaceId:
-                label: eltrino.orocrmamazon.order.market_place_id.label
+                label:          eltrino.orocrmamazon.order.channel.label
+                renderable:     false
             salesChannel:
-                label: eltrino.orocrmamazon.order.sales_channel.label
-            orderType:
-                label: eltrino.orocrmamazon.order.order_type.label
+                label:          eltrino.orocrmamazon.order.sales_channel.label
+                renderable:     false
+            marketPlaceId:
+                label:          eltrino.orocrmamazon.order.market_place_id.label
+                renderable:     false
+            purchaseDate:
+                label:          eltrino.orocrmamazon.order.purchase_date.label
+                renderable:     true
+                frontend_type:  datetime
+            amazonOrderId:
+                label:          eltrino.orocrmamazon.order.amazon_order_id.label
+                renderable:     true
+            sellerOrderId:
+                label:          eltrino.orocrmamazon.order.seller_order_id.label
+                renderable:     false
+            customerName:
+                label:          eltrino.orocrmamazon.order.customer_name.label
+                renderable:     true
+            customerEmail:
+                label:          eltrino.orocrmamazon.order.customer_email.label
+                renderable:     true
             orderStatus:
-                label: eltrino.orocrmamazon.order.order_status.label
-            fulfillmentChannel:
-                label: eltrino.orocrmamazon.order.fulfillment_channel.label
-            shipServiceLevel:
-                label: eltrino.orocrmamazon.order.ship_service_level.label
-            shipmentServiceLevelCategory:
-                label: eltrino.orocrmamazon.order.shipment_service_level_category.label
+                label:          eltrino.orocrmamazon.order.order_status.label
+                renderable:     true
+            orderType:
+                label:          eltrino.orocrmamazon.order.order_type.label
+                renderable:     true
             numberOfItemsShipped:
-                label: eltrino.orocrmamazon.order.number_of_items_shipped.label
+                label:          eltrino.orocrmamazon.order.number_of_items_shipped.label
+                renderable:     true
+                frontend_type:  number
             numberOfItemsUnshipped:
-                label: eltrino.orocrmamazon.order.number_of_items_unshipped.label
+                label:          eltrino.orocrmamazon.order.number_of_items_unshipped.label
+                renderable:     true
+                frontend_type:  number
             currencyId:
-                label: eltrino.orocrmamazon.order.currency_id.label
-            paymentMethod:
-                label: eltrino.orocrmamazon.order.payment_method.label
+                label:          eltrino.orocrmamazon.order.currency_id.label
+                renderable:     false
             totalAmount:
-                label: eltrino.orocrmamazon.order.total_amount.label
-                type:   localized_number
-                method: formatCurrency
+                label:          eltrino.orocrmamazon.order.total_amount.label
+                type:           localized_number
+                method:         formatCurrency
                 context_resolver: Eltrino\OroCrmAmazonBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                renderable:     true
+            paymentMethod:
+                label:          eltrino.orocrmamazon.order.payment_method.label
+                renderable:     false
+            paymentMethodDetail:
+                label:          eltrino.orocrmamazon.order.payment_method_detail.label
+                renderable:     false
+            fulfillmentChannel:
+                label:          eltrino.orocrmamazon.order.fulfillment_channel.label
+                renderable:     false
+            shipServiceLevel:
+                label:          eltrino.orocrmamazon.order.ship_service_level.label
+                renderable:     false
+            shipmentServiceLevelCategory:
+                label:          eltrino.orocrmamazon.order.shipment_service_level_category.label
+                renderable:     false
+            earliestShipDate:
+                label:          eltrino.orocrmamazon.order.earliest_ship_date.label
+                renderable:     false
+                frontend_type:  datetime
+            latestShipDate:
+                label:          eltrino.orocrmamazon.order.latest_ship_date.label
+                renderable:     false
+                frontend_type:  datetime
+            isBusinessOrder:
+                label:          eltrino.orocrmamazon.order.is_business_order.label
+                renderable:     false
+                frontend_type:  boolean
+            isPremiumOrder:
+                label:          eltrino.orocrmamazon.order.is_premium_order.label
+                renderable:     false
+                frontend_type:  boolean
+            isPrime:
+                label:          eltrino.orocrmamazon.order.is_prime.label
+                renderable:     false
+                frontend_type:  boolean
+            isReplacementOrder:
+                label:          eltrino.orocrmamazon.order.is_replacement_order.label
+                renderable:     false
+                frontend_type:  boolean
+            lastUpdateDate:
+                label:          eltrino.orocrmamazon.order.last_update_date.label
+                frontend_type:  datetime
+                renderable:     true
             createdAt:
-                label: eltrino.orocrmamazon.order.created_at.label
-                frontend_type: datetime
+                label:          eltrino.orocrmamazon.order.created_at.label
+                frontend_type:  datetime
+                renderable:     false
+            updatedAt:
+                label:          eltrino.orocrmamazon.order.updated_at.label
+                frontend_type:  datetime
+                renderable:     false
         properties:
             id: ~
             view_link:
@@ -54,73 +119,159 @@ datagrids:
                 params: [ id ]
         sorters:
             columns:
-                amazonOrderId:                      { data_name: o.amazonOrderId }
-                marketPlaceId:                      { data_name: o.marketPlaceId }
-                salesChannel:                       { data_name: o.salesChannel }
-                orderType:                          { data_name: o.orderType }
-                orderStatus:                        { data_name: o.orderStatus }
-                channelName:                        { data_name: ch.name }
-                fulfillmentChannel:                 { data_name: o.fulfillmentChannel }
-                shipServiceLevel:                   { data_name: o.shipServiceLevel }
-                shipmentServiceLevelCategory:       { data_name: o.shipmentServiceLevelCategory }
-                numberOfItemsShipped:               { data_name: o.numberOfItemsShipped }
-                numberOfItemsUnshipped:             { data_name: o.numberOfItemsUnshipped }
-                currencyId:                         { data_name: o.currencyId }
-                paymentMethod:                      { data_name: o.paymentMethod }
-                totalAmount:                        { data_name: o.totalAmount }
-                createdAt:                          { data_name: o.createdAt }
+                channelName:                    { data_name: channelName }
+                salesChannel:                   { data_name: o.salesChannel }
+                marketPlaceId:                  { data_name: o.marketPlaceId }
+                purchaseDate:                   { data_name: o.purchaseDate }
+                amazonOrderId:                  { data_name: o.amazonOrderId }
+                sellerOrderId:                  { data_name: o.sellerOrderId }
+                customerName:                   { data_name: o.customerName }
+                customerEmail:                  { data_name: o.customerEmail }
+                orderStatus:                    { data_name: o.orderStatus }
+                orderType:                      { data_name: o.orderType }
+                numberOfItemsShipped:           { data_name: o.numberOfItemsShipped }
+                numberOfItemsUnshipped:         { data_name: o.numberOfItemsUnshipped }
+                currencyId:                     { data_name: o.currencyId }
+                totalAmount:                    { data_name: o.totalAmount }
+                paymentMethod:                  { data_name: o.paymentMethod }
+                paymentMethodDetail:            { data_name: o.paymentMethodDetail }
+                fulfillmentChannel:             { data_name: o.fulfillmentChannel }
+                shipServiceLevel:               { data_name: o.shipServiceLevel }
+                shipmentServiceLevelCategory:   { data_name: o.shipmentServiceLevelCategory }
+                earliestShipDate:               { data_name: o.earliestShipDate }
+                latestShipDate:                 { data_name: o.latestShipDate }
+                isBusinessOrder:                { data_name: o.isBusinessOrder }
+                isPremiumOrder:                 { data_name: o.isPremiumOrder }
+                isPrime:                        { data_name: o.isPrime }
+                isReplacementOrder:             { data_name: o.isReplacementOrder }
+                lastUpdateDate:                 { data_name: o.lastUpdateDate }
+                createdAt:                      { data_name: o.createdAt }
+                updatedAt:                      { data_name: o.updatedAt }
         filters:
             columns:
                 channelName:
-                    type: entity
-                    data_name: ch.id
+                    type:           entity
+                    data_name:      ch.id
+                    enabled:        false
                     options:
                         field_options:
-                            multiple: true
-                            class: OroIntegrationBundle:Channel
-                            property: name
-                amazonOrderId:
-                    type: string
-                    data_name: o.amazonOrderId
-                marketPlaceId:
-                    type: string
-                    data_name: o.marketPlaceId
+                            multiple:   true
+                            class:      OroIntegrationBundle:Channel
+                            property:   name
                 salesChannel:
-                    type: string
-                    data_name: o.salesChannel
-                orderType:
-                    type: string
-                    data_name: o.orderType
+                    type:           string
+                    data_name:      o.salesChannel
+                    enabled:        false
+                marketPlaceId:
+                    type:           string
+                    data_name:      o.marketPlaceId
+                    enabled:        false
+                purchaseDate:
+                    type:           datetime
+                    data_name:      o.purchaseDate
+                    enabled:        true
+                amazonOrderId:
+                    type:           string
+                    data_name:      o.amazonOrderId
+                    enabled:        true
+                sellerOrderId:
+                    type:           string
+                    data_name:      o.sellerOrderId
+                    enabled:        false
+                customerName:
+                    type:           string
+                    data_name:      o.customerName
+                    enabled:        true
+                customerEmail:
+                    type:           string
+                    data_name:      o.customerEmail
+                    enabled:        true
                 orderStatus:
-                    type: string
-                    data_name: o.orderStatus
-                fulfillmentChannel:
-                    type: string
-                    data_name: o.fulfillmentChannel
-                shipServiceLevel:
-                   type: string
-                   data_name: o.shipServiceLevel
-                shipmentServiceLevelCategory:
-                   type: string
-                   data_name: o.shipmentServiceLevelCategory
+                    type:           string
+                    data_name:      o.orderStatus
+                    enabled:        true
+                orderType:
+                    type:           string
+                    data_name:      o.orderType
+                    enabled:        false
                 numberOfItemsShipped:
-                    type:             number
-                    data_name:        o.numberOfItemsShipped
+                    type:           number
+                    data_name:      o.numberOfItemsShipped
+                    enabled:        true
                     options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                        data_type:  Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 numberOfItemsUnshipped:
-                    type:             number
-                    data_name:        o.numberOfItemsUnshipped
+                    type:           number
+                    data_name:      o.numberOfItemsUnshipped
+                    enabled:        true
                     options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                paymentMethod:
-                    type: string
-                    data_name: o.paymentMethod
+                        data_type:  Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                currencyId:
+                    type:           string
+                    data_name:      o.currencyId
+                    enabled:        false
                 totalAmount:
-                    type:             number
-                    data_name:        o.totalAmount
+                    type:           number
+                    data_name:      o.totalAmount
+                    enabled:        true
                     options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                        data_type:  Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                paymentMethod:
+                    type:           string
+                    data_name:      o.paymentMethod
+                    enabled:        true
+                paymentMethodDetail:
+                    type:           string
+                    data_name:      o.paymentMethodDetail
+                    enabled:        false
+                fulfillmentChannel:
+                    type:           string
+                    data_name:      o.fulfillmentChannel
+                    enabled:        false
+                shipServiceLevel:
+                   type:            string
+                   data_name:       o.shipServiceLevel
+                   enabled:         false
+                shipmentServiceLevelCategory:
+                   type:            string
+                   data_name:       o.shipmentServiceLevelCategory
+                   enabled:         false
+                earliestShipDate:
+                    type:           datetime
+                    data_name:      o.earliestShipDate
+                    enabled:        false
+                latestShipDate:
+                    type:           datetime
+                    data_name:      o.latestShipDate
+                    enabled:        false
+                isBusinessOrder:
+                    type:           boolean
+                    data_name:      o.isBusinessOrder
+                    enabled:        false
+                isPremiumOrder:
+                    type:           boolean
+                    data_name:      o.isPremiumOrder
+                    enabled:        false
+                isPrime:
+                    type:           boolean
+                    data_name:      o.isPrime
+                    enabled:        false
+                isReplacementOrder:
+                    type:           boolean
+                    data_name:      o.isReplacementOrder
+                    enabled:        false
+                lastUpdateDate:
+                    type:           datetime
+                    data_name:      o.lastUpdateDate
+                    enabled:        false
+                createdAt:
+                    type:           datetime
+                    data_name:      o.createdAt
+                    enabled:        false
+                updatedAt:
+                    type:           datetime
+                    data_name:      o.updatedAt
+                    enabled:        false
         actions:
             view:
                 type:         navigate

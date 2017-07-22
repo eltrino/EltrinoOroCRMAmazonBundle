@@ -4,17 +4,27 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.purchase_date.label'|trans, entity.purchaseDate ? entity.purchaseDate|oro_format_datetime : 'N/A'|trans) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.amazon_order_id.label'|trans, entity.amazonOrderId) }}
+            {% if entity.sellerOrderId %}
+                {{ ui.renderProperty('eltrino.orocrmamazon.order.seller_order_id.label'|trans, entity.sellerOrderId) }}
+            {% endif %}
             {{ ui.renderProperty('eltrino.orocrmamazon.order.order_status.label'|trans, entity.orderStatus) }}
             {{ ui.renderProperty('eltrino.orocrmamazon.order.order_type.label'|trans, entity.orderType) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.customer_email.label'|trans, entity.customerEmail) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.sales_channel.label'|trans, entity.salesChannel) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.ship_service_level.label'|trans, entity.shipServiceLevel) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.shipment_service_level_category.label'|trans, entity.shipmentServiceLevelCategory) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_shipped.label'|trans, entity.numberOfItemsShipped) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_unshipped.label'|trans, entity.numberOfItemsUnshipped) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.payment_method.label'|trans, entity.paymentMethod) }}
-            {{ ui.renderProperty('eltrino.orocrmamazon.order.currency_id.label'|trans, entity.currencyId) }}
+            {%- set paymentMethodContent -%}
+                {{ entity.paymentMethod }}
+                {%- if entity.paymentMethodDetail -%}
+                    ({{ entity.paymentMethodDetail }})
+                {%- endif -%}
+            {%- endset -%}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.payment_method.label'|trans, paymentMethodContent) }}
             {{ ui.renderProperty('eltrino.orocrmamazon.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currencyId})) }}
+        </div>
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_business_order.label'|trans, entity.isBusinessOrder) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_premium_order.label'|trans, entity.isPremiumOrder) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_prime.label'|trans, entity.isPrime) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.is_replacement_order.label'|trans, entity.isReplacementOrder) }}
         </div>
     </div>
 </div>

@@ -37,6 +37,10 @@ eltrino:
             
             widget:
                 order_information.title:        Order Information
+                system_information.title:       System Information
+                shipping_information.title:     Shipping
+                customer_information.title:     Customer
+                dynamic_fields.title:           ~
             sections:
                 general_information.title:      General Information
                 order_items.title:              Order Items

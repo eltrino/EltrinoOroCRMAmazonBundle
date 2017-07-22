@@ -1,0 +1,19 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.channel.label'|trans, entity.channel) }}
+        </div>
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.market_place_id.label'|trans, entity.marketPlaceId) }}
+        </div>
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.sales_channel.label'|trans, entity.salesChannel) }}
+        </div>
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.last_update_date.label'|trans, entity.lastUpdateDate ? entity.lastUpdateDate|oro_format_datetime : 'N/A'|trans) }}
+        </div>
+    </div>
+</div>
