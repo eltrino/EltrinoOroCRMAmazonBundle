@@ -261,7 +261,7 @@ class OrderFactory
             );
         }
         if (isset($shippingAddress)) {
-            $order->addAddress($shippingAddress);
+            $order->resetAddresses([$shippingAddress]);
             $shippingAddress->setOwner($order);
         }
 

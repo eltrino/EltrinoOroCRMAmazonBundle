@@ -36,6 +36,7 @@ use Eltrino\OroCrmAmazonBundle\Model\ExtendOrder;
  *
  * @package Eltrino\OroCrmAmazonBundle\Entity
  * @ORM\Entity()
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(name="eltrino_amazon_order",
  *      uniqueConstraints={
  *          @ORM\UniqueConstraint(name="unq_amznorder_amaznid_mrktplcid", columns={"amazon_order_id","marketplace_id"})
@@ -135,7 +136,8 @@ class Order extends ExtendOrder
      * @param $amazonOrderId
      * @param $marketPlaceId
      * @param OrderDetails $orderDetails
-     * @param null $createdAt
+     * @param \DateTime $createdAt - no longer used
+     * @param \DateTime $lastUpdateDate
      */
     public function __construct(
         $amazonOrderId, 
@@ -150,14 +152,6 @@ class Order extends ExtendOrder
         $this->setCustomerEmail($customerEmail);
         $this->setMarketPlaceId($marketPlaceId);
         $this->setOrderDetails($orderDetails);
-
-        if (is_null($createdAt)) {
-            $createdAt = new \DateTime("now");
-        }
-        $this->setCreatedAt($createdAt);
-
-        $updatedAt = clone $createdAt;
-        $this->setUpdatedAt($updatedAt);
 
         $this->setLastUpdateDate($lastUpdateDate);
 
@@ -364,5 +358,34 @@ class Order extends ExtendOrder
                     $shipping
                 );
         }
+    }
+    
+    /**
+     * @return void
+     */
+    public function beforeSave()
+    {
+        $dt = new \DateTime('now', new \DateTimeZone('UTC'));
+        
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt($dt);
+        }
+        $this->setUpdatedAt($dt);
+    }
+    
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->beforeSave();
+    }
+    
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->beforeSave();
     }
 }
