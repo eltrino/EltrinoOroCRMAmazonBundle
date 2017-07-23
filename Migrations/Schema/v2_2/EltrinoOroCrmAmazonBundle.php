@@ -1,6 +1,6 @@
 <?php
 
-namespace Eltrino\OroCrmAmazonBundle\Migrations\Schema\v2_0;
+namespace Eltrino\OroCrmAmazonBundle\Migrations\Schema\v2_2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
