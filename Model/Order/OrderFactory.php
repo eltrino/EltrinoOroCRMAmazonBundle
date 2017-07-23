@@ -14,6 +14,8 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Model\Order;
 
+use Doctrine\ORM\EntityManager;
+
 use Eltrino\OroCrmAmazonBundle\Entity\Order;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderItem;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -23,8 +25,80 @@ use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemShippingInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
+use Eltrino\OroCrmAmazonBundle\Entity\OrderAddress;
+
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\AddressBundle\Entity\Repository\CountryRepository;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\Repository\AddressTypeRepository;
+
 class OrderFactory
 {
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+    
+    /**
+     * @var CountryRepository
+     */
+    protected $countryRepository;
+    
+    /**
+     * @var AddressTypeRepository
+     */
+    protected $addressTypeRepository;
+    
+    /**
+     * @var AddressType
+     */
+    protected $shippingAddressType;
+    
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
+    /**
+     * @return CountryRepository
+     */
+    public function getCountryRepository()
+    {
+        if (is_null($this->countryRepository)) {
+            $this->countryRepository = $this->entityManager->getRepository(Country::class);
+        }
+        
+        return $this->countryRepository;
+    }
+    
+    /**
+     * @return AddressTypeRepository
+     */
+    public function getAddressTypeRepository()
+    {
+        if (is_null($this->addressTypeRepository)) {
+            $this->addressTypeRepository = $this->entityManager->getRepository(AddressType::class);
+        }
+        
+        return $this->addressTypeRepository;
+    }
+    
+    /**
+     * @return AddressType
+     */
+    public function getShippingAddressType()
+    {
+        if (is_null($this->shippingAddressType)) {
+            $this->shippingAddressType = $this->getAddressTypeRepository()
+                    ->findOneBy(['name' => AddressType::TYPE_SHIPPING]);
+        }
+        
+        return $this->shippingAddressType;
+    }
+    
     /**
      * Create Order
      * @param SimpleXMLElement $data
@@ -57,6 +131,50 @@ class OrderFactory
         $isBusinessOrder              = (string) $data->IsBusinessOrder;
         $isPrime                      = (string) $data->IsPrime;
         $lastUpdateDate               = (string) $data->LastUpdateDate;
+        
+        if (isset($data->ShippingAddress)) {
+            $shippingAddress = new OrderAddress();
+            
+            if (isset($data->ShippingAddress->Name)) {
+                $nameParts = $this->explodeShippingAddressNameParts((string)$data->ShippingAddress->Name);
+                $shippingAddress->setNamePrefix($nameParts['name_prefix'])
+                        ->setFirstName($nameParts['first_name'])
+                        ->setMiddleName($nameParts['middle_name'])
+                        ->setLastName($nameParts['last_name'])
+                        ->setNameSuffix($nameParts['name_suffix']);
+            }
+            
+            $street = (isset($data->ShippingAddress->AddressLine1)) ?
+                    (string)$data->ShippingAddress->AddressLine1 :
+                    null;
+            $street2 = (isset($data->ShippingAddress->AddressLine2)) ?
+                    (string)$data->ShippingAddress->AddressLine2 :
+                    null;
+            $city = (isset($data->ShippingAddress->City)) ?
+                    (string)$data->ShippingAddress->City :
+                    null;
+            $regionText = (isset($data->ShippingAddress->StateOrRegion)) ?
+                    (string)$data->ShippingAddress->StateOrRegion :
+                    null;
+            $postalCode = (isset($data->ShippingAddress->PostalCode)) ?
+                    (string)$data->ShippingAddress->PostalCode :
+                    null;
+            $countryCode = (isset($data->ShippingAddress->CountryCode)) ?
+                    (string)$data->ShippingAddress->CountryCode :
+                    null;
+            
+            $shippingAddress->setStreet($street)
+                    ->setStreet2($street2)
+                    ->setCity($city)
+                    ->setRegionText($regionText)
+                    ->setPostalCode($postalCode)
+                    ->setCountry(
+                            $this->getCountryRepository()->findOneBy(['iso2Code' => $countryCode])
+                        );
+            $shippingAddress->addType($this->getShippingAddressType());
+            $shippingAddress->setPrimary(true);
+        }
+
         
         // Contingency for strict SQL checks in MySQL 5.7
         // See: https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-strict
@@ -119,6 +237,10 @@ class OrderFactory
                 new \DateTime("now"),
                 $lastUpdateDate
             );
+        if (isset($shippingAddress)) {
+            $order->addAddress($shippingAddress);
+            $shippingAddress->setOwner($order);
+        }
 
         return $this->processOrderItems($data->OrderItems, $order);
     }
@@ -183,4 +305,51 @@ class OrderFactory
         return $order;
     }
 
+    /**
+     * @param string $nameString
+     * @return array
+     */
+    public function explodeShippingAddressNameParts($nameString)
+    {
+        $return = [
+            'name_prefix' => null,
+            'first_name' => null,
+            'middle_name' => null,
+            'last_name' => null,
+            'name_suffix' => null,
+        ];
+        
+        $nameParts = array_filter(array_map('trim', explode(' ', trim($nameString))));
+        
+        if (count($nameParts) == 0) {
+            return $return;
+        }
+        
+        if (in_array(strtolower($nameParts[0]), [
+            'mr', 'mr.', 'master', 'mister',
+            'mrs', 'mrs.', 'missus', 'miss', 'ms', 'ms.',
+            'prof', 'dr', 'sir',
+        ])) {
+            $return['name_prefix'] = array_shift($nameParts);
+        }
+        
+        switch (count($nameParts)) {
+            case 0 :
+                break;
+            case 1 :
+                $return['last_name'] = $nameParts[0];
+                break;
+            case 2 :
+                $return['first_name'] = $nameParts[0];
+                $return['last_name'] = $nameParts[1];
+                break;
+            default :
+                $return['first_name'] = array_shift($nameParts);
+                $return['last_name'] = array_pop($nameParts);
+                $return['middle_name'] = implode(' ', $nameParts);
+                break;
+        }
+        
+        return $return;
+    }
 }

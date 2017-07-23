@@ -22,9 +22,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 
 use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderTrait;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\OrderDetailsTrait;
+use Eltrino\OroCrmAmazonBundle\Entity\OrderTraits\TypedAddressesOwnerTrait;
 use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
 use Eltrino\OroCrmAmazonBundle\Model\ExtendOrder;
 
@@ -52,6 +55,7 @@ class Order extends ExtendOrder
     use IntegrationEntityTrait;
     use OrderDetailsTrait;
     use OrderTrait;
+    use TypedAddressesOwnerTrait;
 
     /**
      * @var int
@@ -112,6 +116,13 @@ class Order extends ExtendOrder
     private $items;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OrderAddress", mappedBy="owner", cascade={"all"}, orphanRemoval=true)
+     */
+    protected $addresses;
+
+    /**
      * @var OrderDetails
      */
     private $orderDetails;
@@ -147,10 +158,24 @@ class Order extends ExtendOrder
         $this->setLastUpdateDate($lastUpdateDate);
 
         $this->items = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
 
         $this->initFromShipping($orderDetails->getShipping());
         $this->initFromPayment($orderDetails->getPayment());
         $this->initFromOrderDetails($orderDetails);
+    }
+    
+    /**
+     * @return void
+     */
+    public function __clone()
+    {
+        if ($this->items) {
+            $this->items = clone $this->items;
+        }
+        if ($this->addresses) {
+            $this->addresses = clone $this->addresses;
+        }
     }
 
     /**
