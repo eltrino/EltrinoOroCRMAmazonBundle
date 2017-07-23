@@ -29,7 +29,11 @@ use Eltrino\OroCrmAmazonBundle\Model\Order\OrderDetails;
  *
  * @package Eltrino\OroCrmAmazonBundle\Entity
  * @ORM\Entity()
- * @ORM\Table(name="eltrino_amazon_order")
+ * @ORM\Table(name="eltrino_amazon_order",
+ *      uniqueConstraints={
+ *          @ORM\UniqueConstraint(name="unq_amznorder_amaznid_mrktplcid", columns={"amazon_order_id","marketplace_id"})
+ *      }
+ * )
  */
 class Order
 {

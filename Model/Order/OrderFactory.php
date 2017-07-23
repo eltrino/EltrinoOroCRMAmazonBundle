@@ -14,6 +14,8 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Model\Order;
 
+ use Doctrine\ORM\EntityManager;
+ 
 use Eltrino\OroCrmAmazonBundle\Entity\Order;
 use Eltrino\OroCrmAmazonBundle\Entity\OrderItem;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,6 +27,36 @@ use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemCodFeeInfo;
 use Eltrino\OroCrmAmazonBundle\Model\OrderItem\ItemGiftInfo;
 class OrderFactory
 {
+    /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+    
+    /**
+     * @var EntityRepository
+     */
+    protected $orderRepository;
+    
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+    
+    /**
+     * @return EntityRepository
+     */
+    public function getOrderRepository()
+    {
+        if (is_null($this->orderRepository)) {
+            $this->orderRepository = $this->entityManager->getRepository(Order::class);
+        }
+        
+        return $this->orderRepository;
+    }
+ 
     /**
      * Create Order
      * @param SimpleXMLElement $data
@@ -64,7 +96,13 @@ class OrderFactory
         $payment      = new Payment($paymentMethod, $currencyId, $totalAmount);
         $orderDetails = new OrderDetails($salesChannel, $orderType, $fulfillmentChannel, $orderStatus, $payment, $shipping);
 
-        $order = new Order($amazonOrderId, $customerEmail, $marketPlaceId, $orderDetails);
+        $order = $this->getOrderRepository()->findOneBy([
+            'marketPlaceId' => $marketPlaceId,
+            'amazonOrderId' => $amazonOrderId,
+        ]);
+        if (!$order) {
+            $order = new Order($amazonOrderId, $customerEmail, $marketPlaceId, $orderDetails);
+        }
 
         return $this->processOrderItems($data->OrderItems, $order);
     }
