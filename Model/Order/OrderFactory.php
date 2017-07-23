@@ -40,6 +40,11 @@ class OrderFactory
     protected $entityManager;
     
     /**
+     * @var EntityRepository
+     */
+    protected $orderRepository;
+
+    /**
      * @var CountryRepository
      */
     protected $countryRepository;
@@ -62,6 +67,18 @@ class OrderFactory
         $this->entityManager = $entityManager;
     }
     
+    /**
+     * @return EntityRepository
+     */
+    public function getOrderRepository()
+    {
+        if (is_null($this->orderRepository)) {
+            $this->orderRepository = $this->entityManager->getRepository(Order::class);
+        }
+        
+        return $this->orderRepository;
+    }
+ 
     /**
      * @return CountryRepository
      */
@@ -229,7 +246,12 @@ class OrderFactory
                 $isPrime
             );
 
-        $order = new Order(
+        $order = $this->getOrderRepository()->findOneBy([
+            'marketPlaceId' => $marketPlaceId,
+            'amazonOrderId' => $amazonOrderId,
+        ]);
+        if (!$order) {
+            $order = new Order(
                 $amazonOrderId, 
                 $customerEmail, 
                 $marketPlaceId, 
@@ -237,6 +259,7 @@ class OrderFactory
                 new \DateTime("now"),
                 $lastUpdateDate
             );
+        }
         if (isset($shippingAddress)) {
             $order->addAddress($shippingAddress);
             $shippingAddress->setOwner($order);
