@@ -6,11 +6,29 @@ datagrids:
                 select:
                     - o
                     - ch.name as channelName
+                    - >
+                        (SELECT CONCAT_WS(' ', address_name.namePrefix, address_name.firstName, address_name.middleName, address_name.lastName, address_name.nameSuffix) FROM EltrinoOroCrmAmazonBundle:OrderAddress address_name
+                        LEFT JOIN address_name.types types_name
+                        WHERE address_name.owner = o AND (types_name.name = 'shipping' OR types_name.name IS NULL)) as shippingName
+                    - >
+                        (SELECT address_city.city FROM EltrinoOroCrmAmazonBundle:OrderAddress address_city
+                        LEFT JOIN address_city.types types_city
+                        WHERE address_city.owner = o AND (types_city.name = 'shipping' OR types_city.name IS NULL)) as shippingCity
+                    - >
+                        (SELECT address_postalcode.postalCode FROM EltrinoOroCrmAmazonBundle:OrderAddress address_postalcode
+                        LEFT JOIN address_postalcode.types types_postalcode
+                        WHERE address_postalcode.owner = o AND (types_postalcode.name = 'shipping' OR types_postalcode.name IS NULL)) as shippingPostalCode
+                    - >
+                        (SELECT country.name FROM EltrinoOroCrmAmazonBundle:OrderAddress address_country
+                        LEFT JOIN address_country.country country
+                        LEFT JOIN address_country.types types_country
+                        WHERE address_country.owner = o AND (types_country.name = 'shipping' OR types_country.name IS NULL)) as shippingCountryName
                 from:
                     - { table: %eltrino_amazon.order.entity.class%, alias: o }
                 join:
                     left:
                         - { join: o.channel, alias: ch }
+                groupBy: o.id
         columns:
             channelName:
                 label:          eltrino.orocrmamazon.order.channel.label
@@ -51,6 +69,18 @@ datagrids:
                 label:          eltrino.orocrmamazon.order.number_of_items_unshipped.label
                 renderable:     true
                 frontend_type:  number
+            shippingName:
+                label:          eltrino.orocrmamazon.order.shipping_address.name.label
+                renderable:     true
+            shippingCity:
+                label:          eltrino.orocrmamazon.order.shipping_address.city.label
+                renderable:     true
+            shippingPostalCode:
+                label:          eltrino.orocrmamazon.order.shipping_address.postal_code.label
+                renderable:     true
+            shippingCountryName:
+                label:          eltrino.orocrmamazon.order.shipping_address.country_name.label
+                renderable:     false
             currencyId:
                 label:          eltrino.orocrmamazon.order.currency_id.label
                 renderable:     false
@@ -131,6 +161,10 @@ datagrids:
                 orderType:                      { data_name: o.orderType }
                 numberOfItemsShipped:           { data_name: o.numberOfItemsShipped }
                 numberOfItemsUnshipped:         { data_name: o.numberOfItemsUnshipped }
+                shippingName:                   { data_name: shippingName }
+                shippingCity:                   { data_name: shippingCity }
+                shippingPostalCode:             { data_name: shippingPostalCode }
+                shippingCountryName:            { data_name: shippingCountryName }
                 currencyId:                     { data_name: o.currencyId }
                 totalAmount:                    { data_name: o.totalAmount }
                 paymentMethod:                  { data_name: o.paymentMethod }
@@ -206,6 +240,22 @@ datagrids:
                     enabled:        true
                     options:
                         data_type:  Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                shippingName:
+                    type:           string
+                    data_name:      shippingName
+                    enabled:        true
+                shippingCity:
+                    type:           string
+                    data_name:      shippingCity
+                    enabled:        true
+                shippingPostalCode:
+                    type:           string
+                    data_name:      shippingPostalCode
+                    enabled:        false
+                shippingCountryName:
+                    type:           string
+                    data_name:      shippingCountryName
+                    enabled:        false
                 currencyId:
                     type:           string
                     data_name:      o.currencyId

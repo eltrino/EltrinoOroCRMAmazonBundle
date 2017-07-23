@@ -16,5 +16,17 @@
             {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_shipped.label'|trans, entity.numberOfItemsShipped) }}
             {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_unshipped.label'|trans, entity.numberOfItemsUnshipped) }}
         </div>
+        {% if entity.addresses is not empty %}
+            <div class='responsive-block'>
+                {% for orderAddress in entity.addresses %}
+                    {% if orderAddress.types is not empty and orderAddress.types.first is not empty and orderAddress.types.first.name == 'billing' %}
+                        {% set title = 'eltrino.orocrmamazon.order.billing_address.label'|trans %}
+                    {% else %}
+                        {% set title = 'eltrino.orocrmamazon.order.shipping_address.label'|trans %}
+                    {% endif %}
+                    {{ ui.renderHtmlProperty(title, address.renderAddress(orderAddress)) }}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
