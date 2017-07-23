@@ -34,6 +34,22 @@ eltrino:
             ship_service_level.label:                   Ship Service Level
             total_amount.label:                         Total Amount
             updated_at.label:                           Updated At
+            billing_address:
+                label:                                  Billing Address
+            shipping_address:
+                label:                                  Shipping Address
+                name_prefix.label:                      Shipping Name Prefix
+                first_name.label:                       Shipping First Name
+                middle_name.label:                      Shipping Middle Name
+                last_name.label:                        Shipping Last Name
+                name_suffix.label:                      Shipping Name Suffix
+                name.label:                             Shipping Name
+                street.label:                           Shipping Street
+                street2.label:                          Shipping Street (2)
+                city.label:                             Shipping City
+                region.label:                           Shipping Region
+                postal_code.label:                      Shipping Postal Code
+                country_name.label:                     Shipping Country
             
             widget:
                 order_information.title:        Order Information
@@ -70,6 +86,30 @@ eltrino:
             shipping_price_amount.label:        Shipping Price Amount
             shipping_price_currency_id.label:   Shipping Price Currency
             title.label:                        Title
+            
+        orderaddress:
+            entity_label:                       Amazon Order Address
+            entity_plural_label:                Amazon Order Addresses
+            
+            city.label:                         City
+            country.label:                      Country
+            country_text.label:                 Country Text
+            first_name.label:                   First Name
+            id.label:                           Id
+            label.label:                        Label
+            last_name.label:                    Last Name
+            middle_name.label:                  Middle Name
+            name_prefix.label:                  Name Prefix
+            name_suffix.label:                  Name Suffix
+            organization.label:                 Company
+            owner.label:                        Owner Order
+            postal_code.label:                  Postal Code
+            primary.label:                      Is Primary
+            region.label:                       Region
+            region_text.label:                  Region Text
+            street.label:                       Street
+            street2.label:                      Street (2)
+            types.label:                        Address Types
             
         datagrid:
             actions:
