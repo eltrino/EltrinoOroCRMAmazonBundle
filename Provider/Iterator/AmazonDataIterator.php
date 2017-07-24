@@ -20,9 +20,9 @@ use Psr\Log\LoggerAwareTrait;
 
 class AmazonDataIterator implements \Iterator, LoggerAwareInterface
 {
-    const LOAD_BATCH_SIZE = 1000;
     use LoggerAwareTrait;
 
+    const LOAD_BATCH_SIZE = 25;
 
     /** @var integer */
     protected $position = 0;

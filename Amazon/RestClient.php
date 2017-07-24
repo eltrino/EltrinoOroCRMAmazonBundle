@@ -20,6 +20,7 @@ use Psr\Log\NullLogger;
 
 use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
 
 use Guzzle\Common\Event;
 use Guzzle\Http\Exception\ServerErrorResponseException;
@@ -165,6 +166,12 @@ class RestClient extends AbstractRestClient implements LoggerAwareInterface
             $request->processFiltersParameters(),
             $request->getParameters()
         );
+        switch ($action) {
+            case 'ListOrders' :
+            case 'ListOrderByNextToken' :
+                $requestParameters['MaxResultsPerPage'] = AmazonDataIterator::LOAD_BATCH_SIZE;
+                break;
+        }
         $requestParameters['Signature'] = $this->authHandler->getSignature(
             $requestParameters,
             $this->client->getBaseUrl()
