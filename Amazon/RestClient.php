@@ -168,7 +168,7 @@ class RestClient extends AbstractRestClient implements LoggerAwareInterface
         );
         switch ($action) {
             case 'ListOrders' :
-            case 'ListOrderByNextToken' :
+            case 'ListOrdersByNextToken' :
                 $requestParameters['MaxResultsPerPage'] = AmazonDataIterator::LOAD_BATCH_SIZE;
                 break;
         }
