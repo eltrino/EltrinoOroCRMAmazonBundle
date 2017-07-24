@@ -188,7 +188,7 @@ class OrderFactory
                     ->setCountry(
                             $this->getCountryRepository()->findOneBy(['iso2Code' => $countryCode])
                         );
-            $shippingAddress->addType($this->getShippingAddressType());
+            $shippingAddress->addType($this->getAddressTypeRepository()->findOneBy(['name' => AddressType::TYPE_SHIPPING]));
             $shippingAddress->setPrimary(true);
         }
 
