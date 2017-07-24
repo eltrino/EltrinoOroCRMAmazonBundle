@@ -20,6 +20,8 @@ services:
             - @oro_importexport.context_registry
             - @oro_integration.logger.strategy
             - @oro_integration.provider.connector_context_mediator
+        calls:
+            - [setLogger, [@logger]]
         tags:
           - { name: oro_integration.connector, type: order, channel_type: amazon }
 

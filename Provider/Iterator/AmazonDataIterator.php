@@ -16,13 +16,13 @@ namespace Eltrino\OroCrmAmazonBundle\Provider\Iterator;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 
 class AmazonDataIterator implements \Iterator, LoggerAwareInterface
 {
     const LOAD_BATCH_SIZE = 1000;
+    use LoggerAwareTrait;
 
-    /** @var LoggerInterface */
-    protected $logger;
 
     /** @var integer */
     protected $position = 0;
@@ -95,17 +95,6 @@ class AmazonDataIterator implements \Iterator, LoggerAwareInterface
         $this->position = 0;
     }
 
-    /**
-     * {$@inheritdoc}
-     */
-    public function setLogger(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-        if ($this->loader instanceof LoggerAwareInterface) {
-            $this->loader->setLogger($logger);
-        }
-    }
-
     protected function load()
     {
         if ($this->shouldLoad()) {
@@ -126,11 +115,29 @@ class AmazonDataIterator implements \Iterator, LoggerAwareInterface
      */
     protected function loadElements()
     {
+        $this->logger->debug(sprintf(
+                "[ELTAMZ] Loading elements with batch size: %s",
+                $this->batchSize
+            ));
+        
         $elements = $this->loader->load($this->batchSize);
         $loaded   = count($elements);
         $start    = $this->loaded;
         $this->loaded += $loaded;
         $end            = $loaded ? $start + $loaded - 1 : false;
+        
+        $this->logger->debug(sprintf(
+                "[ELTAMZ] Elements loaded: %d; Total loaded to date: %d; Start: %d; End: %s;",
+                $loaded,
+                $this->loaded,
+                $start,
+                ($end === false) ? 'FALSE' : $end
+            ));
+        $this->logger->debug(sprintf(
+                "[ELTAMZ] Peak Memory Usage: %s MB",
+                number_format(memory_get_peak_usage(true) / 1024 / 1024, 2)
+            ));
+        
         $this->elements = $end !== false ? array_combine(range($start, $end), $elements) : [];
     }
 }
