@@ -116,11 +116,13 @@ class RestClient extends AbstractRestClient implements LoggerAwareInterface
 
         $this->shareAction = str_replace('ByNextToken', '', $action);
         $this->applyRecoveryRate();
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Sending request to '%s' with parameters '%s'",
-                $this->client->getBaseUrl(),
-                json_encode($requestParameters)
-            ));
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Sending request to '%s' with parameters '%s'",
+                    $this->client->getBaseUrl(),
+                    json_encode($requestParameters)
+                ));
+        }
         $response = $this->client->post(null, [], $requestParameters)->send();
         $this->requestsCounters[$this->shareAction]++;
 
@@ -212,15 +214,19 @@ class RestClient extends AbstractRestClient implements LoggerAwareInterface
      */
     protected function useRecoveryRate($restoreRateSeconds)
     {
-        $this->logger->info(sprintf(
-                "[ELTAMZ] Sleeping for %s seconds to restore request throttling",
-                $restoreRateSeconds
-            ));
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Sleeping for %s seconds to restore request throttling",
+                    $restoreRateSeconds
+                ));
+        }
         sleep($restoreRateSeconds);
-        $this->logger->info(sprintf(
-                "[ELTAMZ] Waking after %s seconds sleep",
-                $restoreRateSeconds
-            ));
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Waking after %s seconds sleep",
+                    $restoreRateSeconds
+                ));
+        }
         array_walk(
             $this->requestsExtraTime,
             function (&$val, $key) use ($restoreRateSeconds) {

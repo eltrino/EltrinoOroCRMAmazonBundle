@@ -76,12 +76,14 @@ class AmazonOrderConnector extends AbstractConnector implements LoggerAwareInter
         $status = $this->channel
             ->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)
             ->first();
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Getting connector source from last status date (%s) : %s(%s)",
-                ($status !== false) ? $status->getDate()->format('c') : 'N/A',
-                ($status !== false) ? 'getModOrders' : 'getInitialOrders',
-                ($status !== false) ? $status->getDate()->format('c') : $settings->get('start_sync_date')->format('c')
-            ));
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Getting connector source from last status date (%s) : %s(%s)",
+                    ($status !== false) ? $status->getDate()->format('c') : 'N/A',
+                    ($status !== false) ? 'getModOrders' : 'getInitialOrders',
+                    ($status !== false) ? $status->getDate()->format('c') : $settings->get('start_sync_date')->format('c')
+                ));
+        }
         if (false !== $status) {
             return $this->transport->getModOrders($status->getDate());
         } else {

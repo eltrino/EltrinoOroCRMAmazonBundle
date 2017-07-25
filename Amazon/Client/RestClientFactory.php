@@ -35,7 +35,7 @@ class RestClientFactory implements RestClientFactoryInterface, LoggerAwareInterf
         $authHandler = new DefaultAuthorizationHandler($keyId, $secret, $merchantId, $marketplaceId);
 
         $restClient = new RestClient($client, $authHandler);
-        if ($restClient instanceof LoggerAwareInterface) {
+        if ($restClient instanceof LoggerAwareInterface && $this->logger) {
             $restClient->setLogger($this->logger);
         }
         

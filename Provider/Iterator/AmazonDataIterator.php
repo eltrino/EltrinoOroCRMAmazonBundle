@@ -115,10 +115,12 @@ class AmazonDataIterator implements \Iterator, LoggerAwareInterface
      */
     protected function loadElements()
     {
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Loading elements with batch size: %s",
-                $this->batchSize
-            ));
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Loading elements with batch size: %s",
+                    $this->batchSize
+                ));
+        }
         
         $elements = $this->loader->load($this->batchSize);
         $loaded   = count($elements);
@@ -126,17 +128,19 @@ class AmazonDataIterator implements \Iterator, LoggerAwareInterface
         $this->loaded += $loaded;
         $end            = $loaded ? $start + $loaded - 1 : false;
         
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Elements loaded: %d; Total loaded to date: %d; Start: %d; End: %s;",
-                $loaded,
-                $this->loaded,
-                $start,
-                ($end === false) ? 'FALSE' : $end
-            ));
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Peak Memory Usage: %s MB",
-                number_format(memory_get_peak_usage(true) / 1024 / 1024, 2)
-            ));
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Elements loaded: %d; Total loaded to date: %d; Start: %d; End: %s;",
+                    $loaded,
+                    $this->loaded,
+                    $start,
+                    ($end === false) ? 'FALSE' : $end
+                ));
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Peak Memory Usage: %s MB",
+                    number_format(memory_get_peak_usage(true) / 1024 / 1024, 2)
+                ));
+        }
         
         $this->elements = $end !== false ? array_combine(range($start, $end), $elements) : [];
     }

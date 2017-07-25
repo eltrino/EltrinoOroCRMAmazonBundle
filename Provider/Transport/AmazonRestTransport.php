@@ -180,11 +180,13 @@ class AmazonRestTransport implements TransportInterface, LoggerAwareInterface
         $root = AbstractRestClient::GET_SERVICE_STATUS . 'Result';
         $status = (string)$xml->{$root}->Status;
         
-        $this->logger->info(sprintf(
-                "[ELTAMZ] Status response for service %s: %s",
-                $root,
-                $status
-            ));
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Status response for service %s: %s",
+                    $root,
+                    $status
+                ));
+        }
 
         return $status === AbstractRestClient::STATUS_GREEN;
     }
@@ -195,16 +197,22 @@ class AmazonRestTransport implements TransportInterface, LoggerAwareInterface
      */
     protected function getOrders(Filter $filter)
     {
-        $this->logger->debug(sprintf(
-                "[ELTAMZ] Getting orders with filter: %s",
-                json_encode($filter)
-            ));
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Getting orders with filter: %s",
+                    json_encode($filter)
+                ));
+        }
         
         $loader = new OrderLoader($this->amazonClient, $filter, $this->namespace);
-        $loader->setLogger($this->logger);
+        if ($this->logger) {
+            $loader->setLogger($this->logger);
+        }
 
         $iterator = new AmazonDataIterator($loader);
-        $iterator->setLogger($this->logger);
+        if ($this->logger) {
+            $iterator->setLogger($this->logger);
+        }
         
         return $iterator;
     }
