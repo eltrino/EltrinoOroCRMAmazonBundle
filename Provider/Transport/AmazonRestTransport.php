@@ -15,6 +15,10 @@
 
 namespace Eltrino\OroCrmAmazonBundle\Provider\Transport;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
+
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use Eltrino\OroCrmAmazonBundle\Amazon\AbstractRestClient;
@@ -40,8 +44,10 @@ use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
  *
  * @package Eltrino\OroCrmAmazonBundle
  */
-class AmazonRestTransport implements TransportInterface
+class AmazonRestTransport implements TransportInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+    
     /** @var RestClientInterface */
     protected $amazonClient;
 
@@ -172,8 +178,17 @@ class AmazonRestTransport implements TransportInterface
         }
 
         $root = AbstractRestClient::GET_SERVICE_STATUS . 'Result';
+        $status = (string)$xml->{$root}->Status;
+        
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Status response for service %s: %s",
+                    $root,
+                    $status
+                ));
+        }
 
-        return (string)$xml->{$root}->Status === AbstractRestClient::STATUS_GREEN;
+        return $status === AbstractRestClient::STATUS_GREEN;
     }
 
     /**
@@ -182,9 +197,24 @@ class AmazonRestTransport implements TransportInterface
      */
     protected function getOrders(Filter $filter)
     {
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Getting orders with filter: %s",
+                    json_encode($filter)
+                ));
+        }
+        
         $loader = new OrderLoader($this->amazonClient, $filter, $this->namespace);
+        if ($this->logger) {
+            $loader->setLogger($this->logger);
+        }
 
-        return new AmazonDataIterator($loader);
+        $iterator = new AmazonDataIterator($loader);
+        if ($this->logger) {
+            $iterator->setLogger($this->logger);
+        }
+        
+        return $iterator;
     }
 
     /**

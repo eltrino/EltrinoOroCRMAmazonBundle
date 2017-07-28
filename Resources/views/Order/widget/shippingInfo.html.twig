@@ -1,0 +1,32 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.ship_service_level.label'|trans, entity.shipServiceLevel) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.shipment_service_level_category.label'|trans, entity.shipmentServiceLevelCategory) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.fulfillment_channel.label'|trans, entity.fulfillmentChannel) }}
+            {% if entity.earliestShipDate %}
+                {{ ui.renderProperty('eltrino.orocrmamazon.order.earliest_ship_date.label'|trans, entity.earliestShipDate|oro_format_datetime ) }}
+            {% endif %}
+            {% if entity.latestShipDate %}
+                {{ ui.renderProperty('eltrino.orocrmamazon.order.latest_ship_date.label'|trans, entity.latestShipDate|oro_format_datetime ) }}
+            {% endif %}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_shipped.label'|trans, entity.numberOfItemsShipped) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.number_of_items_unshipped.label'|trans, entity.numberOfItemsUnshipped) }}
+        </div>
+        {% if entity.addresses is not empty %}
+            <div class='responsive-block'>
+                {% for orderAddress in entity.addresses %}
+                    {% if orderAddress.types is not empty and orderAddress.types.first is not empty and orderAddress.types.first.name == 'billing' %}
+                        {% set title = 'eltrino.orocrmamazon.order.billing_address.label'|trans %}
+                    {% else %}
+                        {% set title = 'eltrino.orocrmamazon.order.shipping_address.label'|trans %}
+                    {% endif %}
+                    {{ ui.renderHtmlProperty(title, address.renderAddress(orderAddress)) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

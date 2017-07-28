@@ -121,8 +121,11 @@ class OrderLoader extends AbstractNextTokenLoader implements LoggerAwareInterfac
      */
     protected function getOrderItems($amazonOrderId)
     {
-        if (null !== $this->logger) {
-            $this->logger->info('Loading order items for order #' . $amazonOrderId);
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    '[ELTAMZ] Loading order items for order %s',
+                    $amazonOrderId
+                 ));
         }
         $firstRequest  = new Request(AbstractRestClient::LIST_ORDER_ITEMS, new AmazonOrderIdFilter($amazonOrderId));
         $firstResponse = $this->client->sendRequest($firstRequest);

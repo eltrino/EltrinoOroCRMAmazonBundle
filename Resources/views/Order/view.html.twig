@@ -1,13 +1,13 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% oro_title_set({params : {"%order.incrementId%":  entity.amazonOrderId} }) %}
+{% oro_title_set({params : {"%entity.amazonOrderId%":  entity.amazonOrderId} }) %}
 
 {% block pageHeader %}
     {% set breadcrumbs = {
     'entity': entity,
     'indexPath': path('eltrino_amazon_order_index', {id: entity.channel.id}),
-    'indexLabel': 'Orders'|trans,
+    'indexLabel': 'eltrino.orocrmamazon.order.entity_plural_label'|trans,
     'entityTitle': 'Order ' ~ entity.amazonOrderId
     } %}
     {{ parent() }}
@@ -22,11 +22,41 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('eltrino_amazon_order_widget_info', {id: entity.id}),
-            'title': 'Order Information'|trans
+            'title': 'eltrino.orocrmamazon.order.widget.order_information.title'|trans
+        }) }}
+    {% endset %}
+    {% set systemInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('eltrino_amazon_order_widget_system_info', {id: entity.id}),
+            'title': 'eltrino.orocrmamazon.order.widget.system_information.title'|trans
+        }) }}
+    {% endset %}
+    {% set shippingInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('eltrino_amazon_order_widget_shipping_info', {id: entity.id}),
+            'title': 'eltrino.orocrmamazon.order.widget.shipping_information.title'|trans
+        }) }}
+    {% endset %}
+    {% set customerInformationWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('eltrino_amazon_order_widget_customer_info', {id: entity.id}),
+            'title': 'eltrino.orocrmamazon.order.widget.customer_information.title'|trans
+        }) }}
+    {% endset %}
+    {% set dynamicFieldsWidget %}
+        {{ oro_widget_render({
+            'widgetType': 'block',
+            'url': path('eltrino_amazon_order_widget_dynamic_fields', {id: entity.id}),
         }) }}
     {% endset %}
 
-    {% set generalSubblocks = generalSubblocks|merge([{'data' : [orderInformationWidget] }]) %}
+    {% set generalSubblocks = generalSubblocks|merge([
+        {'data' : [orderInformationWidget, systemInformationWidget, dynamicFieldsWidget] },
+        {'data': [customerInformationWidget, shippingInformationWidget]}
+    ]) %}
 
     {% set orderItemsWidget %}
         {{ oro_widget_render({
@@ -37,12 +67,12 @@
 
     {% set dataBlocks = [
         {
-            'title': 'General Information'|trans,
+            'title': 'eltrino.orocrmamazon.order.sections.general_information.title'|trans,
             'class': 'active',
             'subblocks': generalSubblocks
             },
         {
-            'title': 'Order Items'|trans,
+            'title': 'eltrino.orocrmamazon.order.sections.order_items.title'|trans,
             'subblocks': [
                 {'data' : [orderItemsWidget] }
             ]

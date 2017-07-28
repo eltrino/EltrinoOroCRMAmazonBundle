@@ -1,9 +1,131 @@
 eltrino:
-  amazon:
-    transport:
-      rest:
-        label: Amazon
-    orders:
-      label:   Amazon Orders
-    nav:
-      sales:   Sales
+    orocrmamazon:
+        order:
+            entity_label:                               Amazon Order
+            entity_plural_label:                        Amazon Orders
+            
+            amazon_order_id.label:                      Amazon Order Id
+            channel.label:                              Channel
+            created_at.label:                           Created At
+            currency_id.label:                          Currency
+            customer_email.label:                       Customer Email
+            customer_name.label:                        Customer Name
+            earliest_ship_date.label:                   Earliest Ship Date
+            fulfillment_channel.label:                  Fulfillment Channel
+            id.label:                                   Id
+            is_business_order.label:                    Is Business Order
+            is_premium_order.label:                     Is Premium Order
+            is_prime.label:                             Is Prime
+            is_replacement_order.label:                 Is Replacement Order
+            items.label:                                Order Items
+            last_update_date.label:                     Origin Last Updated At
+            latest_ship_date.label:                     Latest Ship Date
+            market_place_id.label:                      Marketplace Id
+            number_of_items_shipped.label:              Number of Items Shipped
+            number_of_items_unshipped.label:            Number of Items Unshipped
+            order_status.label:                         Order Status
+            order_type.label:                           Order Type
+            payment_method.label:                       Payment Method
+            payment_method_detail.label:                Payment Method Detail
+            purchase_date.label:                        Purchase Date
+            sales_channel.label:                        Sales Channel
+            seller_order_id.label:                      Seller Order Id
+            shipment_service_level_category.label:      Shipment Service Level Category
+            ship_service_level.label:                   Ship Service Level
+            total_amount.label:                         Total Amount
+            updated_at.label:                           Updated At
+            billing_address:
+                label:                                  Billing Address
+            shipping_address:
+                label:                                  Shipping Address
+                name_prefix.label:                      Shipping Name Prefix
+                first_name.label:                       Shipping First Name
+                middle_name.label:                      Shipping Middle Name
+                last_name.label:                        Shipping Last Name
+                name_suffix.label:                      Shipping Name Suffix
+                name.label:                             Shipping Name
+                street.label:                           Shipping Street
+                street2.label:                          Shipping Street (2)
+                city.label:                             Shipping City
+                region.label:                           Shipping Region
+                postal_code.label:                      Shipping Postal Code
+                country_name.label:                     Shipping Country
+            
+            widget:
+                order_information.title:        Order Information
+                system_information.title:       System Information
+                shipping_information.title:     Shipping
+                customer_information.title:     Customer
+                dynamic_fields.title:           ~
+            sections:
+                general_information.title:      General Information
+                order_items.title:              Order Items
+            
+        orderitem:
+            entity_label:                       Amazon Order Item
+            entity_plural_label:                Amazon Order Items
+            
+            asin.label:                         ASIN
+            cod_fee_amount.label:               COD Fee Amount
+            cod_fee_currency_id.label:          COD Fee Currency
+            cod_fee_discount_amount.label:      COD Fee Discount Amount
+            cod_fee_discount_currency_id.label: COD Fee Discount Currency
+            condition.label:                    Condition
+            gift_message_text.label:            Gift Message Text
+            gift_wrap_level.label:              Gift Wrap Level
+            gift_wrap_price_amount.label:       Gift Wrap Price Amount
+            gift_wrap_price_currency_id.label:  Gift Wrap Price Currency
+            id.label:                           Id
+            item_price_amount.label:            Item Price Amount
+            item_price_currency_id.label:       Item Price Currency
+            order.label:                        Order
+            order_item_id.label:                Order Item Id
+            quantity_ordered.label:             Quantity Ordered
+            quantity_shipped.label:             Quantity Shipped
+            seller_sku.label:                   Seller SKU
+            shipping_price_amount.label:        Shipping Price Amount
+            shipping_price_currency_id.label:   Shipping Price Currency
+            title.label:                        Title
+            
+        orderaddress:
+            entity_label:                       Amazon Order Address
+            entity_plural_label:                Amazon Order Addresses
+            
+            city.label:                         City
+            country.label:                      Country
+            country_text.label:                 Country Text
+            first_name.label:                   First Name
+            id.label:                           Id
+            label.label:                        Label
+            last_name.label:                    Last Name
+            middle_name.label:                  Middle Name
+            name_prefix.label:                  Name Prefix
+            name_suffix.label:                  Name Suffix
+            organization.label:                 Company
+            owner.label:                        Owner Order
+            postal_code.label:                  Postal Code
+            primary.label:                      Is Primary
+            region.label:                       Region
+            region_text.label:                  Region Text
+            street.label:                       Street
+            street2.label:                      Street (2)
+            types.label:                        Address Types
+            
+        datagrid:
+            actions:
+                view.label:     View
+                
+        navigation:
+            items:
+                eltrino_amazon_orders.label:        Amazon Orders
+                eltrino_sales.label:                Sales
+            titles:
+                eltrino_amazon_order_index.label:   Amazon Orders
+                eltrino_amazon_order_view.label:    '%entity.amazonOrderId%'
+    
+    amazon:
+        transport:
+            rest.label: Amazon
+        orders.label:   Amazon Orders
+        nav:
+            sales:   Sales

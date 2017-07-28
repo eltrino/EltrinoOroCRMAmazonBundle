@@ -14,12 +14,18 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Amazon\Client;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
+
 use Eltrino\OroCrmAmazonBundle\Amazon\DefaultAuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\RestClient;
 use Guzzle\Http\Client;
 
-class RestClientFactory implements RestClientFactoryInterface
+class RestClientFactory implements RestClientFactoryInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+    
     /**
      * {@inheritdoc}
      */
@@ -28,6 +34,11 @@ class RestClientFactory implements RestClientFactoryInterface
         $client      = new Client($baseUrl);
         $authHandler = new DefaultAuthorizationHandler($keyId, $secret, $merchantId, $marketplaceId);
 
-        return new RestClient($client, $authHandler);
+        $restClient = new RestClient($client, $authHandler);
+        if ($restClient instanceof LoggerAwareInterface && $this->logger) {
+            $restClient->setLogger($this->logger);
+        }
+        
+        return $restClient;
     }
 }

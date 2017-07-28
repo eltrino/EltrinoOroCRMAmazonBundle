@@ -1,2 +1,2 @@
 bundles:
-    - Eltrino\OroCrmAmazonBundle\EltrinoOroCrmAmazonBundle
+    - { name: Eltrino\OroCrmAmazonBundle\EltrinoOroCrmAmazonBundle, priority: 100 }

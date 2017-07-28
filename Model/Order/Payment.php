@@ -24,6 +24,11 @@ class Payment
      * @var string
      */
     private $paymentMethod;
+    
+    /**
+     * @var string
+     */
+    private $paymentMethodDetail;
 
     /**
      * @var string
@@ -35,11 +40,22 @@ class Payment
      */
     private $totalAmount;
 
-    public function __construct($paymentMethod, $currencyId, $totalAmount)
-    {
-        $this->paymentMethod  = $paymentMethod;
-        $this->currencyId     = $currencyId;
-        $this->totalAmount    = $totalAmount;
+    /**
+     * @param string $paymentMethod
+     * @param string $currencyId
+     * @param float $totalAmount
+     * @param string $paymentMethodDetail
+     */
+    public function __construct(
+        $paymentMethod=null, 
+        $currencyId=null,
+        $totalAmount=null,
+        $paymentMethodDetail=null
+    ) {
+        $this->setPaymentMethod($paymentMethod);
+        $this->setCurrencyId($currencyId);
+        $this->setTotalAmount($totalAmount);
+        $this->setPaymentMethodDetail($paymentMethodDetail);
     }
 
     /**
@@ -49,6 +65,20 @@ class Payment
     {
         return $this->totalAmount;
     }
+    
+    /**
+     * @param float $totalAmount
+     * @return $this
+     */
+    public function setTotalAmount($totalAmount)
+    {
+        if (!is_null($totalAmount)) {
+            $totalAmount = (float)$totalAmount;
+        }
+        $this->totalAmount = $totalAmount;
+        
+        return $this;
+    }
 
     /**
      * @return string
@@ -56,6 +86,17 @@ class Payment
     public function getCurrencyId()
     {
         return $this->currencyId;
+    }
+    
+    /**
+     * @param string $currencyId
+     * @return $this
+     */
+    public function setCurrencyId($currencyId)
+    {
+        $this->currencyId = $currencyId;
+        
+        return $this;
     }
 
     /**
@@ -66,5 +107,34 @@ class Payment
         return $this->paymentMethod;
     }
 
+    /**
+     * @param string $paymentMethod
+     * @return $this
+     */
+    public function setPaymentMethod($paymentMethod)
+    {
+        $this->paymentMethod = $paymentMethod;
+        
+        return $this;
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPaymentMethodDetail()
+    {
+        return $this->paymentMethodDetail;
+    }
+    
+    /**
+     * @param string $paymentMethodDetail
+     * @return $this
+     */
+    public function setPaymentMethodDetail($paymentMethodDetail)
+    {
+        $this->paymentMethodDetail = $paymentMethodDetail;
+        
+        return $this;
+    }
 
 }

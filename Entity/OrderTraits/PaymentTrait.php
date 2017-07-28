@@ -37,6 +37,13 @@ trait PaymentTrait
      * @ORM\Column(name="payment_method", type="string", length=60, nullable=true)
      */
     private $paymentMethod;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payment_method_detail", type="string", length=255, nullable=true)
+     */
+    private $paymentMethodDetail;
 
     /**
      * @return Payment

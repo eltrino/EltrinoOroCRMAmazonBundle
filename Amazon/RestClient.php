@@ -14,16 +14,23 @@
  */
 namespace Eltrino\OroCrmAmazonBundle\Amazon;
 
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
+
 use Eltrino\OroCrmAmazonBundle\Amazon\Api\AuthorizationHandler;
 use Eltrino\OroCrmAmazonBundle\Amazon\Client\Request;
+use Eltrino\OroCrmAmazonBundle\Provider\Iterator\AmazonDataIterator;
 
 use Guzzle\Common\Event;
 use Guzzle\Http\Exception\ServerErrorResponseException;
 use Guzzle\Plugin\Backoff\BackoffPlugin;
 use Guzzle\Http\ClientInterface;
 
-class RestClient extends AbstractRestClient
+class RestClient extends AbstractRestClient implements LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+    
     const BACK_OFF_RETRIES  = 4;
     const SERVICE_VERSION   = '2013-09-01';
 
@@ -109,6 +116,13 @@ class RestClient extends AbstractRestClient
 
         $this->shareAction = str_replace('ByNextToken', '', $action);
         $this->applyRecoveryRate();
+        if ($this->logger) {
+            $this->logger->debug(sprintf(
+                    "[ELTAMZ] Sending request to '%s' with parameters '%s'",
+                    $this->client->getBaseUrl(),
+                    json_encode($requestParameters)
+                ));
+        }
         $response = $this->client->post(null, [], $requestParameters)->send();
         $this->requestsCounters[$this->shareAction]++;
 
@@ -154,6 +168,12 @@ class RestClient extends AbstractRestClient
             $request->processFiltersParameters(),
             $request->getParameters()
         );
+        switch ($action) {
+            case 'ListOrders' :
+            case 'ListOrdersByNextToken' :
+                $requestParameters['MaxResultsPerPage'] = AmazonDataIterator::LOAD_BATCH_SIZE;
+                break;
+        }
         $requestParameters['Signature'] = $this->authHandler->getSignature(
             $requestParameters,
             $this->client->getBaseUrl()
@@ -194,7 +214,19 @@ class RestClient extends AbstractRestClient
      */
     protected function useRecoveryRate($restoreRateSeconds)
     {
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Sleeping for %s seconds to restore request throttling",
+                    $restoreRateSeconds
+                ));
+        }
         sleep($restoreRateSeconds);
+        if ($this->logger) {
+            $this->logger->info(sprintf(
+                    "[ELTAMZ] Waking after %s seconds sleep",
+                    $restoreRateSeconds
+                ));
+        }
         array_walk(
             $this->requestsExtraTime,
             function (&$val, $key) use ($restoreRateSeconds) {

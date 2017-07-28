@@ -1,0 +1,11 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.customer_name.label'|trans, entity.customerName) }}
+            {{ ui.renderProperty('eltrino.orocrmamazon.order.customer_email.label'|trans, entity.customerEmail) }}
+        </div>
+    </div>
+</div>
