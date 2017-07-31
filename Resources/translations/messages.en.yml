@@ -118,7 +118,6 @@ eltrino:
         navigation:
             items:
                 eltrino_amazon_orders.label:        Amazon Orders
-                eltrino_sales.label:                Sales
             titles:
                 eltrino_amazon_order_index.label:   Amazon Orders
                 eltrino_amazon_order_view.label:    '%entity.amazonOrderId%'

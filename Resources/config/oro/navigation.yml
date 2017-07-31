@@ -8,14 +8,10 @@ navigation:
                     routes: ['eltrino_amazon_*']
                     position: 20
 
-            eltrino_sales:
-                label: 'eltrino.orocrmamazon.navigation.items.eltrino_sales.label'
-                uri: "#"
-
         tree:
             application_menu:
                 children:
-                    eltrino_sales:
+                    sales_tab:
                         children:
                             eltrino_amazon_orders: ~
 
